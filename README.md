@@ -103,29 +103,39 @@ Frontend → Backend API → Database
 ## How to Run Locally
 
 ### 1. Clone the repository
+```bash
 git clone https://github.com/UJ474/Sugooianimes.git
 cd Sugooianime
+```
 
 ### 2. Install dependencies
 # Frontend
+```bash
 cd client
 npm install
-
+```
 # Backend
+```bash
 cd ../server
 npm install
-
+```
 ### 3. Create a .env file inside /server
+```bash
 MONGO_URI=<your MongoDB connection string>
 JWT_SECRET=<your secret>
 PORT=5001
+```
 
 ### 4. Start both servers
 # Frontend
+```bash
 npm run dev
+```
 
 # Backend
+```bash
 node index.js
+```
 
 Visit:
 Frontend → http://localhost:5173
@@ -134,7 +144,7 @@ Backend → http://localhost:5001
 -------------------------------------------------------------------------------
 
 ## Folder Structure
-
+```bash
 Sugooianime/
 │
 ├── client/          # React frontend
@@ -150,5 +160,5 @@ Sugooianime/
 │
 ├── .gitignore
 └── README.md
-
+```
 -------------------------------------------------------------------------------

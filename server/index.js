@@ -9,8 +9,8 @@ const app = express();
 
 // Middleware setup
 app.use(cors({
-  origin: 'http://localhost:5173', // frontend origin
-  credentials: true
+  origin: ['https://sugooianimes.vercel.app', 'http://localhost:5173'], // frontend origin
+  credentials: true,
 }));
 
 app.use(express.json());

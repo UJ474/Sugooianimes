@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware setup
 app.use(cors({
-  origin: ['https://sugooianimes.vercel.app', 'http://localhost:5173'], // frontend origin
+  origin: process.env.FRONTEND_URL, // frontend origin
   credentials: true,
 }));
 
@@ -36,7 +36,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.get('/', (req, res) => res.send('API running...'));
 
+
+
 // Server start
-// module.exports = app;
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
+// const PORT = process.env.PORT || 5001;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

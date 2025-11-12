@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware setup
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // frontend origin
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 
@@ -38,7 +38,8 @@ app.get('/', (req, res) => res.send('API running...'));
 
 
 
-// Server start
+if(process.env.NODE_ENV == "development"){
+  const PORT = process.env.PORT; 
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`))
+}
 module.exports = app;
-// const PORT = process.env.PORT || 5001;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

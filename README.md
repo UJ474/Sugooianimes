@@ -109,12 +109,12 @@ cd Sugooianime
 ```
 
 ### 2. Install dependencies
-# Frontend
+#### Frontend
 ```bash
 cd client
 npm install
 ```
-# Backend
+#### Backend
 ```bash
 cd ../server
 npm install
@@ -127,12 +127,12 @@ PORT=5001
 ```
 
 ### 4. Start both servers
-# Frontend
+#### Frontend
 ```bash
 npm run dev
 ```
 
-# Backend
+#### Backend
 ```bash
 node index.js
 ```

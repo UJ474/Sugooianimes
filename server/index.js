@@ -3,10 +3,11 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const verifyToken = require('./middleware/verifyToken.js');
+const connectDB = require('./config/db.js')
 dotenv.config();
 
 const app = express();
-
+connectDB()
 // Middleware setup
 app.use(cors({
   origin: process.env.FRONTEND_URL,
@@ -29,9 +30,9 @@ app.get('/api/protected', verifyToken, (req, res) => {
 
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => console.log('MongoDB connected'))
+//   .catch(err => console.error('MongoDB connection error:', err));
 
 
 app.get('/', (req, res) => res.send('API running...'));

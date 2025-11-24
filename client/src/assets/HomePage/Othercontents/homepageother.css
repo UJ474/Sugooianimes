@@ -8,6 +8,7 @@
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
   scroll-padding: 0 20px;
+  background-color: black;
 }
 
 .animescroll::-webkit-scrollbar {
@@ -19,11 +20,17 @@
   scroll-snap-stop: always;
 }
 
+.background_col {
+  background-color: black;
+}
+
 .fancyheading {
   font-family: 'Cinzel', serif;
-  font-weight: 700;
-  font-size: 2rem;
-  color: white;
-  text-align: center;
-  letter-spacing: 1px;
+  /* font-weight: 700; */
+  /* font-size: 2rem;
+  color: white; */
+  /* text-align: center; */
+  /* letter-spacing: 1px; */
 }
+
+

@@ -54,6 +54,7 @@ const genreMap = {
 
 
 
+
 export default function SpecificGenre() {
   const { genreName } = useParams();
   const [animes, setAnimes] = useState([]);

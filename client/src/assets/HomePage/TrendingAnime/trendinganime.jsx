@@ -173,12 +173,12 @@ export default function TrendingAnime() {
             )}
 
             </div>
-            <div className="trendingherosliderdata content-fade-in">
+            <div className="trendingherosliderdata content-fade-in" style={{marginTop: '6rem', padding: '4rem 3rem'}}>
             {topAnime.length > 0 && (
                 <>
-                <p style={{fontSize:'30px', paddingBottom:'2rem', marginTop:'6rem'}}>{topAnime[currentIndex].title_japanese}</p>
-                <p style={{fontSize:'1rem', opacity:'0.6'}}>{topAnime[currentIndex].title}</p>
-                {/* <p style={{padding:'0.5rem'}}>⭐ {topAnime[currentIndex].score}</p> */}
+                <p style={{fontSize:'36px', paddingBottom:'2.5rem', marginTop:'8rem', fontWeight:'700', textShadow:'0 0 12px rgba(255,255,255,0.35)'}}>{topAnime[currentIndex].title_japanese}</p>
+                <p style={{fontSize:'1.1rem', opacity:'0.75', marginBottom:'1rem', letterSpacing:'0.5px'}}>{topAnime[currentIndex].title}</p>
+                {/* <p style={{padding:'0.5rem'}}> {topAnime[currentIndex].score}</p> */}
                 <div style={{padding:'0.5rem'}}>
                 {topAnime[currentIndex].genres.map((gen) => (
                   <Link

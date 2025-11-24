@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Flex } from "@chakra-ui/react";
 import AnimeCard from '../../components/animecard';
 import '../../css_files/spinner.css';
 import './homepageother.css';
@@ -8,8 +9,7 @@ const SuggestedAnimeFeed = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        localStorage.removeItem('currentanimesdata');
-        const currentStoredData = localStorage.getItem('currentanimesdata');
+        const currentStoredData = localStorage.getItem('suggestedanimesdata');
         if (currentStoredData) {
             const parsedData = JSON.parse(currentStoredData);
             const now = new Date().getTime();
@@ -26,8 +26,8 @@ const SuggestedAnimeFeed = () => {
 
     function fetchAndStoreCurrentAnime() {
         setLoading(true);
-        fetch('https://api.jikan.moe/v4/top/anime?filter=bypopularity&page=1')
-            .then(response => response.json())
+        fetch('https://api.jikan.moe/v4/top/anime?filter=favorite&page=1')
+            .then(res => res.json())
             .then(data => {
                 if (data.data && data.data.length > 0) {
                     const top30 = data.data.slice(0, 20).map(anime => ({
@@ -44,42 +44,60 @@ const SuggestedAnimeFeed = () => {
                         episodes: anime.episodes,
                     }));
                     setAnimeList(top30);
-                    localStorage.setItem('currentanimesdata', JSON.stringify({
+                    localStorage.setItem('suggestedanimesdata', JSON.stringify({
                         data: top30,
-                        timestamp: new Date().getTime()
+                        timestamp: new Date().getTime(),
                     }));
                 }
             })
-            .catch(error => {
-                console.log("Error fetching current anime:", error);
-            })
+            .catch(err => console.log("Error fetching suggested anime:", err))
             .finally(() => setLoading(false));
     }
 
     if (loading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+            <Flex justify="center" align="center" height="300px">
                 <div className="loading-spinner"></div>
-            </div>
+            </Flex>
         );
     }
 
     return (
-        <div>
-            <h2 className="fancyheading" style={{ textAlign: 'left', paddingLeft: '20px' }}>Suggested</h2>
-            <div className="animescroll">
+        <Box mt="1rem" mb="4rem">
+            <Text
+                className='fancyheading'
+                pl="20px"
+                textAlign="left"
+                fontSize="3xl"
+                fontWeight="800"
+                letterSpacing="wide"
+                bgGradient="linear(to-r, brand.400, brand.100)"
+                bgClip="text"
+                // textShadow="0 0 20px rgba(82,125,255,0.6)"
+                // mb="1rem"
+            >
+                Suggested
+            </Text>
+
+            <Flex
+                // className="animescroll"
+                overflowX="auto"
+                gap="10px"
+                pl="20px"
+                pb="10px"
+            >
                 {animeList.slice(0, 10).map((anime, index) => (
-                    <div key={index} style={{ flex: '0 0 auto', marginRight: '10px' }}>
+                    <Box key={index} flex="0 0 auto">
                         <AnimeCard
                             title={anime.title}
                             imageUrl={anime.imageUrl}
-                            synopsis={anime.synopsis}
-                            rating={anime.score}
+                            synopsis={anime.synopsis ?? "No synopsis available"}
+                            rating={anime.score ?? "N/A"}
                         />
-                    </div>
+                    </Box>
                 ))}
-            </div>
-        </div>
+            </Flex>
+        </Box>
     );
 };
 

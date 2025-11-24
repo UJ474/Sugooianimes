@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Text, Skeleton } from "@chakra-ui/react";
+import { useState } from "react";
 
 export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <Link to={`/anime/${encodeURIComponent(title)}`}>
       <Box
         // className="anime-card"
         position="relative"
-        width="14rem"
+        width="13.5rem"
         borderRadius="sm"
         overflow="hidden"
         bg="gray.800"
@@ -19,7 +22,23 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
         }}
         m="10px"
       >
-        <Box width="100%" aspectRatio="2 / 3" overflow="hidden">
+        <Box width="100%" aspectRatio="2 / 3" overflow="hidden" position="relative">
+
+          {!loaded && (
+            <Skeleton
+              height="100%"
+              width="100%"
+              startColor="gray.700"
+              endColor="gray.600"
+              position="absolute"
+              top="0"
+              left="0"
+              zIndex="1"
+              borderRadius="sm"
+              fadeDuration={0.2}
+            />
+          )}
+
           <Image
             src={imageUrl}
             alt={title}
@@ -27,9 +46,11 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
             height="100%"
             objectFit="cover"
             transition="0.3s"
-            opacity={1}
+            opacity={loaded ? 1 : 0}
+            onLoad={() => setLoaded(true)}  
           />
         </Box>
+
 
         <Box
           position="absolute"

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Box, Text, Flex } from "@chakra-ui/react";
 import AnimeCard from '../../components/animecard';
 import '../../css_files/spinner.css';
 import './homepageother.css';
@@ -23,6 +24,7 @@ const CurrentAnimeFeed = () => {
         fetchAndStoreCurrentAnime();
     }, []);
 
+    
     function fetchAndStoreCurrentAnime() {
         setLoading(true);
         fetch('https://api.jikan.moe/v4/seasons/now?page=1')
@@ -57,28 +59,48 @@ const CurrentAnimeFeed = () => {
 
     if (loading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+            <Flex justify="center" align="center" height="300px">
                 <div className="loading-spinner"></div>
-            </div>
+            </Flex>
         );
     }
 
     return (
-        <div>
-            <h2 className="fancyheading" style={{ textAlign: 'left', paddingLeft: '20px' }}>Currently Airing</h2>
-            <div className="animescroll">
+        <Box mt="3rem" mb="1rem" >
+            <Text
+                className='fancyheading'
+                pl="20px"
+                textAlign="left"
+                fontSize="3xl"
+                fontWeight="800"
+                letterSpacing="wide"
+                bgGradient="linear(to-r, brand.400, brand.100)"
+                bgClip="text"
+                // textShadow="0 0 20px rgba(82,125,255,0.6)"
+                // mb="1rem"
+            >
+                Currently Airing
+            </Text>
+
+            <Flex
+                // className="animescroll"
+                overflowX="auto"
+                gap="10px"
+                pl="20px"
+                pb="10px"
+            >
                 {animeList.slice(0, 10).map((anime, index) => (
-                    <div key={index} style={{ flex: '0 0 auto', marginRight: '10px' }}>
+                    <Box key={index} flex="0 0 auto">
                         <AnimeCard
                             title={anime.title}
                             imageUrl={anime.imageUrl}
                             synopsis={anime.synopsis ?? "No synopsis available"}
-                            rating={anime.score ?? "N/A"}                        
+                            rating={anime.score ?? "N/A"}
                         />
-                    </div>
+                    </Box>
                 ))}
-            </div>
-        </div>
+            </Flex>
+        </Box>
     );
 };
 

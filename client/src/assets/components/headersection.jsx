@@ -18,43 +18,25 @@ export default function Header() {
     ];
 
     const headerTextLinksRight = [
-        { image: searchImage, alt: 'Search' },
+        // { image: searchImage, alt: 'Search' },
         { image: savedImage, alt: 'Saved' },
+
+        
         { image: accountImage, alt: 'Account' },
     ];
-
-    const [mode, setMode] = useState('dark');
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
-
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
     const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const savedMode = localStorage.getItem('mode');
-        if (savedMode) setMode(savedMode);
-    }, []);
 
     useEffect(() => {
       const u = localStorage.getItem('user');
       if (u) setUser(JSON.parse(u));
     }, []);
 
-    useEffect(() => {
-        document.body.classList.remove('dark-theme', 'light-theme', 'grayscale-mode');
-        if (mode === 'light') document.body.classList.add('light-theme');
-        else if (mode === 'dark') document.body.classList.add('dark-theme');
-        else if (mode === 'bw') document.body.classList.add('grayscale-mode');
-
-        localStorage.setItem('mode', mode);
-    }, [mode]);
-
-    const cycleMode = () => {
-        setMode(prev => (prev === 'dark' ? 'light' : prev === 'light' ? 'bw' : 'dark'));
-    };
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(prev => !prev);
@@ -101,27 +83,35 @@ export default function Header() {
         <nav className="headersectionmain">
             <div className="navbarleftcontainer">
                 <img src={hamburgerimage} alt='hamburger' className='hamburgerimage' onClick={toggleMobileMenu}/>
-                <Link to='/'><img src={sugooianimelogo} alt='logo' className='sugooianimelogo'/></Link>
-                {headerTextLinksLeft.map((item, i) => (
-                    <Link to={item.path} key={i} className='navbarleft hamburger'>{item.heading}</Link>
-                ))}
+                <Link to='/' className='logo-link'>
+                    <img src={sugooianimelogo} alt='logo' className='sugooianimelogo'/>
+                </Link>
+                <div className="nav-links-desktop">
+                    {headerTextLinksLeft.map((item, i) => (
+                        <Link to={item.path} key={i} className='navbarleft'>{item.heading}</Link>
+                    ))}
+                </div>
                 {mobileMenuOpen && (
-                    <div className="mobilemenu">
+                    <div className="mobilemenu show">
                         {headerTextLinksLeft.map((item, i) => (
-                            <Link to={item.path} key={i} onClick={handleMobileLinkClick}>{item.heading}</Link>
+                            <Link to={item.path} key={i} onClick={handleMobileLinkClick} className="mobile-link">{item.heading}</Link>
                         ))}
                     </div>
                 )}
             </div>
+
             <div className="searchbarcontainer">
-                <input
+                <div className="search-input-wrapper">
+                  <input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearch}
                     onKeyDown={handleKeyPress}
                     placeholder="Search anime..."
                     className="searchinput"
-                />
+                  />
+                  <img src={searchImage} alt="Search" className="searchinput-icon" />
+                </div>
                 {searchResults.length > 0 && (
                     <div className="searchdropdown">
                         {searchResults.map(anime => (
@@ -140,26 +130,31 @@ export default function Header() {
                     </div>
                 )}
             </div>
+
             <div className="navbarrightcontainer">
-                {headerTextLinksRight.map((item, i) => (
-                    <img key={i} src={item.image} alt={item.alt} className='navbarright' />
-                ))}
-                {user ? (
-                    <div className="user-info">
-                        <span className="username">Hi, {user.username}</span>
-                        <button onClick={handleLogout} className="logout-btn">Logout</button>
-                    </div>
-                ) : (
-                  <div className="auth-links">
-                    <Link to="/login" className="auth-link">Login</Link>
-                    <Link to="/signup" className="auth-link">Signup</Link>
-                  </div>
-                )}
+                <div className="header-icons">
+                    {headerTextLinksRight.map((item, i) => (
+                        <button key={i} className="icon-btn" title={item.alt}>
+                            <img src={item.image} alt={item.alt} className='navbarright' />
+                        </button>
+                    ))}
+                </div>
+
+                <div className="auth-section">
+                    {user ? (
+                        <div className="user-info">
+                            <span className="username">{user.username}</span>
+                            <button onClick={handleLogout} className="logout-btn">Logout</button>
+                        </div>
+                    ) : (
+                        <div className="auth-links">
+                            <Link to="/login" className="auth-link login-link">Login</Link>
+                            <Link to="/signup" className="auth-link signup-link">Sign Up</Link>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <button onClick={cycleMode} className="themetogglebutton">
-                {mode === 'dark' ? 'Day' : mode === 'light' ? 'B/W' : 'Night'}
-            </button>
         </nav>
     );
 }

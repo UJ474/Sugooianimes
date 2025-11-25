@@ -26,16 +26,11 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
 
           {!loaded && (
             <Skeleton
-              height="100%"
-              width="100%"
-              startColor="gray.700"
-              endColor="gray.600"
-              position="absolute"
-              top="0"
-              left="0"
-              zIndex="1"
-              borderRadius="sm"
-              fadeDuration={0.2}
+              style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                    gap: "1rem",
+                }}
             />
           )}
 

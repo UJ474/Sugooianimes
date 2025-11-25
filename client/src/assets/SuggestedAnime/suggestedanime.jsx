@@ -11,8 +11,8 @@ export default function SuggestedAnime() {
     const [currentPage, setCurrentPage] = useState(Number(localStorage.getItem("animePage")) || 1);
 
     useEffect(() => {
-        localStorage.removeItem('suggestedanimesdata');
-        const suggestedStoredData = localStorage.getItem('suggestedanimesdata');
+        localStorage.removeItem('suggestednewpageanimedata');
+        const suggestedStoredData = localStorage.getItem('suggestednewpageanimedata');
 
         if (suggestedStoredData) {
             const parsedData = JSON.parse(suggestedStoredData);
@@ -59,7 +59,7 @@ export default function SuggestedAnime() {
                     setSuggestedAnimes(top30);
                     suggestedanimedata.length = 0;
                     suggestedanimedata.push(...top30);
-                    localStorage.setItem('suggestedanimesdata', JSON.stringify({
+                    localStorage.setItem('suggestednewpageanimedata', JSON.stringify({
                         data: top30,
                         timestamp: new Date().getTime(),
                         page: page

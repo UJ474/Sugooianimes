@@ -24,6 +24,7 @@ const SuggestedAnimeFeed = () => {
         fetchAndStoreCurrentAnime();
     }, []);
 
+    
     function fetchAndStoreCurrentAnime() {
         setLoading(true);
         fetch('https://api.jikan.moe/v4/top/anime?filter=favorite&page=1')

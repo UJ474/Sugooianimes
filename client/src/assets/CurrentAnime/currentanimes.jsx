@@ -11,7 +11,7 @@ export default function CurrentAnimes() {
     const [currentPage, setCurrentPage] = useState(Number(localStorage.getItem("currentAnimePage")) || 1);
 
     useEffect(() => {
-        const storedData = localStorage.getItem('currentanimesdata');
+        const storedData = localStorage.getItem('currentmostpopularanimedata');
         if (storedData) {
             const parsedData = JSON.parse(storedData);
             const now = new Date().getTime();
@@ -57,7 +57,7 @@ export default function CurrentAnimes() {
                     setCurrentAnimes(top30);
                     currentanimedata.length = 0;
                     currentanimedata.push(...top30);
-                    localStorage.setItem('currentanimesdata', JSON.stringify({
+                    localStorage.setItem('currentmostpopularanimedata', JSON.stringify({
                         data: top30,
                         timestamp: new Date().getTime(),
                         page: page

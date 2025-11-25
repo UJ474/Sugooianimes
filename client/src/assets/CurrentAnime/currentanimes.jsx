@@ -11,6 +11,7 @@ export default function CurrentAnimes() {
     const [currentPage, setCurrentPage] = useState(Number(localStorage.getItem("currentAnimePage")) || 1);
 
     useEffect(() => {
+        localStorage.removeItem('currentmostpopularanimedata');
         const storedData = localStorage.getItem('currentmostpopularanimedata');
         if (storedData) {
             const parsedData = JSON.parse(storedData);

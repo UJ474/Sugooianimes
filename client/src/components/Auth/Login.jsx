@@ -56,7 +56,7 @@ export default function Login() {
       setModalMessage("Login Successful!");
       setModalOpen(true);
 
-      setTimeout(() => navigate("/"), 500);
+      setTimeout(() => navigate("/"), 1000);
 
     } catch (err) {
       setModalStatus("error");

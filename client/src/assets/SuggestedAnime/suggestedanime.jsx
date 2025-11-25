@@ -1,46 +1,50 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import suggestedanimedata from './suggestedanimedata.jsx';
 import AnimeCard from "../components/animecard.jsx";
 import '../css_files/spinner.css';
 import './suggestedanime.css';
+import { Flex, Button } from "@chakra-ui/react";
 
 export default function SuggestedAnime() {
     const [suggestedAnimes, setSuggestedAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const fetchRef = useRef(false);
-    const [currentPage, setCurrentPage] = useState(Number(localStorage.getItem("animePage")) || 1);
+
+    // always start from page 1 — do NOT restore old page
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        localStorage.removeItem('suggestednewpageanimedata');
-        const suggestedStoredData = localStorage.getItem('suggestednewpageanimedata');
+        // Load from cache
+        const storedData = localStorage.getItem("suggested_page_cache");
+        if (storedData) {
+            try {
+                const parsed = JSON.parse(storedData);
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
 
-        if (suggestedStoredData) {
-            const parsedData = JSON.parse(suggestedStoredData);
-            const now = new Date().getTime();
-            const oneday = 24 * 60 * 60 * 1000;
-
-            if (now - parsedData.timestamp < oneday && parsedData.page === currentPage) {
-                setSuggestedAnimes(parsedData.data);
-                suggestedanimedata.length = 0;
-                suggestedanimedata.push(...parsedData.data);
-                setLoading(false);
-                return;
+                if (parsed.page === currentPage && now - parsed.timestamp < oneDay) {
+                    setSuggestedAnimes(parsed.data || []);
+                    suggestedanimedata.length = 0;
+                    suggestedanimedata.push(...(parsed.data || []));
+                    setLoading(false);
+                    return;
+                }
+            } catch (err) {
+                console.warn("Cache parse failed:", err);
             }
         }
-        fetchAndStoreSuggestedAnime(currentPage);
+
+        fetchAndStore(currentPage);
     }, [currentPage]);
 
     useEffect(() => {
-        if (fetchRef.current) {
-            fetchAndStoreSuggestedAnime(currentPage);
-        }
-        localStorage.setItem("animePage", currentPage);
+        // Scroll to top whenever page changes
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }, [currentPage]);
 
-    function fetchAndStoreSuggestedAnime(page) {
+    function fetchAndStore(page) {
         setLoading(true);
         fetch(`https://api.jikan.moe/v4/top/anime?filter=bypopularity&page=${page}`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 if (data.data && data.data.length > 0) {
                     const top30 = data.data.slice(0, 30).map(anime => ({
@@ -56,60 +60,119 @@ export default function SuggestedAnime() {
                         themes: anime.themes,
                         episodes: anime.episodes,
                     }));
+
                     setSuggestedAnimes(top30);
                     suggestedanimedata.length = 0;
                     suggestedanimedata.push(...top30);
-                    localStorage.setItem('suggestednewpageanimedata', JSON.stringify({
-                        data: top30,
-                        timestamp: new Date().getTime(),
-                        page: page
-                    }));
+
+                    // cache properly
+                    localStorage.setItem(
+                        "suggested_page_cache",
+                        JSON.stringify({
+                            data: top30,
+                            timestamp: Date.now(),
+                            page: page,
+                        })
+                    );
                 }
             })
-            .catch(error => {
-                console.log("Error fetching trending anime:", error);
-            })
+            .catch(err => console.error("Error fetching suggested:", err))
             .finally(() => setLoading(false));
     }
 
-    if (loading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-                <div className="loading-spinner"></div>
-            </div>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <div style={{
+    //             display: "flex",
+    //             justifyContent: "center",
+    //             alignItems: "center",
+    //             height: "400px"
+    //         }}>
+    //             <div className="loading-spinner"></div>
+    //         </div>
+    //     );
+    // }
 
     return (
         <>
-        <div className="suggestedanimelist">
-            {suggestedAnimes.map((anime, index) => (
-                <AnimeCard
-                    key={index}
-                    title={anime.title_english || anime.title}
-                    imageUrl={anime.imageUrl}
-                    synopsis={anime.synopsis}
-                    rating={anime.score}
-                />
-            ))}
-        </div>
-        <div style={{ marginTop: '3rem' }}>
-            <button className="changebuttons" disabled={currentPage === 1} onClick={() => setCurrentPage(prev => (prev - 1))}>Prev</button>
-            {Array.from({ length: 10 }, (_, i) => {
-                const startPage = Math.max(currentPage - 5, 1);
-                const pageNum = startPage + i;
-                return (
-                    <button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className="pagebutton">
-                        {pageNum}
-                    </button>
-                );
-            })}
-            <button className="changebuttons" onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-        </div>
+        {loading && (
+            <div style={{ padding: "2rem", width: "100%" }}>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                        gap: "1rem"
+                    }}
+                >
+                    {Array.from({ length: suggestedAnimes.length || 25 }).map((_, i) => (
+                        <div key={i} className="skeleton-card"></div>
+                    ))}
+                </div>
+            </div>
+        )}
+
+            {!loading && (
+                <div className="suggestedanimelist">
+                    {suggestedAnimes.map((anime, index) => (
+                        <AnimeCard
+                            key={index}
+                            title={anime.title_english || anime.title}
+                            imageUrl={anime.imageUrl}
+                            synopsis={anime.synopsis}
+                            rating={anime.score}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {/* Pagination (unchanged logic) but Chakra-themed */}
+            <Flex justify="center" align="center" gap="10px" mt="3rem">
+                <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    color="white"
+                    borderColor="white"
+                    _hover={{ bg: "white", color: "black" }}
+                    isDisabled={currentPage === 1}
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                >
+                    Prev
+                </Button>
+
+                {Array.from({ length: 10 }, (_, i) => {
+                    const startPage = Math.max(currentPage - 5, 1);
+                    const pageNum = startPage + i;
+
+                    return (
+                        <Button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            variant={currentPage === pageNum ? "solid" : "outline"}
+                            colorScheme={currentPage === pageNum ? "pink" : undefined}
+                            color="white"
+                            _hover={
+                                currentPage === pageNum
+                                    ? { bg: "blue", color: "white" }
+                                    : { bg: "white", color: "black" }
+                            }
+                            borderColor={currentPage === pageNum ? "pink.500" : "white"}
+                        >
+                            {pageNum}
+                        </Button>
+                    );
+                })}
+
+                <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    color="white"
+                    borderColor="white"
+                    _hover={{ bg: "white", color: "black" }}
+                    onClick={() => setCurrentPage(prev => prev + 1)}
+                >
+                    Next
+                </Button>
+            </Flex>
         </>
     );
 }
-

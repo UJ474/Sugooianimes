@@ -9,24 +9,26 @@ const SuggestedAnimeFeed = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const currentStoredData = localStorage.getItem('suggestedanimesdata');
+        const currentStoredData = localStorage.getItem('home_suggested_top_10');
+
         if (currentStoredData) {
             const parsedData = JSON.parse(currentStoredData);
-            const now = new Date().getTime();
-            const oneday = 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            const oneDay = 24 * 60 * 60 * 1000;
 
-            if (now - parsedData.timestamp < oneday) {
+            if (now - parsedData.timestamp < oneDay) {
                 setAnimeList(parsedData.data);
                 setLoading(false);
                 return;
             }
         }
-        fetchAndStoreCurrentAnime();
+
+        fetchAndStoreSuggestedAnime();
     }, []);
 
-    
-    function fetchAndStoreCurrentAnime() {
+    function fetchAndStoreSuggestedAnime() {
         setLoading(true);
+
         fetch('https://api.jikan.moe/v4/top/anime?filter=favorite&page=1')
             .then(res => res.json())
             .then(data => {
@@ -44,29 +46,26 @@ const SuggestedAnimeFeed = () => {
                         themes: anime.themes,
                         episodes: anime.episodes,
                     }));
+
                     setAnimeList(top30);
-                    localStorage.setItem('suggestedanimesdata', JSON.stringify({
-                        data: top30,
-                        timestamp: new Date().getTime(),
-                    }));
+
+                    localStorage.setItem(
+                        'home_suggested_top_10',
+                        JSON.stringify({
+                            data: top30,
+                            timestamp: Date.now(),
+                        })
+                    );
                 }
             })
             .catch(err => console.log("Error fetching suggested anime:", err))
             .finally(() => setLoading(false));
     }
 
-    if (loading) {
-        return (
-            <Flex justify="center" align="center" height="300px">
-                <div className="loading-spinner"></div>
-            </Flex>
-        );
-    }
-
     return (
-        <Box mt="1rem" mb="4rem">
+        <Box mt="3rem" mb="1rem">
             <Text
-                className='fancyheading'
+                className="fancyheading"
                 pl="20px"
                 textAlign="left"
                 fontSize="3xl"
@@ -74,30 +73,48 @@ const SuggestedAnimeFeed = () => {
                 letterSpacing="wide"
                 bgGradient="linear(to-r, brand.400, brand.100)"
                 bgClip="text"
-                // textShadow="0 0 20px rgba(82,125,255,0.6)"
-                // mb="1rem"
             >
                 Suggested
             </Text>
 
-            <Flex
-                // className="animescroll"
-                overflowX="auto"
-                gap="10px"
-                pl="20px"
-                pb="10px"
-            >
-                {animeList.slice(0, 10).map((anime, index) => (
-                    <Box key={index} flex="0 0 auto">
-                        <AnimeCard
-                            title={anime.title}
-                            imageUrl={anime.imageUrl}
-                            synopsis={anime.synopsis ?? "No synopsis available"}
-                            rating={anime.score ?? "N/A"}
-                        />
-                    </Box>
-                ))}
-            </Flex>
+            {/* Skeleton shimmer loading (same as CurrentAnimeFeed) */}
+            {loading && (
+                <div style={{ padding: "2rem", width: "100%" }}>
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                            gap: "1rem",
+                        }}
+                    >
+                        {Array.from({ length: animeList.length || 25 }).map((_, i) => (
+                            <div key={i} className="skeleton-card"></div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Actual list (same layout as current anime feed) */}
+            {!loading && (
+                <Flex
+                    className="animescroll"
+                    overflowX="auto"
+                    gap="10px"
+                    pl="20px"
+                    pb="10px"
+                >
+                    {animeList.slice(0, 10).map((anime, index) => (
+                        <Box key={index} flex="0 0 auto">
+                            <AnimeCard
+                                title={anime.title}
+                                imageUrl={anime.imageUrl}
+                                synopsis={anime.synopsis ?? "No synopsis available"}
+                                rating={anime.score ?? "N/A"}
+                            />
+                        </Box>
+                    ))}
+                </Flex>
+            )}
         </Box>
     );
 };

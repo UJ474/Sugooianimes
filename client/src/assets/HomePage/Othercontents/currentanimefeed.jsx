@@ -9,7 +9,9 @@ const CurrentAnimeFeed = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const currentStoredData = localStorage.getItem('currentanimesdata');
+        // const currentStoredData = localStorage.getItem('currentanimesdata');
+        const currentStoredData = localStorage.getItem('home_current_top_10')
+        
         if (currentStoredData) {
             const parsedData = JSON.parse(currentStoredData);
             const now = new Date().getTime();
@@ -23,7 +25,6 @@ const CurrentAnimeFeed = () => {
         }
         fetchAndStoreCurrentAnime();
     }, []);
-
     
     function fetchAndStoreCurrentAnime() {
         setLoading(true);
@@ -45,7 +46,7 @@ const CurrentAnimeFeed = () => {
                         episodes: anime.episodes,
                     }));
                     setAnimeList(top30);
-                    localStorage.setItem('currentanimesdata', JSON.stringify({
+                    localStorage.setItem('home_current_top_10', JSON.stringify({
                         data: top30,
                         timestamp: new Date().getTime()
                     }));
@@ -57,13 +58,21 @@ const CurrentAnimeFeed = () => {
             .finally(() => setLoading(false));
     }
 
-    if (loading) {
-        return (
-            <Flex justify="center" align="center" height="300px">
-                <div className="loading-spinner"></div>
-            </Flex>
-        );
-    }
+        {loading && (
+            <div style={{ padding: "2rem", width: "100%" }}>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                        gap: "1rem"
+                    }}
+                >
+                    {Array.from({ length: animeList.length || 25 }).map((_, i) => (
+                        <div key={i} className="skeleton-card"></div>
+                    ))}
+                </div>
+            </div>
+        )}
 
     return (
         <Box mt="3rem" mb="1rem" >
@@ -83,7 +92,7 @@ const CurrentAnimeFeed = () => {
             </Text>
 
             <Flex
-                // className="animescroll"
+                className="animescroll"
                 overflowX="auto"
                 gap="10px"
                 pl="20px"

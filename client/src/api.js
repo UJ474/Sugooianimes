@@ -1,55 +1,42 @@
-import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`, // backend base URL
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
 });
 
-
-// Automatically attach JWT if logged in
+// Attaching JWT token automatically for all requests
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-
-// Signup request
-export const signupUser = async (userData, navigate) => {
+// SIGNUP
+export const signupUser = async (userData) => {
   try {
-    const res = await API.post('/auth/signup', userData);
-    alert('Signup successful! Please login.');
-    navigate('/login');
-    return res.data;
+    const res = await API.post("/auth/signup", userData);
+    return res.data; // { message }
   } catch (err) {
-    if (err.response && err.response.data.message) {
-      alert(`Signup failed: ${err.response.data.message}`);
-    } else {
-      alert('Signup failed: Server error.');
-    }
-    throw err;
+    const msg =
+      err.response?.data?.message || "Signup failed. Please try again.";
+    throw new Error(msg);
   }
 };
 
-
-// Login request
-export const loginUser = async (credentials, navigate) => {
+// LOGIN
+export const loginUser = async (credentials) => {
   try {
-    const res = await API.post('/auth/login', credentials);
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
-    alert('Login successful!');
-    navigate('/');
-    return res.data;
+    const res = await API.post("/auth/login", credentials);
+
+    // save token + user
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    return res.data; // { user, token }
   } catch (err) {
-    if (err.response && err.response.data.message) {
-      alert(`Login failed: ${err.response.data.message}`);
-    } else {
-      alert('Login failed: Server error.');
-    }
-    throw err;
+    const msg =
+      err.response?.data?.message || "Login failed. Please try again.";
+    throw new Error(msg);
   }
 };
 

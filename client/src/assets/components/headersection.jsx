@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
 import '../../App.css'
 import '../css_files/headersection.css'
 import searchImage from '../images/searchimage.png';
@@ -20,8 +21,6 @@ export default function Header() {
     const headerTextLinksRight = [
         // { image: searchImage, alt: 'Search' },
         { image: savedImage, alt: 'Saved' },
-
-        
         { image: accountImage, alt: 'Account' },
     ];
 
@@ -29,14 +28,8 @@ export default function Header() {
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [user, setUser] = useState(null);
 
-
-    useEffect(() => {
-      const u = localStorage.getItem('user');
-      if (u) setUser(JSON.parse(u));
-    }, []);
-
+    const { user, logout } = useContext(AuthContext);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(prev => !prev);
@@ -73,10 +66,8 @@ export default function Header() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-        navigate('/');
+    logout();
+    navigate('/');
     };
 
     return (

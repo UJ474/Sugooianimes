@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -11,61 +11,114 @@ import {
   Text,
   VStack,
   HStack,
-  useToast,
   Spinner,
   Link as ChakraLink,
+  // useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { FaFilm } from "react-icons/fa";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
 
+
 export default function Login() {
   const navigate = useNavigate();
-  const toast = useToast();
+  // const toast = useToast();
+  
+  const { login } = useContext(AuthContext);
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalStatus, setModalStatus] = useState("success");
 
   const handleChange = (e) =>
-    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
-      toast({ title: "All fields are required", status: "warning", duration: 2000 });
-      return;
-    }
+    setLoading(true);
 
     try {
-      setLoading(true);
-      await loginUser(form, navigate); // api helper handles navigation + storage
+      const { user, token } = await loginUser(form);
+
+      login(user, token);
+
+      setModalStatus("success");
+      setModalMessage("Login Successful!");
+      setModalOpen(true);
+
+      setTimeout(() => navigate("/"), 500);
+
     } catch (err) {
-      const msg = err?.response?.data?.message || "Login failed";
-      toast({ title: msg, status: "error", duration: 4000, isClosable: true });
-    } finally {
-      setLoading(false);
+      setModalStatus("error");
+      setModalMessage(err.message);
+      setModalOpen(true);
     }
+
+    setLoading(false);
   };
 
-
-
   return (
-    <Box minH="100vh" zIndex={20} bgGradient="linear(to-br, gray.900, #0f1724)" display="flex" alignItems="center" justifyContent="center" p={4}>
-      <Box position="absolute" top="-6" left="-6" w="72" h="72" bg="purple.600" opacity="0.12" filter="blur(56px)" borderRadius="full" />
-      <Box position="absolute" bottom="-6" right="-6" w="72" h="72" bg="blue.600" opacity="0.12" filter="blur(56px)" borderRadius="full" />
+    <Box
+      minH="100vh"
+      w="100vw"
+      overflow="hidden"
+      zIndex={20}
+      bgGradient="linear(to-br, gray.900, #0f1724)"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      p={4}
+      position="relative"
+    >
+      {/* background blur */}
+      <Box
+        position="absolute"
+        top="-6"
+        left="-6"
+        w="72"
+        h="72"
+        bg="purple.600"
+        opacity="0.12"
+        filter="blur(56px)"
+        borderRadius="full"
+        pointerEvents="none"
+      />
+      <Box
+        position="absolute"
+        bottom="-6"
+        right="-6"
+        w="72"
+        h="72"
+        bg="blue.600"
+        opacity="0.12"
+        filter="blur(56px)"
+        borderRadius="full"
+        pointerEvents="none"
+      />
 
       <Box position="relative" zIndex={10} w="full" maxW="md">
-        {/* header */}
+
+        {/* Header */}
         <Box textAlign="center" mb={6}>
-          <HStack justify="center" spacing={3}>
-            {/* <FaFilm size={28} color="#b794f4" /> */}
-            <Heading size="lg" color="white">Sugooianime</Heading>
-          </HStack>
-          <Text color="gray.300" fontSize="sm">Welcome back — discover new favorite anime</Text>
+          <Heading size="lg" color="white">
+            Sugooianime
+          </Heading>
+          <Text color="gray.300" fontSize="sm">
+            Welcome back — discover your next favorite anime
+          </Text>
         </Box>
 
+        {/* Auth Card */}
         <Box
           bg="rgba(15, 23, 42, 0.6)"
           border="1px solid"
@@ -81,8 +134,12 @@ export default function Login() {
 
           <form onSubmit={handleSubmit}>
             <VStack spacing={4}>
-              <FormControl id="email">
-                <FormLabel color="gray.300" fontSize="sm">Email address</FormLabel>
+
+              {/* Email */}
+              <FormControl id="email" isRequired>
+                <FormLabel color="gray.300" fontSize="sm">
+                  Email address
+                </FormLabel>
                 <Input
                   name="email"
                   type="email"
@@ -92,12 +149,14 @@ export default function Login() {
                   bg="rgba(255,255,255,0.03)"
                   color="white"
                   _placeholder={{ color: "gray.400" }}
-                  required
                 />
               </FormControl>
 
-              <FormControl id="password">
-                <FormLabel color="gray.300" fontSize="sm">Password</FormLabel>
+              {/* Password */}
+              <FormControl id="password" isRequired>
+                <FormLabel color="gray.300" fontSize="sm">
+                  Password
+                </FormLabel>
                 <InputGroup>
                   <Input
                     name="password"
@@ -108,23 +167,34 @@ export default function Login() {
                     bg="rgba(255,255,255,0.03)"
                     color="white"
                     _placeholder={{ color: "gray.400" }}
-                    required
                   />
                   <InputRightElement>
-                    <Button variant="ghost" onClick={() => setShowPassword((s) => !s)} aria-label="toggle password">
-                      {showPassword ? <ViewOffIcon color="gray.200" /> : <ViewIcon color="gray.200" />}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <ViewOffIcon color="gray.200" />
+                      ) : (
+                        <ViewIcon color="gray.200" />
+                      )}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
 
+              {/* Signup Redirect */}
               <HStack w="full" justify="space-between">
                 <Text mt={4} color="gray.400" fontSize="xs" textAlign="center">
                   Don't have an account?{" "}
-                  <ChakraLink as={Link} to="/signup" color="purple.300" fontSize="sm">Create account</ChakraLink>
+                  <ChakraLink as={Link} to="/signup" color="purple.300" fontSize="sm">
+                    Create account
+                  </ChakraLink>
                 </Text>
               </HStack>
 
+              {/* Submit Button */}
               <Button
                 type="submit"
                 w="full"
@@ -134,14 +204,48 @@ export default function Login() {
                 _hover={{ transform: "translateY(-2px)" }}
                 isDisabled={loading}
               >
-                {loading ? <Spinner size="sm" color="white" /> : "Sign In"}
+                {loading ? <Spinner size="sm" color="white" /> : "Login"}
               </Button>
+
             </VStack>
           </form>
         </Box>
-
-
       </Box>
+      
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} isCentered>
+        <ModalOverlay backdropFilter="blur(50px)" />
+
+        <ModalContent
+          bg="rgba(15,23,42,0.9)"
+          border="1px solid rgba(82,125,255,0.4)"
+          backdropFilter="blur(10px)"
+          borderRadius="xl"
+          textAlign="center"
+          p={6}
+        >
+          <ModalHeader color="white" fontSize="xl">
+            {modalStatus === "success" ? "Success" : "Error"}
+          </ModalHeader>
+
+          <ModalBody>
+            <Text fontSize="md" color="gray.200">
+              {modalMessage}
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              bg="brand.500"
+              color="white"
+              _hover={{ bg: "brand.400" }}
+              onClick={() => setModalOpen(false)}
+              w="full"
+            >
+              OK
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

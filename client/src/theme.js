@@ -95,6 +95,21 @@ const theme = extendTheme({
   },
 
   components: {
+    Toast: {
+      variants: {
+        sugAnime: {
+          container: {
+            bg: "rgba(15, 23, 42, 0.8)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(82,125,255,0.45)",
+            boxShadow: "0 0 25px rgba(82,125,255,0.55)",
+            color: "white",
+            borderRadius: "16px",
+            padding: "14px 18px",
+          }
+        }
+      }
+    },
     Button: {
       baseStyle: {
         borderRadius: "12px",
@@ -121,18 +136,6 @@ const theme = extendTheme({
       },
     },
 
-    // Card: {
-    //   baseStyle: {
-    //     bg: "gray.800",
-    //     borderRadius: "18px",
-    //     shadow: "card",
-    //     transition: "0.25s",
-    //     _hover: {
-    //       transform: "scale(1.03)",
-    //       shadow: "neon",
-    //     },
-    //   },
-    // },
   },
 });
 

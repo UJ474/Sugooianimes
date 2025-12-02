@@ -20,6 +20,8 @@ app.use(express.json());
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
+const weebRoutes = require("./routes/weebRoutes");
+app.use("/api/weeb", weebRoutes);
 app.use('/api/auth', authRoutes);
 
 // Protected route (for testing middleware)

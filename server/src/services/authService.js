@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const Weeb = require("../models/Weeb");
 const jwt = require("jsonwebtoken");
 
 const {
@@ -8,6 +8,8 @@ const {
 } = require("../utils/generateToken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || JWT_SECRET;
+
 
 
 // SIGNUP
@@ -18,7 +20,7 @@ exports.signup = async ({ username, email, password }) => {
     throw error;
   }
 
-  const existing = await User.findOne({ email });
+  const existing = await Weeb.findOne({ email });
   if (existing) {
     const error = new Error("Email already registered");
     error.status = 400;
@@ -27,7 +29,7 @@ exports.signup = async ({ username, email, password }) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.create({
+  const user = await Weeb.create({
     username,
     email,
     password: hashedPassword,
@@ -44,41 +46,49 @@ exports.signup = async ({ username, email, password }) => {
 };
 
 
-// LOGIN
+
 exports.login = async ({ email, password }) => {
   if (!email || !password) {
-    const error = new Error("Email and password required");
-    error.status = 400;
-    throw error;
+    const err = new Error("Email and password required");
+    err.status = 400;
+    throw err;
   }
 
-  const user = await User.findOne({ email });
+  const user = await Weeb.findOne({ email });
   if (!user) {
-    const error = new Error("Invalid credentials");
-    error.status = 400;
-    throw error;
+    const err = new Error("Invalid credentials");
+    err.status = 401;
+    throw err;
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password);
-  if (!passwordMatch) {
-    const error = new Error("Invalid credentials");
-    error.status = 400;
-    throw error;
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    const err = new Error("Invalid credentials");
+    err.status = 401;
+    throw err;
   }
 
-  // Generate tokens
-  const accessToken = generateAccessToken({ id: user._id });
-  const refreshToken = generateRefreshToken({ id: user._id });
+  // ISSUE FIX: token should store _id (NOT id)
+  const accessToken = jwt.sign(
+    { _id: user._id.toString(), email: user.email },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+
+  const refreshToken = jwt.sign(
+    { _id: user._id.toString() },
+    REFRESH_SECRET,
+    { expiresIn: "30d" }
+  );
 
   return {
-    message: "Login successful",
-    accessToken,
-    refreshToken,
     user: {
-      id: user._id,
+      _id: user._id,
       username: user.username,
       email: user.email,
     },
+    accessToken,
+    refreshToken,
   };
 };
 

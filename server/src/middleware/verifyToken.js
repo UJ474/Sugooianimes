@@ -1,8 +1,8 @@
-
+// middleware/verifyToken.js
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = function (req, res, next) {
   const authHeader = req.headers.authorization;
@@ -17,9 +17,25 @@ module.exports = function (req, res, next) {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // attach user info (id, email, etc.)
+
+    const id = decoded.id || decoded._id || decoded._id_str || decoded.userId;
+    const email = decoded.email || decoded.em || null;
+
+    // Attach the normalized user object
+    req.user = {
+      id,
+      _id: id,
+      email,
+      raw: decoded, 
+    };
+
+    if (!id) {
+      return res.status(401).json({ message: 'Invalid token payload (no id)' });
+    }
+
     next();
   } catch (err) {
+    console.error('verifyToken error:', err.message);
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

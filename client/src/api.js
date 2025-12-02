@@ -28,11 +28,11 @@ export const loginUser = async (credentials) => {
   try {
     const res = await API.post("/auth/login", credentials);
 
-    // save token + user
-    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("token", res.data.accessToken);
+    localStorage.setItem("refreshToken", res.data.refreshToken);
     localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    return res.data; // { user, token }
+    return res.data;
   } catch (err) {
     const msg =
       err.response?.data?.message || "Login failed. Please try again.";

@@ -5,63 +5,75 @@ import {
   HStack,
   VStack,
   Text,
-  SimpleGrid,
-  Badge,
   Image,
   IconButton,
-  useToast,
   Center,
+  Badge
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { CloseIcon } from "@chakra-ui/icons";
+import API from "../../api";
 
 export default function History() {
   const { user } = useContext(AuthContext);
+
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
-  const toast = useToast();
 
   useEffect(() => {
     fetchHistory();
   }, [filter]);
 
   const fetchHistory = async () => {
+    if (!user) return;
+
     try {
       setLoading(true);
 
-      // TODO: Replace mock with API call
-      setTimeout(() => {
-        setHistory([]); // Empty mock
-        setLoading(false);
-      }, 900);
-    } catch (err) {
-      console.error(err);
+      const res = await API.get("/weeb/history");
+      
+      // res = [...animeItems]
+      let data = res.data;
+
+      // Apply filter
+      if (filter === "watching") {
+        data = data.filter((item) => item.status === "watching");
+      } else if (filter === "completed") {
+        data = data.filter((item) => item.status === "completed");
+      }
+
+      setHistory(data);
       setLoading(false);
+    } catch (err) {
+      console.error("Error loading history:", err);
+      setHistory([]);
+      setLoading(false);
+    }
+  };
+
+  const removeFromHistory = async (mal_id) => {
+    try {
+      const res = await API.delete(`/weeb/history/${mal_id}`);
+      setHistory(res.data.history || res.data); // backend returns history
+    } catch (err) {
+      console.error("Error removing:", err);
     }
   };
 
   const clearHistory = async () => {
     if (!window.confirm("Clear entire history?")) return;
 
-    setHistory([]);
-    toast({
-      title: "History cleared.",
-      status: "info",
-      duration: 1000,
-    });
+    try {
+      await API.delete("/weeb/history/clear"); // you can add a route later
+      setHistory([]);
+    } catch (err) {
+      console.error("Error clearing history:", err);
+    }
   };
 
-  const removeFromHistory = async (id) => {
-    setHistory((prev) => prev.filter((item) => item.id !== id));
-    toast({
-      title: "Removed from history",
-      status: "info",
-      duration: 1000,
-    });
-  };
-
+  // --- LOADING SKELETON ---
   if (loading) {
     return (
       <div style={{ padding: "2rem", width: "100%" }}>
@@ -72,7 +84,7 @@ export default function History() {
             gap: "1rem",
           }}
         >
-          {Array.from({ length: history.length || 10 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <div key={i} className="skeleton-card"></div>
           ))}
         </div>
@@ -80,16 +92,11 @@ export default function History() {
     );
   }
 
-
   return (
     <Box py={6} px={2}>
-      {/* Filters */}
-      <HStack
-        justify="space-between"
-        flexWrap="wrap"
-        gap={4}
-        mb={6}
-      >
+
+      {/* FILTER BUTTONS */}
+      <HStack justify="space-between" mb={6}>
         <HStack spacing={3}>
           {["all", "watching", "completed"].map((key) => (
             <Button
@@ -116,18 +123,16 @@ export default function History() {
         )}
       </HStack>
 
-      {/* Empty state */}
+      {/* EMPTY STATE */}
       {history.length === 0 ? (
-        <Center py={20} textAlign="center">
-          <VStack spacing={4}>
-            <Text fontSize="4xl" opacity={0.5}>
-              📄
-            </Text>
+        <Center py={20}>
+          <VStack spacing={3}>
+            <Text fontSize="4xl" opacity={0.5}>📄</Text>
             <Text fontSize="2xl" fontWeight="300">
               No History Found
             </Text>
-            <Text fontSize="md" color="gray.400">
-              Start watching anime to see it appear here.
+            <Text color="gray.400">
+              Start exploring anime and they will appear here.
             </Text>
             <Button as={Link} to="/" colorScheme="purple">
               Browse Anime
@@ -138,97 +143,60 @@ export default function History() {
         <VStack spacing={4}>
           {history.map((item) => (
             <Box
-              key={item.id}
+              key={item.mal_id}
               w="full"
               bg="gray.800"
               border="1px solid rgba(255,255,255,0.1)"
               borderRadius="md"
               overflow="hidden"
-              _hover={{
-                transform: "translateX(4px)",
-                transition: "0.2s",
-                borderColor: "gray.600",
-              }}
               position="relative"
+              _hover={{ transform: "translateX(4px)", transition: "0.2s" }}
             >
-              <Link to={`/anime/${item.anime.title}`}>
+              <Link to={`/anime/${item.title}`}>
                 <HStack spacing={0} align="stretch">
                   <Image
-                    src={item.anime.image}
-                    alt={item.anime.title}
+                    src={item.imageUrl}
+                    alt={item.title}
                     w="140px"
                     h="200px"
                     objectFit="cover"
                   />
 
-                  <VStack
-                    align="start"
-                    spacing={2}
-                    p={4}
-                    flex={1}
-                  >
-                    <Text
-                      fontSize="lg"
-                      fontWeight="600"
-                      noOfLines={2}
-                    >
-                      {item.anime.title}
+                  <VStack align="start" spacing={2} p={4} flex="1">
+                    <Text fontSize="lg" fontWeight="600" noOfLines={2}>
+                      {item.title}
                     </Text>
 
-                    <HStack spacing={2} fontSize="sm" color="gray.400">
-                      <Text>
-                        Episode {item.lastEpisode} of{" "}
-                        {item.anime.totalEpisodes}
-                      </Text>
-                      <Text>•</Text>
-                      <Text>{item.watchedAt}</Text>
-                    </HStack>
-
-                    {/* Progress */}
-                    <Box
-                      w="full"
-                      h="6px"
-                      bg="gray.700"
-                      borderRadius="full"
-                      overflow="hidden"
-                    >
-                      <Box
-                        h="full"
-                        bgGradient="linear(to-r, purple.500, purple.700)"
-                        width={`${(item.lastEpisode / item.anime.totalEpisodes) * 100}%`}
-                      />
-                    </Box>
-
-                    {/* Status */}
                     <Badge
                       colorScheme={
-                        item.status === "completed" ? "green" : "blue"
+                        item.status === "completed"
+                          ? "green"
+                          : item.status === "watching"
+                          ? "blue"
+                          : "purple"
                       }
                       borderRadius="full"
                       px={3}
-                      py={1}
                     >
-                      {item.status === "completed"
-                        ? "Completed"
-                        : "Watching"}
+                      {item.status || "Viewed"}
                     </Badge>
+
+                    <Text fontSize="sm" color="gray.400">
+                      Viewed on: {new Date(item.addedAt).toLocaleDateString()}
+                    </Text>
                   </VStack>
                 </HStack>
               </Link>
 
-              {/* Remove Button */}
               <IconButton
                 icon={<CloseIcon />}
                 size="sm"
                 position="absolute"
                 top={3}
                 right={3}
-                opacity={0}
-                _groupHover={{ opacity: 1 }}
-                transition="0.2s"
                 onClick={(e) => {
                   e.preventDefault();
-                  removeFromHistory(item.id);
+                  removeFromHistory(item.mal_id);
                 }}
               />
             </Box>

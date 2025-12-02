@@ -48,9 +48,12 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { user, token } = await loginUser(form);
+      const { user, accessToken } = await loginUser(form);
+      
+      console.log("Login response user:", user); 
+      console.log("Access token:", accessToken); 
 
-      login(user, token);
+      login(user, accessToken);
 
       setModalStatus("success");
       setModalMessage("Login Successful!");
@@ -60,12 +63,13 @@ export default function Login() {
 
     } catch (err) {
       setModalStatus("error");
-      setModalMessage(err.message);
+      setModalMessage(err.message || "Login failed");
       setModalOpen(true);
     }
 
     setLoading(false);
   };
+
 
   return (
     <Box

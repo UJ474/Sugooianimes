@@ -1,0 +1,270 @@
+/* Profile Page Styles */
+.profile-page {
+    min-height: 100vh;
+    background: #000; /* pure black */
+    padding: 80px 20px 40px;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar-section {
+    flex-shrink: 0;
+}
+
+.profile-avatar-large {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #527dff 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    font-weight: 600;
+    color: white;
+    border: 3px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 22px rgba(82,125,255,0.55);
+    transition: transform 0.3s ease;
+}
+.profile-avatar-large:hover {
+    transform: scale(1.05);
+}
+
+.profile-info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-username-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-username {
+    font-size: 32px;
+    font-weight: 500;
+    color: white;
+    margin: 0;
+}
+
+.profile-edit-btn {
+    padding: 8px 22px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.profile-edit-btn:hover {
+    background: rgba(82,125,255,0.2);
+    border-color: rgba(82,125,255,0.5);
+    box-shadow: 0 0 15px rgba(82,125,255,0.4);
+}
+
+.profile-stats {
+    display: flex;
+    gap: 40px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-number {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.profile-bio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-email {
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.profile-description {
+    font-size: 14px;
+    color: #e2e8f0;
+    margin: 0;
+}
+
+/* Tabs Navigation */
+.profile-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 60px;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+.profile-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 2px solid transparent;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.profile-tab:hover {
+    color: #94a3b8;
+}
+
+.profile-tab.active {
+    color: white;
+    border-bottom-color: #527dff;
+    text-shadow: 0 0 8px rgba(82,125,255,0.7);
+}
+
+.tab-icon {
+    font-size: 18px;
+}
+
+/* Profile Content */
+.profile-content {
+    padding: 40px 0;
+}
+
+.profile-empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-state-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.profile-empty-state h2 {
+    font-size: 28px;
+    font-weight: 300;
+    color: white;
+    margin: 0 0 12px 0;
+}
+
+.profile-empty-state p {
+    font-size: 16px;
+    color: #94a3b8;
+    margin: 0 0 32px 0;
+}
+
+.empty-state-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.empty-state-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #527dff 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 0 18px rgba(82,125,255,0.45);
+}
+.empty-state-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(82,125,255,0.7);
+}
+
+.empty-state-btn.secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.empty-state-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-page {
+        padding: 60px 16px 40px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        font-size: 48px;
+    }
+
+    .profile-username {
+        font-size: 24px;
+    }
+
+    .profile-username-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .profile-stats {
+        justify-content: center;
+        gap: 32px;
+    }
+
+    .profile-tabs {
+        gap: 40px;
+    }
+
+    .profile-content {
+        padding: 24px 0;
+    }
+}

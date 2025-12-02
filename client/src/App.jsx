@@ -11,6 +11,9 @@ import AnimePage from './assets/AnimePage/animepage.jsx'
 import SearchResults from './assets/SearchResult/searchresult.jsx';
 import Signup from './components/Auth/Signup.jsx';
 import Login from './components/Auth/Login.jsx';
+import Profile from './assets/components/profile.jsx';
+import Watchlist from './assets/components/watchlist.jsx';
+import History from './assets/components/history.jsx';
 
 
 function App() {
@@ -30,6 +33,10 @@ function App() {
           <Route path='/anime/:animeId' element={<AnimePage />} />
           <Route path="/search/:query" element={<SearchResults />} />
           {/* <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} /> */}
+          <Route path="/profile" element={<Profile />}>
+            <Route path="watchlist" element={<Watchlist />} />
+            <Route path="history" element={<History />} />
+          </Route>
         </Routes>
       <Footer />
     </Router>
@@ -38,3 +45,6 @@ function App() {
 }
 
 export default App
+
+
+

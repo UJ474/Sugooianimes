@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import '../../App.css'
@@ -19,15 +19,15 @@ export default function Header() {
     ];
 
     const headerTextLinksRight = [
-        // { image: searchImage, alt: 'Search' },
         { image: savedImage, alt: 'Saved' },
-        { image: accountImage, alt: 'Account' },
     ];
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const profileMenuRef = useRef(null);
 
     const { user, logout } = useContext(AuthContext);
 
@@ -38,6 +38,22 @@ export default function Header() {
     const handleMobileLinkClick = () => {
         setMobileMenuOpen(false);
     };
+
+    const toggleProfileMenu = () => {
+        setProfileMenuOpen(prev => !prev);
+    };
+
+    // Close profile menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+                setProfileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleSearch = async (e) => {
         const query = e.target.value;
@@ -66,8 +82,14 @@ export default function Header() {
     };
 
     const handleLogout = () => {
-    logout();
-    navigate('/');
+        logout();
+        setProfileMenuOpen(false);
+        navigate('/');
+    };
+
+    const handleProfileMenuClick = (path) => {
+        setProfileMenuOpen(false);
+        navigate(path);
     };
 
     return (
@@ -133,9 +155,64 @@ export default function Header() {
 
                 <div className="auth-section">
                     {user ? (
-                        <div className="user-info">
-                            <span className="username">{user.username}</span>
-                            <button onClick={handleLogout} className="logout-btn">Logout</button>
+                        <div className="user-info" ref={profileMenuRef}>
+                            <button 
+                                className="profile-button" 
+                                onClick={toggleProfileMenu}
+                                aria-label="Profile menu"
+                            >
+                                <img src={accountImage} alt="Profile" className='profile-icon' />
+                            </button>
+                            
+                            {profileMenuOpen && (
+                                <div className="profile-dropdown">
+                                    <div className="profile-dropdown-header">
+                                        <div className="profile-dropdown-avatar">
+                                            {user.username?.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="profile-dropdown-info">
+                                            <p className="profile-dropdown-name">{user.username}</p>
+                                            <p className="profile-dropdown-email">{user.email}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="profile-dropdown-divider"></div>
+                                    
+                                    <button 
+                                        className="profile-dropdown-item"
+                                        onClick={() => handleProfileMenuClick('/profile')}
+                                    >
+                                        <span className="profile-dropdown-icon">👤</span>
+                                        My Profile
+                                    </button>
+                                    
+                                    <button 
+                                        className="profile-dropdown-item"
+                                        onClick={() => handleProfileMenuClick('/profile/watchlist')}
+                                    >
+                                        <span className="profile-dropdown-icon">📺</span>
+                                        Watchlist
+                                    </button>
+                                    
+                                    <button 
+                                        className="profile-dropdown-item"
+                                        onClick={() => handleProfileMenuClick('/profile/history')}
+                                    >
+                                        <span className="profile-dropdown-icon">🕐</span>
+                                        History
+                                    </button>
+                                    
+                                    <div className="profile-dropdown-divider"></div>
+                                    
+                                    <button 
+                                        className="profile-dropdown-item logout"
+                                        onClick={handleLogout}
+                                    >
+                                        <span className="profile-dropdown-icon">🚪</span>
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="auth-links">

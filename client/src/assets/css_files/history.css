@@ -1,0 +1,37 @@
+/* HISTORY CSS — Reduced because Chakra now handles styling */
+
+/* Keep only spinner animation for backward compatibility */
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #444;
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.skeleton-card {
+  width: 100%;
+  height: 260px;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 400% 100%;
+  border-radius: 12px;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

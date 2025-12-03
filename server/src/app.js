@@ -7,53 +7,53 @@ dotenv.config();
 
 const app = express();
 
-// DB connect (same as yours)
+// DB connect
 connectDB();
 
-// ---------- CORS ----------
-const FRONTEND = process.env.FRONTEND_URL;
-
-app.use(cors({
-  origin: FRONTEND,
+// Middleware
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*',
   credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-}));
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+};
 
-// Important → allow preflight OPTIONS to succeed
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", FRONTEND);
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept");
-  res.header("Access-Control-Allow-Credentials", "true");
-  return res.sendStatus(200);
+app.use(cors(corsOptions));
+
+// Lightweight preflight handler — avoids using app.options('*', ...) which can break
+// in some serverless/path-to-regexp environments where '*' is parsed as a route param.
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', corsOptions.origin);
+    res.header('Access-Control-Allow-Methods', corsOptions.methods.join(','));
+    res.header('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(','));
+    // If your frontend needs credentials, the Access-Control-Allow-Credentials header
+    // will be set by the cors middleware above for non-OPTIONS requests. For OPTIONS
+    // responses set it explicitly if needed:
+    if (corsOptions.credentials) res.header('Access-Control-Allow-Credentials', 'true');
+    return res.sendStatus(204);
+  }
+  next();
 });
 
 app.use(express.json());
 
-// ---------- Routes ----------
+// Routes
 const authRoutes = require('./routes/authRoutes');
 const weebRoutes = require("./routes/weebRoutes");
-
-app.use('/api/auth', authRoutes);
 app.use("/api/weeb", weebRoutes);
+app.use('/api/auth', authRoutes);
 
-// test protected route
+// Protected route (for testing middleware)
 const verifyToken = require('./middleware/verifyToken');
 app.get('/api/protected', verifyToken, (req, res) => {
   res.json({
-    message: 'Access granted',
-    user: req.user
+    message: 'Access granted to protected route',
+    user: req.user // coming from verifyToken
   });
 });
 
-// root
+// Root
 app.get('/', (req, res) => res.send('API running...'));
-
-// last: global error handler
-app.use((err, req, res, next) => {
-  console.error("Unhandled server error:", err);
-  res.status(err.status || 500).json({ message: err.message || "Server error" });
-});
 
 module.exports = app;

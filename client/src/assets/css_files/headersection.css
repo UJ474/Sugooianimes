@@ -77,15 +77,13 @@
 .navbarleft:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
-  padding: 8px 12px;
 }
 
 .navbarleft:hover::after {
   width: 70%;
 }
 
-/* ============ CENTER - SEARCH BAR ============ */
-
+/* Search Bar */
 .searchbarcontainer {
   position: relative;
   margin: 0 2rem;
@@ -93,9 +91,13 @@
   max-width: 400px;
 }
 
+.search-input-wrapper {
+  position: relative;
+}
+
 .searchinput {
   width: 100%;
-  padding: 10px 16px;
+  padding: 10px 40px 10px 16px;
   border-radius: 25px;
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   font-size: 0.95rem;
@@ -116,9 +118,19 @@
   background: rgba(255, 255, 255, 1);
 }
 
+.searchinput-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 22px;
+  width: 22px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .searchdropdown {
   position: absolute;
-  z-index: 999999 !important;
   top: calc(100% + 8px);
   left: 0;
   right: 0;
@@ -126,7 +138,7 @@
   color: #333;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
+  z-index: 999999;
   max-height: 250px;
   overflow-y: auto;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -150,11 +162,10 @@
   padding-left: 20px;
 }
 
-/* ============ RIGHT CONTAINER ============ */
-
+/* Right Container */
 .navbarrightcontainer {
   display: flex;
-  gap: 0em;
+  gap: 0;
   align-items: center;
   flex: 0 0 auto;
 }
@@ -189,8 +200,7 @@
   filter: brightness(0) invert(1);
 }
 
-/* ============ AUTH SECTION ============ */
-
+/* Auth Section */
 .auth-section {
   display: flex;
   align-items: center;
@@ -216,11 +226,7 @@
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-}
-
-.login-link {
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
 }
 
 .login-link:hover {
@@ -236,75 +242,146 @@
 
 .signup-link:hover {
   background: rgba(255, 255, 255, 0.35);
-  border-color: rgba(255, 255, 255, 1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Dropdown */
+.profile-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 .user-info {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 280px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 12px;
+  padding: 16px;
 }
 
-.username {
+.profile-dropdown-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
   font-weight: 600;
-  color: #fff;
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
+  color: white;
+  flex-shrink: 0;
 }
 
-.logout-btn {
-  background-color: rgba(231, 76, 60, 0.9);
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1.5px solid transparent;
+.profile-dropdown-info {
+  flex: 1;
+  min-width: 0;
 }
 
-.logout-btn:hover {
-  background-color: rgba(192, 57, 43, 1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-}
-
-/* ============ THEME TOGGLE ============ */
-
-.themetogglebutton {
-  position: fixed;
-  top: 65px;
-  right: 25px;
-  z-index: 9999;
-  padding: 10px 14px;
-  background: rgba(117, 109, 227, 0.9);
-  color: #fff;
+.profile-dropdown-name {
+  font-size: 15px;
   font-weight: 600;
-  font-size: 0.85rem;
+  color: white;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown-email {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.profile-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: none;
   border: none;
-  border-radius: 20px;
+  color: #e2e8f0;
+  font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s;
+  text-align: left;
 }
 
-.themetogglebutton:hover {
-  background: rgba(117, 109, 227, 1);
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+.profile-dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-.themetogglebutton:active {
-  transform: scale(0.95);
+.profile-dropdown-item.logout {
+  color: #ef4444;
 }
 
-/* ============ HAMBURGER & MOBILE MENU ============ */
+.profile-dropdown-item.logout:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
 
+.profile-dropdown-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+/* Hamburger & Mobile Menu */
 .hamburgerimage {
   display: none;
   height: 32px;
@@ -354,35 +431,13 @@
   padding-left: 16px;
 }
 
-/* ============ DARK/LIGHT/GRAYSCALE MODES ============ */
-
-.dark-theme {
-  --bg-color: #0d1117;
-  --text-color: #ffffff;
-  --card-bg: #1c1c1e;
-  --accent-color: #ff9800;
-}
-
-.light-theme {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --card-bg: #f0f0f0;
-  --accent-color: #007bff;
-}
-
-
-.card {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--accent-color);
-}
-
-/* ============ RESPONSIVE DESIGN ============ */
+/* ====================================== */
+/* RESPONSIVE DESIGN */
+/* ====================================== */
 
 @media screen and (max-width: 1024px) {
   .headersectionmain {
     padding: 10px 20px;
-    
   }
 
   .navbarleftcontainer {
@@ -395,13 +450,13 @@
   }
 
   .navbarrightcontainer {
-    gap: 1.5em;
+    gap: 1em;
   }
 }
 
 @media screen and (max-width: 768px) {
   .headersectionmain {
-    padding: 8px 12px;
+    padding: 10px 12px;
     flex-wrap: wrap;
     row-gap: 12px;
   }
@@ -430,7 +485,8 @@
   .navbarrightcontainer {
     order: 2;
     flex: 1 1 auto;
-    gap: 1rem;
+    justify-content: flex-end;
+    gap: 0.8rem;
   }
 
   .header-icons {
@@ -438,17 +494,15 @@
   }
 
   .auth-section {
-    margin-left: 0;
-    padding-left: 0;
-    border-left: none;
+    margin-left: 1rem;
+    padding-left: 1rem;
   }
 
   .auth-links {
     gap: 0.6rem;
   }
 
-  .auth-link,
-  .logout-btn {
+  .auth-link {
     padding: 6px 12px;
     font-size: 0.85rem;
   }
@@ -457,20 +511,15 @@
     height: 2.4rem;
   }
 
-  .navbarright {
-    height: 20px;
-    width: 20px;
+  .navbarright,
+  .profile-icon {
+    height: 22px;
+    width: 22px;
   }
 
-  .themetogglebutton {
-    top: 12px;
-    right: 12px;
-    padding: 8px 12px;
-    font-size: 0.75rem;
-  }
-
-  .icon-btn {
-    padding: 6px;
+  .profile-dropdown {
+    right: -10px;
+    min-width: 260px;
   }
 }
 
@@ -483,190 +532,67 @@
     gap: 0.8rem;
   }
 
+  .sugooianimelogo {
+    height: 2rem;
+  }
+
   .searchinput {
     font-size: 0.85rem;
-    padding: 8px 12px;
+    padding: 8px 36px 8px 12px;
   }
 
-  .username {
-    font-size: 0.85rem;
+  .searchinput-icon {
+    height: 18px;
+    width: 18px;
+    right: 10px;
   }
 
-  .auth-link,
-  .logout-btn {
+  .auth-link {
     padding: 6px 10px;
     font-size: 0.8rem;
   }
 
-  .searchbarcontainer {
-    max-width: 100%;
-  }
-
   .navbarrightcontainer {
-    gap: 0.8rem;
+    gap: 0.6rem;
   }
 
   .header-icons {
     gap: 0.8rem;
   }
-}
 
-.search-input-wrapper {
-  position: relative;
-}
+  .auth-section {
+    margin-left: 0.8rem;
+    padding-left: 0.8rem;
+  }
 
-.searchinput-icon {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 22px;
-  width: 22px;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-
-
-.profile-button {
-    background: none;
-    border: none;
-    cursor: pointer;
+  .icon-btn {
     padding: 4px;
-    border-radius: 50%;
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  }
+
+  .navbarright,
+  .profile-icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .profile-dropdown {
+    min-width: 240px;
+    right: -20px;
+  }
 }
 
-.profile-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
+@media screen and (max-width: 360px) {
+  .sugooianimelogo {
+    height: 1.8rem;
+  }
 
-.profile-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-}
+  .auth-link {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
 
-.user-info {
-    position: relative;
-}
-
-.profile-dropdown {
-    position: absolute;
-    top: calc(100% + 12px);
-    right: 0;
-    background: rgba(15, 23, 42, 0.98);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    min-width: 280px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.profile-dropdown-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-}
-
-.profile-dropdown-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: 600;
-    color: white;
-    flex-shrink: 0;
-}
-
-.profile-dropdown-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.profile-dropdown-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: white;
-    margin: 0 0 4px 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.profile-dropdown-email {
-    font-size: 13px;
-    color: #94a3b8;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.profile-dropdown-divider {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 8px 0;
-}
-
-.profile-dropdown-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: none;
-    border: none;
-    color: #e2e8f0;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    text-align: left;
-}
-
-.profile-dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.profile-dropdown-item.logout {
-    color: #ef4444;
-}
-
-.profile-dropdown-item.logout:hover {
-    background-color: rgba(239, 68, 68, 0.1);
-}
-
-.profile-dropdown-icon {
-    font-size: 18px;
-    width: 24px;
-    text-align: center;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .profile-dropdown {
-        right: -10px;
-        min-width: 260px;
-    }
+  .searchinput {
+    font-size: 0.8rem;
+    padding: 7px 32px 7px 10px;
+  }
 }

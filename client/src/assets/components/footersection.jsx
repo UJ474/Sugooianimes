@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import sugooianimelogo from '../images/sugooianimelogo2.png';
 
 
+
 export default function Footer() {
     return (
         <footer className="footer-main">

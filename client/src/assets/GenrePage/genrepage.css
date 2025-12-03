@@ -1,140 +1,380 @@
-
-
 .genre-page-container {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #2c2c3c;
   border-radius: 20px;
   color: #fff;
   font-family: 'Poppins', sans-serif;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .breadcrumb {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  color: #d6d6ff;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  color: #94a3b8;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .breadcrumb span {
-  margin-right: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb span:hover:not(.breadcrumb-current) {
+  color: #e2e8f0;
+  cursor: pointer;
 }
 
 .breadcrumb-current {
-  font-weight: bold;
-  color: #f5a4c7;
+  font-weight: 600;
+  color: #3b82f6;
+  background: rgba(59,130,246,0.12);
+  padding: 4px 12px;
+  border-radius: 6px;
 }
-
 
 .filter-box {
-  background-color: #36368164;
-  border: 1px solid #3a3a95;
-  padding: 1.5rem;
-  border-radius: 15px;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-
-
 
 .filter-title {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  color: #9fa2ff;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
-
-.filter-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
-
-.filter-option {
-  font-size: 1rem;
-  padding: 0.6rem 1rem;
-  background-color: #4b4b61;
-  border-radius: 8px;
-  color: #f5f5f5;
-}
-
-.filter-value {
-  margin-left: 0.5rem;
-  color: #f5a4c7;
-  font-weight: bold;
+.filter-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(50deg, #4924eefb);
+  border-radius: 2px;
 }
 
 .genre-section {
-  margin-top: 2rem;
-}
-
-.genre-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #dcaaff;
-  text-align: left;
+  margin-top: 2.5rem;
 }
 
 .genre-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: 1rem;
+  justify-content: center;
 }
 
 .genre-tag {
-  padding: 0.5rem 1rem;
-  background-color: #38384d;
-  border: 1px solid #5a5a6e;
+  padding: 0.7rem 1.3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
-  color: #dcdcdc;
-  font-size: 0.9rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .genre-tag:hover {
-  background-color: #4f4f65;
-  color: #fff;
-}
-
-.filter-button-container {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.filter-button {
-  padding: 0.75rem 2rem;
-  background-color: #f5a4c7;
-  color: #1c1c1c;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.filter-button:hover {
-  background-color: #d08ca4;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(59,130,246,0.5);
+  color: #ffffff;
 }
 
 .genre-tag.selected {
-  background-color: #ffffff;
-  color: #ff0000;
-  border-color: #000000;
+  background: linear-gradient(50deg, #4924eefb);
+  border-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.genre-tag.selected::after {
+  content: '✓';
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.filter-button-container {
+  margin-top: 2.5rem;
+  text-align: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-button {
+  padding: 0.9rem 3rem;
+  background: linear-gradient(50deg, #4924eefb);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1);
+  box-shadow: 0 4px 15px rgba(30,58,138,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-button:hover {
+  background: linear-gradient(50deg, #4924eecf);
+  box-shadow: 0 8px 26px rgba(30,58,138,0.45);
+  transform: scale(1.06);
+}
+
+.filter-button:active {
+  transform: scale(0.98);
+}
+
+.filter-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Selected Count Badge */
+.selected-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(59,130,246,0.15);
+  border: 1px solid #3b82f6;
+  border-radius: 10px;
+  color: #dbeafe;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.clear-button {
+  padding: 0.9rem 2rem;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Genre Search Results */
+.genre-search-container {
+  margin-top: 3rem;
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.genre-search-title {
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.genre-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 .filteredanimecontainer {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
-  justify-content: center;
   margin-top: 2rem;
+}
+
+/* ====================================== */
+/* RESPONSIVE DESIGN */
+/* ====================================== */
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .genre-page-container {
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-box {
+    padding: 1.5rem;
+  }
+
+  .filter-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .genre-section {
+    margin-top: 2rem;
+  }
+
+  .genre-list {
+    gap: 0.8rem;
+  }
+
+  .genre-tag {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+  }
+
+  .filter-button-container {
+    flex-direction: column;
+    margin-top: 2rem;
+  }
+
+  .filter-button,
+  .clear-button {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .selected-count {
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
+  }
+
+  .genre-search-title {
+    font-size: 1.5rem;
+  }
+
+  .filteredanimecontainer {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .genre-page-container {
+    margin: 1rem 0.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+  }
+
+  .filter-box {
+    padding: 1.2rem;
+  }
+
+  .filter-title {
+    font-size: 1.4rem;
+  }
+
+  .genre-section {
+    margin-top: 1.5rem;
+  }
+
+  .genre-list {
+    gap: 0.6rem;
+  }
+
+  .genre-tag {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .filter-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+
+  .clear-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .selected-count {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .genre-search-title {
+    font-size: 1.3rem;
+  }
+
+  .filteredanimecontainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Extra Small Mobile (360px and below) */
+@media (max-width: 360px) {
+  .genre-page-container {
+    padding: 0.8rem;
+  }
+
+  .filter-title {
+    font-size: 1.2rem;
+  }
+
+  .genre-tag {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .filter-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .filteredanimecontainer {
+    gap: 0.8rem;
+  }
 }

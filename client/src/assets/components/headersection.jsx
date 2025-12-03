@@ -10,6 +10,7 @@ import accountImage from '../images/accountimage.png';
 import hamburgerimage from '../images/hamburgerimage.png';
 import sugooianimelogo from '../images/sugooianimelogo2.png';
 
+
 export default function Header() {
     const headerTextLinksLeft = [
         { heading: 'Home', path: '/' },

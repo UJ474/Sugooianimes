@@ -76,20 +76,36 @@ const AnimePage = () => {
     checkStatus();
   }, [user, animeData]);
 
-  // Add to watchlist
-  const handleAddToWatchlist = async () => {
+  const toggleWatchlist = async () => {
     if (!user) return alert("Please login first");
     setActionLoading(true);
 
     try {
-      await API.post("/weeb/watchlist", {
-        mal_id: animeData.mal_id,
-        title: animeData.title,
-        imageUrl: animeData.images.jpg.large_image_url
-      });
+      if (!watchlistStatus) {
+        await API.post("/weeb/watchlist", {
+          mal_id: animeData.mal_id,
+          title: animeData.title,
+          imageUrl: animeData.images.jpg.large_image_url
+        });
+        setWatchlistStatus(true);
+      } else {
+        await API.delete(`/weeb/watchlist/${animeData.mal_id}`);
+        setWatchlistStatus(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
-      setWatchlistStatus(true);
+  const handleRemoveFromWatching = async () => {
+    if (!user) return;
+    setActionLoading(true);
 
+    try {
+      await API.delete(`/weeb/watching/${animeData.mal_id}`);
+      setWatchStatus(null);
     } catch (err) {
       console.error(err);
     } finally {
@@ -119,6 +135,20 @@ const AnimePage = () => {
     }
   };
 
+  const handleRemoveFromCompleted = async () => {
+    if (!user) return;
+    setActionLoading(true);
+
+    try {
+      await API.delete(`/weeb/completed/${animeData.mal_id}`);
+      setWatchStatus(null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Move to completed
   const handleMarkAsCompleted = async () => {
     if (!user) return alert("Please login first");
@@ -133,23 +163,6 @@ const AnimePage = () => {
 
       setWatchStatus("completed");
       setWatchlistStatus(false);
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  // Remove from watchlist only
-  const handleRemoveFromWatchlist = async () => {
-    setActionLoading(true);
-
-    try {
-      await API.delete(`/weeb/watchlist/${animeData.mal_id}`);
-      setWatchlistStatus(false);
-
-      if (watchStatus === "watching") setWatchStatus(null);
 
     } catch (err) {
       console.error(err);
@@ -211,11 +224,18 @@ const AnimePage = () => {
               {/* ACTION BUTTONS (centered) */}
               <div className="anime-action-buttons" style={{ justifyContent: "center" }}>
 
-                {/* COMPLETED */}
-                {watchStatus === "completed" ? (
+                {/* BUTTON LOGIC REWRITTEN */}
+                {watchStatus === "completed" && (
                   <>
                     <button className="action-btn completed-btn" disabled>✓ Completed</button>
 
+                    <button
+                      className="action-btn remove-btn"
+                      onClick={handleRemoveFromCompleted}
+                      disabled={actionLoading}
+                    >
+                      Remove from Completed
+                    </button>
                     <button
                       className="action-btn secondary-btn"
                       onClick={handleMarkAsWatching}
@@ -223,14 +243,34 @@ const AnimePage = () => {
                     >
                       {actionLoading ? "..." : "Move to Watching"}
                     </button>
-                  </>
-                ) : null}
 
-                {/* WATCHING */}
-                {watchStatus === "watching" ? (
+
+                    {/* Watchlist toggle always available */}
+                    <button
+                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
+                      onClick={toggleWatchlist}
+                      disabled={actionLoading}
+                    >
+                      {actionLoading
+                        ? "..."
+                        : watchlistStatus
+                          ? "✓ In Watchlist (Remove?)"
+                          : "+ Add to Watchlist"}
+                    </button>
+                  </>
+                )}
+
+                {watchStatus === "watching" && (
                   <>
                     <button className="action-btn watching-btn" disabled>⏵ Watching</button>
 
+                    <button
+                      className="action-btn remove-btn"
+                      onClick={handleRemoveFromWatching}
+                      disabled={actionLoading}
+                    >
+                      Remove from Watching
+                    </button>
                     <button
                       className="action-btn secondary-btn"
                       onClick={handleMarkAsCompleted}
@@ -239,30 +279,38 @@ const AnimePage = () => {
                       {actionLoading ? "..." : "Mark as Completed"}
                     </button>
 
-                    {watchlistStatus && (
-                      <button
-                        className="action-btn remove-btn"
-                        onClick={handleRemoveFromWatchlist}
-                        disabled={actionLoading}
-                      >
-                        Remove from Watchlist
-                      </button>
-                    )}
-                  </>
-                ) : null}
 
-                {/* DEFAULT STATE */}
-                {watchStatus === null && (
-                  <>
-                    <button 
-                      className="action-btn primary-btn"
-                      onClick={handleAddToWatchlist}
+                    {/* Watchlist toggle always available */}
+                    <button
+                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
+                      onClick={toggleWatchlist}
                       disabled={actionLoading}
                     >
-                      + Add to Watchlist
+                      {actionLoading
+                        ? "..."
+                        : watchlistStatus
+                          ? "✓ In Watchlist (Remove?)"
+                          : "+ Add to Watchlist"}
+                    </button>
+                  </>
+                )}
+
+                {watchStatus === null && (
+                  <>
+                    {/* Watchlist toggle */}
+                    <button
+                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
+                      onClick={toggleWatchlist}
+                      disabled={actionLoading}
+                    >
+                      {actionLoading
+                        ? "..."
+                        : watchlistStatus
+                          ? "✓ In Watchlist (Remove?)"
+                          : "+ Add to Watchlist"}
                     </button>
 
-                    <button 
+                    <button
                       className="action-btn secondary-btn"
                       onClick={handleMarkAsWatching}
                       disabled={actionLoading}
@@ -270,7 +318,7 @@ const AnimePage = () => {
                       Mark as Watching
                     </button>
 
-                    <button 
+                    <button
                       className="action-btn secondary-btn"
                       onClick={handleMarkAsCompleted}
                       disabled={actionLoading}
@@ -303,12 +351,10 @@ const AnimePage = () => {
 
       {/* FEEDS */}
       <div className="anime-recommendations-section">
-        <h2 className="section-title">Currently Airing</h2>
         <CurrentAnimeFeed />
       </div>
 
       <div className="anime-recommendations-section">
-        <h2 className="section-title">Popular Anime</h2>
         <SuggestedAnimeFeed />
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AnimeCard from '../components/animecard.jsx';
 import '../css_files/spinner.css';
+import { Flex, Button } from '@chakra-ui/react';
 
 const API_URL = 'https://api.jikan.moe/v4/anime';
 
@@ -51,6 +52,14 @@ const genreMap = {
 const GenreSearch = ({ selectedGenre }) => {
   const [animeList, setAnimeList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    if (!selectedGenre || selectedGenre.length === 0) return;
+    
+    // Reset to page 1 when genres change
+    setCurrentPage(1);
+  }, [selectedGenre]);
 
   useEffect(() => {
     if (!selectedGenre || selectedGenre.length === 0) return;
@@ -65,7 +74,7 @@ const GenreSearch = ({ selectedGenre }) => {
           return;
         }
 
-        const response = await fetch(`${API_URL}?genres=${genreIds.join(',')}`);
+        const response = await fetch(`${API_URL}?genres=${genreIds.join(',')}&page=${currentPage}`);
         const data = await response.json();
         if (data.data && Array.isArray(data.data)) {
           setAnimeList(data.data);
@@ -73,16 +82,18 @@ const GenreSearch = ({ selectedGenre }) => {
           setAnimeList([]);
         }
       } catch (error) {
+        console.error('Error fetching anime:', error);
         setAnimeList([]);
       }
       setLoading(false);
     };
 
     fetchAnimeByGenres();
-  }, [selectedGenre]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [selectedGenre, currentPage]);
 
   if (!selectedGenre || selectedGenre.length === 0) {
-    return <div>Please select a genre.</div>;
+    return <div className="genre-message">Please select a genre.</div>;
   }
 
   if (loading) {
@@ -94,8 +105,9 @@ const GenreSearch = ({ selectedGenre }) => {
   }
 
   return (
-    <div>
-      <h2>Anime in Genres: {selectedGenre.join(', ')}</h2>
+    <div className="genre-search-container">
+      <h2 className="genre-search-title">Anime in Genres: {selectedGenre.join(', ')}</h2>
+      
       <div className="filteredanimecontainer">
         {animeList.map(anime => (
           <AnimeCard
@@ -107,6 +119,57 @@ const GenreSearch = ({ selectedGenre }) => {
           />
         ))}
       </div>
+
+      {/* Pagination */}
+      {animeList.length > 0 && (
+        <Flex justify="center" align="center" gap="10px" mt="3rem" mb="2rem" flexWrap="wrap">
+          <Button
+            colorScheme="blue"
+            variant="outline"
+            color="white"
+            borderColor="white"
+            _hover={{ bg: "white", color: "black" }}
+            isDisabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            Prev
+          </Button>
+
+          {Array.from({ length: 10 }, (_, i) => {
+            const startPage = Math.max(currentPage - 5, 1);
+            const pageNum = startPage + i;
+
+            return (
+              <Button
+                key={pageNum}
+                onClick={() => setCurrentPage(pageNum)}
+                variant={currentPage === pageNum ? "solid" : "outline"}
+                colorScheme={currentPage === pageNum ? "pink" : undefined}
+                color={currentPage === pageNum ? "white" : "white"}
+                _hover={
+                  currentPage === pageNum
+                    ? { bg: "blue", color: "white" }
+                    : { bg: "white", color: "black" }
+                }
+                borderColor={currentPage === pageNum ? "pink.500" : "white"}
+              >
+                {pageNum}
+              </Button>
+            );
+          })}
+
+          <Button
+            colorScheme="blue"
+            variant="outline"
+            color="white"
+            borderColor="white"
+            _hover={{ bg: "white", color: "black" }}
+            onClick={() => setCurrentPage(prev => prev + 1)}
+          >
+            Next
+          </Button>
+        </Flex>
+      )}
     </div>
   );
 };

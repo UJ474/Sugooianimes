@@ -1,8 +1,7 @@
 import React from 'react';
 import './genrepage.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import GenreSearch from './genresearch';
-
 
 const GenrePage = () => {
   const genres = [
@@ -25,16 +24,28 @@ const GenrePage = () => {
   };
 
   const handleFilter = () => {
-    setShowFiltered(true);
+    if (selectedGenres.length > 0) {
+      setShowFiltered(true);
+    }
+  };
+
+  const handleClearAll = () => {
+    setSelectedGenres([]);
+    setShowFiltered(false);
   };
 
   return (
     <div className="genre-page-container">
+      {/* Breadcrumb */}
       <div className="breadcrumb">
-        <span>Home</span> <span>•</span> <span className="breadcrumb-current">Filter</span>
+        <span>Home</span>
+        <span>•</span>
+        <span className="breadcrumb-current">Filter by Genre</span>
       </div>
+
+      {/* Filter Box */}
       <div className="filter-box">
-        <h2 className="filter-title">Filter</h2>
+        <h2 className="filter-title">Select Genres</h2>
 
         <div className="genre-section">
           <div className="genre-list">
@@ -50,13 +61,35 @@ const GenrePage = () => {
           </div>
         </div>
 
+        {/* Action Buttons */}
         <div className="filter-button-container">
-          <button className="filter-button" onClick={handleFilter}>Filter</button>
+          <button 
+            className="filter-button" 
+            onClick={handleFilter}
+            disabled={selectedGenres.length === 0}
+            >
+            {selectedGenres.length === 0 ? 'Select Genres to Filter' : 'Apply Filter'}
+          </button>
+            {selectedGenres.length > 0 && (
+              <>
+                <button className="clear-button" onClick={handleClearAll}>
+                  Clear All
+                </button>
+              </>
+            )}
         </div>
       </div>
 
+      {/* Results */}
       {showFiltered && selectedGenres.length > 0 && (
         <GenreSearch selectedGenre={selectedGenres} />
+      )}
+
+      {/* Empty State */}
+      {!showFiltered && selectedGenres.length === 0 && (
+        <div className="genre-message">
+          <p>Select one or more genres to discover amazing anime!</p>
+        </div>
       )}
     </div>
   );

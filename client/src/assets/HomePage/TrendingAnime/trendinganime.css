@@ -4,12 +4,10 @@
     position: relative;
     overflow: hidden;
     background-color: #000;
-
     display: flex; 
     justify-content: flex-start; 
     align-items: center; 
 }
-
 
 .slide-image {
     width: 100%;
@@ -27,15 +25,13 @@
     opacity: 1;
     z-index: 2;
     transition: opacity 3s ease-in-out;
-  }
-  
-  
-  .fade-out {
+}
+
+.fade-out {
     opacity: 0;
     z-index: 1;
     transition: opacity 3s ease-in-out;
-  }
-
+}
 
 .trendingheroslider img {
     height: 100%;
@@ -44,18 +40,10 @@
 
 .trendingherosliderdata {
     position: relative;
-    left: 0;
-    top: 0;
-    overflow: hidden;
-}
-
-.trendingherosliderdata {
-    position: relative;
     z-index: 2; 
     left: 0;
     top: 0;
     color: white;
-    /* background-color: rgba(0,0,0,0.1); */
     margin-top: 7rem;
     padding: 3rem;
     border-radius: 8px;
@@ -63,9 +51,7 @@
     height: 100%;
     text-align: left;
     font-family: 'Poppins', 'Inter', sans-serif;
-    /* font-size: small; */
 }
-
 
 .genretag {
     background-color: rgba(0, 85, 254, 0.494);
@@ -74,9 +60,7 @@
     margin-right: 5px;
     font-size: 14px;
     opacity: 1;
-  }
-
-
+}
 
 .herosliderimages img {
     -webkit-mask-image: 
@@ -87,7 +71,293 @@
         linear-gradient(to left, black 30%, transparent 100%),
         linear-gradient(to bottom, black 30%, transparent 100%);
     mask-composite: intersect;
-
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+}
+
+/* Navigation Buttons */
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.01);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    padding: 0;
+}
+
+.nav-button:hover {
+    transform: translateY(-50%) scale(1.5);
+}
+
+.nav-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.nav-button-left {
+    left: 2rem;
+}
+
+.nav-button-right {
+    right: 2rem;
+}
+
+/* Progress Indicators */
+.progress-indicators {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.progress-dash {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.progress-dash:not(.active) {
+    width: 30px;
+}
+
+.progress-dash.active {
+    width: 50px;
+    height: 4px;
+    background: rgba(0, 85, 254, 0.9);
+    box-shadow: 0 0 10px rgba(0, 85, 254, 0.5);
+}
+
+.progress-dash:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+/* Large Desktop & Ultra-wide (1920px+) */
+@media (min-width: 1920px) {
+    .nav-button {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .nav-button-left {
+        left: 3rem;
+    }
+    
+    .nav-button-right {
+        right: 3rem;
+    }
+}
+
+/* Tablets & Small Laptops (768px - 1024px) */
+@media (max-width: 1024px) {
+    .trendingherosliderdata {
+        width: 40%;
+        padding: 2.5rem 2rem;
+        margin-top: 5rem;
+    }
+    
+    .nav-button {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .nav-button-left {
+        left: 1.5rem;
+    }
+    
+    .nav-button-right {
+        right: 1.5rem;
+    }
+    
+    .progress-dash:not(.active) {
+        width: 25px;
+    }
+    
+    .progress-dash.active {
+        width: 40px;
+    }
+}
+
+/* Tablets Portrait (768px - 900px) */
+@media (max-width: 900px) {
+    .trendingherosliderdata {
+        width: 50%;
+        padding: 2rem 1.5rem;
+        margin-top: 4rem;
+    }
+    
+    .trendingheroslider {
+        height: 80vh;
+    }
+}
+
+/* Mobile Landscape & Small Tablets (600px - 768px) */
+@media (max-width: 768px) {
+    .trendingherosliderdata {
+        width: 60%;
+        padding: 2rem 1.5rem;
+        margin-top: 3rem;
+    }
+    
+    .nav-button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .nav-button svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .nav-button-left {
+        left: 1rem;
+    }
+    
+    .nav-button-right {
+        right: 1rem;
+    }
+    
+    .progress-indicators {
+        bottom: 1.5rem;
+        gap: 6px;
+    }
+    
+    .progress-dash:not(.active) {
+        width: 20px;
+        height: 2.5px;
+    }
+    
+    .progress-dash.active {
+        width: 35px;
+        height: 3.5px;
+    }
+}
+
+/* Mobile Portrait (480px - 600px) */
+@media (max-width: 600px) {
+    .trendingheroslider {
+        height: 70vh;
+        align-items: flex-end;
+    }
+    
+    .trendingherosliderdata {
+        width: 85%;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 4rem;
+    }
+    
+    /* Adjust gradient mask for mobile */
+    .herosliderimages img {
+        -webkit-mask-image: 
+            linear-gradient(to bottom, black 20%, transparent 90%);
+        mask-image: 
+            linear-gradient(to bottom, black 20%, transparent 90%);
+    }
+    
+    .nav-button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .nav-button-left {
+        left: 0.75rem;
+    }
+    
+    .nav-button-right {
+        right: 0.75rem;
+    }
+    
+    .progress-indicators {
+        bottom: 1rem;
+    }
+}
+
+/* Small Mobile (max 480px) */
+@media (max-width: 480px) {
+    .trendingheroslider {
+        height: 65vh;
+    }
+    
+    .trendingherosliderdata {
+        width: 90%;
+        padding: 1.25rem;
+        margin-top: 1rem;
+    }
+    
+    /* Smaller text for mobile */
+    .trendingherosliderdata p:first-child {
+        font-size: 24px !important;
+        padding-bottom: 1.5rem !important;
+        margin-top: 4rem !important;
+    }
+    
+    .trendingherosliderdata p:nth-child(2) {
+        font-size: 0.95rem !important;
+    }
+    
+    .genretag {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+    
+    .nav-button {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .nav-button svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .progress-dash:not(.active) {
+        width: 16px;
+        height: 2px;
+    }
+    
+    .progress-dash.active {
+        width: 28px;
+        height: 3px;
+    }
+    
+    .progress-indicators {
+        gap: 5px;
+    }
+}
+
+/* Extra Small Mobile (max 375px) */
+@media (max-width: 375px) {
+    .trendingherosliderdata {
+        width: 92%;
+        padding: 1rem;
+    }
+    
+    .nav-button-left {
+        left: 0.5rem;
+    }
+    
+    .nav-button-right {
+        right: 0.5rem;
+    }
+    
+    .progress-indicators {
+        bottom: 0.75rem;
+    }
 }

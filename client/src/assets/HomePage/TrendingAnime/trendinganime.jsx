@@ -16,8 +16,6 @@ import img8 from './TrendingAssests/hunterxhunter.png'
 import img9 from './TrendingAssests/gintama2.png'
 import img10 from './TrendingAssests/gintamaen.png'
 
-
-
 const genreList = [
   { name: 'Action', key: 'action' },
   { name: 'Adventure', key: 'adventure' },
@@ -60,22 +58,20 @@ const genreList = [
   { name: 'Vampire', key: 'vampire' },
 ];
 
-
-
 export default function TrendingAnime() {
     const [topAnime, setTopAnime] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState(null);
     const fetchRef = useRef(false);
     const [loading, setLoading] = useState(true);
+    const [autoPlay, setAutoPlay] = useState(true);
+    const intervalRef = useRef(null);
+    
     const imagelinks = [
         img1, img2, img3, img4, img5, img6, img7, img8, img9, img10
     ]
 
     useEffect(() => {
-        // localStorage.removeItem('trendingAnime');
-        // localStorage is a Web API that allows you to store key-value pairs in the browser and the data persists even after the page is refreshed or the browser is closed.
-
         const storedData = localStorage.getItem('trendingAnime');
     
         if (storedData) {
@@ -134,16 +130,39 @@ export default function TrendingAnime() {
             });
     }
 
+    // Handle manual navigation
+    const goToSlide = (index) => {
+        setPrevIndex(currentIndex);
+        setCurrentIndex(index);
+        setAutoPlay(false);
+        
+        // Resume auto-play after 8 seconds of inactivity
+        setTimeout(() => setAutoPlay(true), 8000);
+    };
+
+    const goToPrevious = () => {
+        const newIndex = currentIndex === 0 ? topAnime.length - 1 : currentIndex - 1;
+        goToSlide(newIndex);
+    };
+
+    const goToNext = () => {
+        const newIndex = (currentIndex + 1) % topAnime.length;
+        goToSlide(newIndex);
+    };
+
+    // Auto-play effect
     useEffect(() => {
-        if (topAnime.length > 0) {
-            const interval = setInterval(() => {
+        if (topAnime.length > 0 && autoPlay) {
+            intervalRef.current = setInterval(() => {
                 setPrevIndex(currentIndex);
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % topAnime.length);
             }, 4000);
 
-            return () => clearInterval(interval);
+            return () => {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+            };
         }
-    }, [topAnime, currentIndex]);
+    }, [topAnime, currentIndex, autoPlay]);
 
     if (loading) {
         return (
@@ -171,14 +190,54 @@ export default function TrendingAnime() {
                     className="slide-image fade-in"
                 />
             )}
-
             </div>
+
+            {/* Left Navigation Button */}
+            <button 
+                className="nav-button nav-button-left"
+                onClick={goToPrevious}
+                aria-label="Previous anime"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            {/* Right Navigation Button */}
+            <button 
+                className="nav-button nav-button-right"
+                onClick={goToNext}
+                aria-label="Next anime"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            {/* Progress Indicators */}
+            <div className="progress-indicators">
+                {topAnime.map((_, index) => (
+                    <div
+                        key={index}
+                        className={`progress-dash ${index === currentIndex ? 'active' : ''}`}
+                        onClick={() => goToSlide(index)}
+                        aria-label={`Go to anime ${index + 1}`}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                goToSlide(index);
+                            }
+                        }}
+                    />
+                ))}
+            </div>
+
             <div className="trendingherosliderdata content-fade-in" style={{marginTop: '6rem', padding: '4rem 3rem'}}>
             {topAnime.length > 0 && (
                 <>
                 <p style={{fontSize:'36px', paddingBottom:'2.5rem', marginTop:'8rem', fontWeight:'700', textShadow:'0 0 12px rgba(255,255,255,0.35)'}}>{topAnime[currentIndex].title_japanese}</p>
                 <p style={{fontSize:'1.1rem', opacity:'0.75', marginBottom:'1rem', letterSpacing:'0.5px'}}>{topAnime[currentIndex].title}</p>
-                {/* <p style={{padding:'0.5rem'}}> {topAnime[currentIndex].score}</p> */}
                 <div style={{padding:'0.5rem'}}>
                 {topAnime[currentIndex].genres.map((gen) => (
                   <Link
@@ -192,17 +251,10 @@ export default function TrendingAnime() {
                   </Link>
                 ))}
                 </div>
-                
-                {/* {topAnime[currentIndex].themes.map((obj) => (
-                <a href={obj.url} key={obj.mal_id} style={{ marginRight: "8px", textDecoration: 'none', color: 'inherit' }} className="genre-tag">
-                    {obj.name}
-                </a>
-                ))} */}
                 <SynopsisText text={topAnime[currentIndex].synopsis} />
                 </>
             )}
             </div>
-
         </div>
         </>
     );

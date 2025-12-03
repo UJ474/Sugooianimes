@@ -1,14 +1,14 @@
 const Weeb = require("../models/Weeb");
 
-// Ensure valid structure
+// Ensure history object exists
 function ensureHistory(weeb) {
   if (!weeb.history || Array.isArray(weeb.history)) {
     weeb.history = { all: [], watching: [], completed: [] };
   }
 }
 
-// GET COMPLETED
-exports.getCompleted = async (userId) => {
+// GET WATCHING
+exports.getWatching = async (userId) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {
     const err = new Error("Please sign in to continue");
@@ -16,11 +16,11 @@ exports.getCompleted = async (userId) => {
     throw err;
   }
   ensureHistory(weeb);
-  return weeb.history.completed;
+  return weeb.history.watching;
 };
 
-// ADD TO COMPLETED
-exports.addToCompleted = async (userId, anime) => {
+// ADD TO WATCHING
+exports.addToWatching = async (userId, anime) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {
     const err = new Error("Please sign in to continue");
@@ -37,24 +37,24 @@ exports.addToCompleted = async (userId, anime) => {
     addedAt: new Date(),
   };
 
-  // Remove from watching
-  weeb.history.watching = weeb.history.watching.filter(a => a.mal_id !== item.mal_id);
+  // Remove from history.completed
+  weeb.history.completed = weeb.history.completed.filter(a => a.mal_id !== item.mal_id);
 
   // Remove from watchlist
   weeb.watchlist = weeb.watchlist.filter(a => a.mal_id !== item.mal_id);
 
-  // Remove duplicates in completed
-  weeb.history.completed = weeb.history.completed.filter(a => a.mal_id !== item.mal_id);
+  // Remove duplicates in watching
+  weeb.history.watching = weeb.history.watching.filter(a => a.mal_id !== item.mal_id);
 
-  // Add
-  weeb.history.completed.unshift(item);
+  // Add to watching
+  weeb.history.watching.unshift(item);
 
   await weeb.save();
-  return weeb.history.completed;
+  return weeb.history.watching;
 };
 
-// REMOVE FROM COMPLETED
-exports.removeFromCompleted = async (userId, mal_id) => {
+// REMOVE FROM WATCHING
+exports.removeFromWatching = async (userId, mal_id) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {
     const err = new Error("Please sign in to continue");
@@ -64,8 +64,8 @@ exports.removeFromCompleted = async (userId, mal_id) => {
 
   ensureHistory(weeb);
 
-  weeb.history.completed = weeb.history.completed.filter(a => a.mal_id != mal_id);
+  weeb.history.watching = weeb.history.watching.filter(a => a.mal_id != mal_id);
 
   await weeb.save();
-  return weeb.history.completed;
+  return weeb.history.watching;
 };

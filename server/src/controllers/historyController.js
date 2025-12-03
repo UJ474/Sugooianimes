@@ -29,3 +29,13 @@ exports.removeFromHistory = async (req, res) => {
     res.status(err.status || 500).json({ message: err.message });
   }
 };
+
+
+exports.clearHistory = async (req, res) => {
+  try {
+    const updated = await historyService.clearHistory(req.user._id);
+    res.json({ message: "History cleared", history: updated });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};

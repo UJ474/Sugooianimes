@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   IconButton,
+  useToast,
   Center,
   Badge
 } from "@chakra-ui/react";
@@ -17,6 +18,7 @@ import API from "../../api";
 
 export default function History() {
   const { user } = useContext(AuthContext);
+  const toast = useToast();
 
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,19 +34,19 @@ export default function History() {
     try {
       setLoading(true);
 
-      const res = await API.get("/weeb/history");
-      
-      // res = [...animeItems]
-      let data = res.data;
+      let res;
 
-      // Apply filter
-      if (filter === "watching") {
-        data = data.filter((item) => item.status === "watching");
-      } else if (filter === "completed") {
-        data = data.filter((item) => item.status === "completed");
+      if (filter === "all") {
+        res = await API.get("/weeb/history");
+      } 
+      else if (filter === "watching") {
+        res = await API.get("/weeb/watching");
+      } 
+      else if (filter === "completed") {
+        res = await API.get("/weeb/completed");
       }
 
-      setHistory(data);
+      setHistory(res.data);
       setLoading(false);
     } catch (err) {
       console.error("Error loading history:", err);
@@ -56,7 +58,7 @@ export default function History() {
   const removeFromHistory = async (mal_id) => {
     try {
       const res = await API.delete(`/weeb/history/${mal_id}`);
-      setHistory(res.data.history || res.data); // backend returns history
+      setHistory(res.data.history || res.data);
     } catch (err) {
       console.error("Error removing:", err);
     }
@@ -66,14 +68,28 @@ export default function History() {
     if (!window.confirm("Clear entire history?")) return;
 
     try {
-      await API.delete("/weeb/history/clear"); // you can add a route later
-      setHistory([]);
+      const res = await API.delete("/weeb/history");
+
+      setHistory(res.data.history || []);
+
+    toast({
+      title: "History Removed!",
+      status: "error",
+      duration: 1200,
+      position: "top-right",
+      containerStyle: {
+        bg: "#7c3aed",
+        color: "white",
+        fontWeight: "bold",
+        borderRadius: "12px",
+      }
+    });
+
     } catch (err) {
-      console.error("Error clearing history:", err);
+      console.error("Failed to clear history:", err);
     }
   };
 
-  // --- LOADING SKELETON ---
   if (loading) {
     return (
       <div style={{ padding: "2rem", width: "100%" }}>
@@ -94,8 +110,6 @@ export default function History() {
 
   return (
     <Box py={6} px={2}>
-
-      {/* FILTER BUTTONS */}
       <HStack justify="space-between" mb={6}>
         <HStack spacing={3}>
           {["all", "watching", "completed"].map((key) => (
@@ -111,7 +125,7 @@ export default function History() {
           ))}
         </HStack>
 
-        {history.length > 0 && (
+        {history.length > 0 && filter === "all" && (
           <Button
             size="sm"
             colorScheme="red"
@@ -123,7 +137,6 @@ export default function History() {
         )}
       </HStack>
 
-      {/* EMPTY STATE */}
       {history.length === 0 ? (
         <Center py={20}>
           <VStack spacing={3}>
@@ -153,7 +166,7 @@ export default function History() {
               _hover={{ transform: "translateX(4px)", transition: "0.2s" }}
             >
               <Link to={`/anime/${item.title}`}>
-                <HStack spacing={0} align="stretch">
+                <HStack spacing={0}>
                   <Image
                     src={item.imageUrl}
                     alt={item.title}
@@ -167,38 +180,42 @@ export default function History() {
                       {item.title}
                     </Text>
 
-                    <Badge
-                      colorScheme={
-                        item.status === "completed"
-                          ? "green"
-                          : item.status === "watching"
-                          ? "blue"
-                          : "purple"
-                      }
-                      borderRadius="full"
-                      px={3}
-                    >
-                      {item.status || "Viewed"}
-                    </Badge>
+                    {filter !== "all" && (
+                      <Badge
+                        colorScheme={
+                          filter === "completed"
+                            ? "green"
+                            : filter === "watching"
+                            ? "blue"
+                            : "purple"
+                        }
+                        borderRadius="full"
+                        px={3}
+                      >
+                        {filter}
+                      </Badge>
+                    )}
 
                     <Text fontSize="sm" color="gray.400">
-                      Viewed on: {new Date(item.addedAt).toLocaleDateString()}
+                      Added: {new Date(item.addedAt).toLocaleDateString()}
                     </Text>
                   </VStack>
                 </HStack>
               </Link>
 
-              <IconButton
-                icon={<CloseIcon />}
-                size="sm"
-                position="absolute"
-                top={3}
-                right={3}
-                onClick={(e) => {
-                  e.preventDefault();
-                  removeFromHistory(item.mal_id);
-                }}
-              />
+              {filter === "all" && (
+                <IconButton
+                  icon={<CloseIcon />}
+                  size="sm"
+                  position="absolute"
+                  top={3}
+                  right={3}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    removeFromHistory(item.mal_id);
+                  }}
+                />
+              )}
             </Box>
           ))}
         </VStack>

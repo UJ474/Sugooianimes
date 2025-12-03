@@ -14,6 +14,7 @@ import Login from './components/Auth/Login.jsx';
 import Profile from './assets/components/profile.jsx';
 import Watchlist from './assets/components/watchlist.jsx';
 import History from './assets/components/history.jsx';
+import ScrollToTop from "./assets/components/scrolltotop.jsx";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
   return (
     <>
     <Router>
+      <ScrollToTop />
       <Header />
         <Routes>
           <Route path="/signup" element={<Signup />} />

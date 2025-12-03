@@ -44,7 +44,7 @@ const AnimePage = () => {
     API.post("/weeb/history", {
       mal_id: animeData.mal_id,
       title: animeData.title,
-      imageUrl: animeData.images?.jpg?.large_image_url || "",
+      imageUrl: animeData.images.jpg.large_image_url
     }).catch(() => {});
   }, [animeData]);
 
@@ -208,9 +208,14 @@ const AnimePage = () => {
                 <span className="meta-tag score">⭐ {animeData.score || 'N/A'}</span>
               </div>
 
+              <div className="anime-genres">
+                {animeData.genres?.map((genre, idx) => (
+                  <span key={idx} className="genre-tag">{genre.name}</span>
+                ))}
+              </div>
+
               <p className="anime-synopsis-main">{animeData.synopsis}</p>
 
-              {/* Action Buttons */}
               <div className="anime-action-buttons">
                 {watchStatus === 'completed' ? (
                   <>
@@ -222,7 +227,7 @@ const AnimePage = () => {
                       onClick={handleMarkAsWatching}
                       disabled={actionLoading}
                     >
-                      {actionLoading ? 'Loading...' : 'Mark as Watching'}
+                      {actionLoading ? 'Loading...' : 'Move to Watching'}
                     </button>
                   </>
                 ) : watchStatus === 'watching' ? (
@@ -242,7 +247,7 @@ const AnimePage = () => {
                       onClick={handleRemoveFromWatchlist}
                       disabled={actionLoading}
                     >
-                      Remove from List
+                      Remove from Watchlist
                     </button>
                   </>
                 ) : (
@@ -271,17 +276,12 @@ const AnimePage = () => {
                   </>
                 )}
               </div>
-
-              <div className="anime-genres">
-                {animeData.genres?.map((genre, idx) => (
-                  <span key={idx} className="genre-tag">{genre.name}</span>
-                ))}
-              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Details Section */}
       <div className="anime-details-section">
         <div className="details-grid">
           <div className="detail-item">
@@ -321,15 +321,19 @@ const AnimePage = () => {
         </div>
       </div>
 
+      {/* Recommendations */}
       <div className="anime-recommendations-section">
+        <h2 className="section-title">Currently Airing</h2>
         <CurrentAnimeFeed />
       </div>
 
       <div className="anime-recommendations-section">
+        <h2 className="section-title">Popular Anime</h2>
         <SuggestedAnimeFeed />
       </div>
     </div>
   );
 };
+
 
 export default AnimePage;

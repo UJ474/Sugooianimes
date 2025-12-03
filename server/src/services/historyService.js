@@ -83,3 +83,23 @@ exports.removeFromHistory = async (userId, mal_id) => {
 
   return weeb.history.all;
 };
+
+
+
+exports.clearHistory = async (userId) => {
+  const weeb = await Weeb.findById(userId);
+
+  if (!weeb) {
+    const error = new Error("Please sign in to continue");
+    error.status = 401;
+    throw error;
+  }
+
+  ensureHistoryStructure(weeb);
+
+  weeb.history.all = [];
+
+  await weeb.save();
+
+  return weeb.history.all;
+};

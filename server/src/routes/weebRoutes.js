@@ -14,6 +14,7 @@ router.delete("/watchlist/:mal_id", verifyToken, watchlistCtrl.removeFromWatchli
 router.get("/history", verifyToken, historyCtrl.getHistory);
 router.post("/history", verifyToken, historyCtrl.addToHistory);
 router.delete("/history/:mal_id", verifyToken, historyCtrl.removeFromHistory);
+router.delete("/history", verifyToken, historyCtrl.clearHistory);
 
 // COMPLETED
 router.get("/completed", verifyToken, completedCtrl.getCompleted);

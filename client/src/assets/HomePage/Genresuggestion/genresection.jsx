@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, SimpleGrid, Link as ChakraLink, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import "./genresection.css";
-
+import tired_cat from "../../images/tired_cat.png";
 
 const genreList = [
   { name: "Action", key: "action" },
@@ -92,7 +92,6 @@ export default function GenreSection() {
             _hover={{
               transform: "scale(1.12)",
               boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-              // bg: "rgba(40,40,75,0.9)"
             }}
             textAlign="center"
             fontSize="md"
@@ -103,6 +102,23 @@ export default function GenreSection() {
           </ChakraLink>
         ))}
       </SimpleGrid>
+
+      {/* Empty State Section */}
+      <Box className="genre-empty-state" mt="4rem">
+        <div className="genre-illustration">
+          <img 
+            src={tired_cat}
+            alt="Still looking for something?" 
+            className="genre-empty-image"
+          />
+        </div>
+        <Text className="genre-empty-title" fontSize="2xl" fontWeight="700" mb="1rem" color="white">
+          Still looking for something to watch?
+        </Text>
+        <Text className="genre-empty-subtitle" fontSize="lg" color="gray.400" mb="2rem">
+          Check out our full library
+        </Text>
+      </Box>
 
       <Box className="showmorecontainer" mt="2rem">
         <Button
@@ -118,10 +134,9 @@ export default function GenreSection() {
           borderRadius="md"
           boxShadow="0 6px 18px rgba(0,0,0,0.4)"
         >
-          Show more
+          VIEW ALL
         </Button>
       </Box>
     </Box>
   );
 }
-

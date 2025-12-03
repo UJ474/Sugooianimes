@@ -57,36 +57,80 @@ export default function History() {
 
   const removeFromHistory = async (mal_id) => {
     try {
-      const res = await API.delete(`/weeb/history/${mal_id}`);
-      setHistory(res.data.history || res.data);
+      let res;
+
+      if (filter === "all") {
+        res = await API.delete(`/weeb/history/${mal_id}`);
+      } else if (filter === "watching") {
+        res = await API.delete(`/weeb/watching/${mal_id}`);
+      } else if (filter === "completed") {
+        res = await API.delete(`/weeb/completed/${mal_id}`);
+      }
+
+      // server may return either { history: [...] } or the raw list
+      const updated = res.data.history || res.data || [];
+      setHistory(updated);
+
+      // quick toast feedback (uses your chosen style)
+      toast({
+        title: "Removed!",
+        status: "error",
+        duration: 1200,
+        position: "top-right",
+        containerStyle: {
+          bg: "#7c3aed",
+          color: "white",
+          fontWeight: "bold",
+          borderRadius: "12px",
+        }
+      });
+
     } catch (err) {
       console.error("Error removing:", err);
+      toast({ title: "Failed to remove", status: "error", duration: 1200 });
     }
   };
 
   const clearHistory = async () => {
-    if (!window.confirm("Clear entire history?")) return;
+    const confirmMsg =
+      filter === "all"
+        ? "Clear entire history?"
+        : filter === "watching"
+        ? "Clear all currently-watching items?"
+        : "Clear all completed items?";
+
+    if (!window.confirm(confirmMsg)) return;
 
     try {
-      const res = await API.delete("/weeb/history");
+      let res;
 
-      setHistory(res.data.history || []);
-
-    toast({
-      title: "History Removed!",
-      status: "error",
-      duration: 1200,
-      position: "top-right",
-      containerStyle: {
-        bg: "#7c3aed",
-        color: "white",
-        fontWeight: "bold",
-        borderRadius: "12px",
+      if (filter === "all") {
+        res = await API.delete("/weeb/history");
+      } else if (filter === "watching") {
+        res = await API.delete("/weeb/watching");
+      } else if (filter === "completed") {
+        res = await API.delete("/weeb/completed");
       }
-    });
+
+      const updated = res.data.history || res.data || [];
+      setHistory(updated);
+
+      toast({
+        title: "History Removed!",
+        status: "error",
+        duration: 1200,
+        position: "top-right",
+        containerStyle: {
+          bg: "#7c3aed",
+          color: "white",
+          fontWeight: "bold",
+          borderRadius: "12px",
+        }
+      });
 
     } catch (err) {
       console.error("Failed to clear history:", err);
+      toast({ title: "Failed to clear", status: "error", duration: 1200 });
     }
   };
 
@@ -203,19 +247,20 @@ export default function History() {
                 </HStack>
               </Link>
 
-              {filter === "all" && (
-                <IconButton
-                  icon={<CloseIcon />}
-                  size="sm"
-                  position="absolute"
-                  top={3}
-                  right={3}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    removeFromHistory(item.mal_id);
-                  }}
-                />
-              )}
+              <IconButton
+                icon={<CloseIcon />}
+                size="sm"
+                position="absolute"
+                top={3}
+                right={3}
+                bg="rgba(0,0,0,0.6)"
+                color="white"
+                _hover={{ bg: 'red.500' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeFromHistory(item.mal_id);
+                }}
+              />
             </Box>
           ))}
         </VStack>

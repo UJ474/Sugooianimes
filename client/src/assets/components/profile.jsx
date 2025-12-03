@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import API from "../../api";
 import "../css_files/profile.css";
 
 export default function Profile() {
@@ -24,18 +25,28 @@ export default function Profile() {
     }
 
     fetchUserStats();
+    // refresh stats when user changes
   }, [user, loading, navigate]);
 
+  // Fetch counts from backend
   const fetchUserStats = async () => {
     try {
-      // future real API call
+      const calls = [
+        API.get("/weeb/watchlist"),
+        API.get("/weeb/watching"),
+        API.get("/weeb/completed"),
+      ];
+
+      const [watchlistRes, historyRes, completedRes] = await Promise.all(calls);
+
       setStats({
-        watchlistCount: 0,
-        historyCount: 0,
-        completedCount: 0,
+        watchlistCount: Array.isArray(watchlistRes.data) ? watchlistRes.data.length : 0,
+        historyCount: Array.isArray(historyRes.data) ? historyRes.data.length : 0,
+        completedCount: Array.isArray(completedRes.data) ? completedRes.data.length : 0,
       });
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      console.error("Error fetching user stats:", error);
+      // keep previous values if error
     }
   };
 
@@ -75,7 +86,7 @@ export default function Profile() {
               </div>
               <div className="stat-item">
                 <span className="stat-number">{stats.historyCount}</span>
-                <span className="stat-label">Watched</span>
+                <span className="stat-label">Watching</span>
               </div>
               <div className="stat-item">
                 <span className="stat-number">{stats.completedCount}</span>
@@ -96,15 +107,13 @@ export default function Profile() {
         <div className="profile-tabs">
           <Link
             to="/profile/watchlist"
-            className={`profile-tab ${activeTab === "watchlist" ? "active" : ""}`}
-          >
+            className={`profile-tab ${activeTab === "watchlist" ? "active" : ""}`}>
             <span className="tab-icon">📺</span> WATCHLIST
           </Link>
 
           <Link
             to="/profile/history"
-            className={`profile-tab ${activeTab === "history" ? "active" : ""}`}
-          >
+            className={`profile-tab ${activeTab === "history" ? "active" : ""}`}>
             <span className="tab-icon">🕐</span> HISTORY
           </Link>
         </div>

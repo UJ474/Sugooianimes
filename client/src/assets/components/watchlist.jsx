@@ -17,6 +17,7 @@ import {
 import { DeleteIcon } from '@chakra-ui/icons';
 import { AuthContext } from '../../context/AuthContext';
 import '../css_files/watchlist.css'; // kept for backwards compatibility (now minimal)
+import API from '../../api';
 
 export default function Watchlist() {
   const { user } = useContext(AuthContext);
@@ -30,36 +31,56 @@ export default function Watchlist() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // NOTE: replace the internals of fetchWatchlist with your real API call
   const fetchWatchlist = async () => {
     setLoading(true);
     try {
-      // mock fetch delay
-      await new Promise((r) => setTimeout(r, 650));
+      const res = await API.get('/weeb/watchlist');
 
-      // TODO: replace this mock with your API call, e.g.
-      // const res = await API.get(`/users/${user.id}/watchlist`);
-      // setWatchlist(res.data);
+      // normalize response to an array
+      const payload = Array.isArray(res.data)
+        ? res.data
+        : (res.data.watchlist || res.data.data || []);
 
-      // Mock data: keep empty array if you want empty-state to show
-      const mock = [];
-
-      setWatchlist(mock);
+      setWatchlist(payload);
     } catch (err) {
       console.error('Error fetching watchlist:', err);
-      toast({ title: 'Failed to load watchlist', status: 'error' });
+      toast({
+        title: 'Failed to load watchlist',
+        status: 'error',
+        duration: 1200,
+        position: 'top-right',
+        containerStyle: {
+          bg: '#7c3aed',
+          color: 'white',
+          fontWeight: 'bold',
+          borderRadius: '12px',
+        }
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const removeFromWatchlist = async (animeId) => {
+  const removeFromWatchlist = async (mal_id) => {
     try {
-      // TODO: call API to remove on server
-      // await API.delete(`/users/${user.id}/watchlist/${animeId}`)
+      // call server
+      await API.delete(`/weeb/watchlist/${mal_id}`);
 
-      setWatchlist((prev) => prev.filter((a) => a.id !== animeId));
-      toast({ title: 'Removed from watchlist', status: 'info', duration: 1200 });
+      // update local UI
+      setWatchlist((prev) => prev.filter((a) => a.mal_id !== mal_id));
+
+      toast({
+        title: 'Removed from watchlist',
+        status: 'error',
+        duration: 1200,
+        position: 'top-right',
+        containerStyle: {
+          bg: '#7c3aed',
+          color: 'white',
+          fontWeight: 'bold',
+          borderRadius: '12px',
+        }
+      });
     } catch (err) {
       console.error('Error removing from watchlist:', err);
       toast({ title: 'Failed to remove', status: 'error' });
@@ -107,7 +128,7 @@ export default function Watchlist() {
           <Text color="gray.300">Save anime to your watchlist to find them later.</Text>
 
           <HStack spacing={4}>
-            <Button as={RouterLink} to="/" colorScheme="purple" variant="solid">Browse anime</Button>
+            <Button as={RouterLink} to="/current" colorScheme="purple" variant="solid">Browse anime</Button>
             <Button as={RouterLink} to="/filter" variant="outline" borderColor="rgba(255,255,255,0.08)">Explore genres</Button>
           </HStack>
         </VStack>
@@ -122,7 +143,7 @@ export default function Watchlist() {
       <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={6}>
         {watchlist.map((anime) => (
           <Box
-            key={anime.id}
+            key={anime.mal_id}
             bg="rgba(255,255,255,0.02)"
             borderRadius="12px"
             overflow="hidden"
@@ -131,7 +152,7 @@ export default function Watchlist() {
           >
             <Box position="relative" h="0" pb="140%" bg="gray.800">
               <Image
-                src={anime.image || anime.cover || ''}
+                src={anime.imageUrl || anime.image || anime.cover || ''}
                 alt={anime.title}
                 objectFit="cover"
                 position="absolute"
@@ -152,7 +173,7 @@ export default function Watchlist() {
                 bg="rgba(0,0,0,0.6)"
                 color="white"
                 _hover={{ bg: 'red.500' }}
-                onClick={() => removeFromWatchlist(anime.id)}
+                onClick={() => removeFromWatchlist(anime.mal_id)}
               />
             </Box>
 
@@ -167,7 +188,7 @@ export default function Watchlist() {
 
               <HStack mt={4} spacing={3}>
                 <Button as={RouterLink} to={`/anime/${encodeURIComponent(anime.title)}`} size="sm" variant="outline" borderColor="rgba(255,255,255,0.06)" color="white">View</Button>
-                <Button size="sm" onClick={() => removeFromWatchlist(anime.id)} variant="ghost" color="gray.300">Remove</Button>
+                <Button size="sm" onClick={() => removeFromWatchlist(anime.mal_id)} variant="ghost" color="gray.300">Remove</Button>
               </HStack>
             </Box>
           </Box>

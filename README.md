@@ -19,7 +19,10 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> bf2d7c6f06ea7f8338ebb72f45197d629c793580
 ##  System Architecture  
 **Frontend → Backend API → Database**
 

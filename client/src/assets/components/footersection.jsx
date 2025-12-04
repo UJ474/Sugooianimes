@@ -51,7 +51,7 @@ export default function Footer() {
             {/* Bottom Bar */}
             <div className="footer-bottom">
                 <div className="footer-bottom-content">
-                    <p className="footer-copyright">© 2025 Sugooianime. All rights reserved.</p>
+                    <p className="footer-copyright">© 2025 Sugooianimes. All rights reserved.</p>
                     <div className="footer-legal">
                         <Link >Terms of Use</Link>
                         <span className="footer-separator">•</span>

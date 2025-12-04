@@ -1,164 +1,196 @@
 # Sugooianime – Anime Discovery Platform
 
-Sugooianime is a full-stack anime discovery platform inspired by IMDb, designed to deliver live anime data, personalized experiences, and user interactivity.
-It integrates real-time anime information using a public API and combines it with user-specific features like watchlists and recently viewed anime — all backed by a secure authentication system.
+Sugooianime is a full‑stack anime browsing and tracking platform inspired by IMDb and MyAnimeList.  
+It delivers **live anime data**, **personalized user dashboards**, **watchlists**, **watching/completed tracking**, and a **history system**, all backed by a secure authentication layer and a custom API.
 
--------------------------------------------------------------------------------
+---
 
-## Problem Statement
-Most anime websites provide only static or limited data with no personalization.
-Users cannot maintain watchlists, track progress, or store preferences.
+## 📌 Problem Statement
 
-Sugooianime solves this by combining live anime data with:
-- A custom backend (Express.js)
-- User accounts (JWT authentication)
-- Watchlists
-- Recently viewed systems
+Most anime‑browsing websites only show static lists with no personalization. Users cannot:
 
--------------------------------------------------------------------------------
+- Track what they’re watching
+- Maintain a watchlist
+- Mark anime as completed
+- View history of what they opened
+- Enjoy a consistent design system
 
-## System Architecture
-Frontend → Backend API → Database
+Sugooianime solves this by combining real‑time API data + a custom backend + user‑specific collections.
 
-### Frontend
-- React.js, HTML, CSS, JavaScript
-- React Router for multiple pages:
-  Home, Popular, New Releases, Genre, Anime Details, Watchlist, Login, Signup, Profile
-- Live data fetching from Jikan/AniList API
-- State management using React Hooks
+---
 
-### Backend
+## 🏗️ System Architecture  
+**Frontend → Backend API → Database**
+
+### **Frontend**
+- React.js (Vite)
+- Chakra UI + Custom CSS
+- React Router for pages:
+  - Home  
+  - Popular  
+  - New Releases  
+  - Genre  
+  - Anime Details  
+  - Watchlist  
+  - History  
+  - Profile  
+  - Login / Signup
+- Reusable components (AnimeCard, Header, Profile, etc.)
+- Fully responsive & consistent UI system
+- State management with React Hooks
+
+### **Backend**
 - Node.js + Express.js
-- CRUD APIs for users, watchlists, recently viewed
-- Filtering, searching, sorting, pagination
-- Acts as a proxy for external anime API
+- Custom REST API for all anime interactions
+- CRUD routes:
+  - Watchlist  
+  - Watching list  
+  - Completed list  
+  - History  
+- Token‑based auth middleware
+- External API proxy for Jikan / AniList
 
-### Database
-- MongoDB Atlas
-- Stores users, watchlists, recently viewed
-- Designed for efficient querying
+### **Database**
+- MongoDB Atlas (Cloud)
+- Collections:
+  - users
+  - watchlist
+  - watching
+  - completed
+  - history
 
-### Authentication
-- JWT-based system
-- Password encryption using bcrypt
+### **Authentication**
+- JWT‑based login sessions
+- Password hashing via bcrypt
+- Secure protected routes
 
-### Hosting
-| Layer     | Platform |
-|-----------|----------|
-| Frontend  | Vercel   |
-| Backend   | Vercel   |
-| Database  | MongoDB Atlas |
+---
 
--------------------------------------------------------------------------------
+## 🚀 Key Features
 
-## Key Features
-- JWT authentication (login/signup)
-- CRUD operations
-- Search / Filter / Sort / Pagination
-- Dynamic data fetching
-- Watchlist management
-- Recently viewed anime history
-- Fully deployed frontend + backend
+- Full authentication system (Login, Signup, Protected Routes)
+- Watchlist (Add / Remove)
+- Watching list (Start watching / Remove)
+- Completed list (Mark completed / Move from watching)
+- History tracking (Auto‑track visited anime)
+- Clear History (for all / watching / completed)
+- Toast + popup feedback UX
+- Anime search with live suggestions
+- Genre filtering
+- Popular / Current Season pages
 
--------------------------------------------------------------------------------
+---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-| Layer         | Technologies |
-|---------------|--------------|
-| Frontend      | React.js, React Router, Axios, HTML, CSS, JS |
-| Backend       | Node.js, Express.js |
-| Database      | MongoDB Atlas |
-| Auth          | JWT, bcrypt |
-| External API  | Jikan / AniList |
-| Hosting       | Vercel (Frontend + Backend) |
+| Layer | Technologies |
+|-------|--------------|
+| Frontend | React.js, Chakra UI, CSS Modules, Axios |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas |
+| Auth | JWT, bcrypt |
+| External API | Jikan / AniList |
+| Hosting | Vercel (Frontend + Backend) |
 
--------------------------------------------------------------------------------
+---
 
-## API Overview
+## 🔗 Deployment Links
 
-| Endpoint                     | Method | Description                             | Access        |
-|-----------------------------|--------|-----------------------------------------|---------------|
-| /api/auth/signup           | POST   | Register new user                       | Public        |
-| /api/auth/login            | POST   | Authenticate user                       | Public        |
-| /api/users/:id             | GET    | Get user profile                        | Authenticated |
-| /api/watchlist             | GET    | Get user watchlist                      | Authenticated |
-| /api/watchlist             | POST   | Add anime to watchlist                  | Authenticated |
-| /api/watchlist/:id         | DELETE | Remove anime from watchlist             | Authenticated |
-| /api/recent                | GET    | Fetch recently viewed                   | Authenticated |
-| /api/recent                | POST   | Add recently viewed item                | Authenticated |
-| /api/anime/search          | GET    | Search, sort, filter anime with pagination | Public |
+| Component | URL |
+|----------|-----|
+| **Frontend** | https://sugooianimes.vercel.app/ |
+| **Backend** | https://sugooianimes-server.vercel.app/ |
 
--------------------------------------------------------------------------------
+---
 
-## Deployment Links
+## 📡 API Routes Summary
 
-| Component     | URL |
-|---------------|-----|
-| Frontend      | https://sugooianimes.vercel.app/ |
-| Backend       | https://sugooianimes-server.vercel.app/ |
+| Endpoint | Method | Description | Auth |
+|----------|--------|-------------|------|
+| /api/auth/signup | POST | Register user | Public |
+| /api/auth/login | POST | Login user | Public |
+| /api/watchlist | GET | Fetch watchlist | Protected |
+| /api/watchlist | POST | Add anime | Protected |
+| /api/watchlist/:id | DELETE | Remove anime | Protected |
+| /api/watching | GET | Fetch watching list | Protected |
+| /api/watching | POST | Move to watching | Protected |
+| /api/watching/:id | DELETE | Remove | Protected |
+| /api/completed | GET | Fetch completed list | Protected |
+| /api/completed | POST | Add to completed | Protected |
+| /api/completed/:id | DELETE | Remove | Protected |
+| /api/history | GET | Fetch history | Protected |
+| /api/history | DELETE | Clear all history | Protected |
+| /api/history/:id | DELETE | Remove one | Protected |
+| /api/anime/search | GET | Search / paginate | Public |
 
--------------------------------------------------------------------------------
+---
 
-## How to Run Locally
+## 🧩 How to Run Locally
 
-### 1. Clone the repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/UJ474/Sugooianimes.git
 cd Sugooianime
 ```
 
-### 2. Install dependencies
-- Frontend
+### 2. Install Dependencies
+**Frontend**
 ```bash
 cd client
 npm install
 ```
-- Backend
+
+**Backend**
 ```bash
 cd ../server
 npm install
 ```
-### 3. Create a .env file inside /server
-```bash
-MONGO_URI=<your MongoDB connection string>
-JWT_SECRET=<your secret>
+
+### 3. Setup Environment Variables  
+Create `/server/.env`:
+
+```
+MONGO_URI=<your_mongo_uri>
+JWT_SECRET=<your_secret_key>
 PORT=5001
 ```
 
-### 4. Start both servers
-- Frontend
+### 4. Run Development Servers  
+Frontend:
 ```bash
 npm run dev
 ```
 
-- Backend
+Backend:
 ```bash
 node index.js
 ```
 
-#### Visit:
-- Frontend → http://localhost:5173
-- Backend → http://localhost:5001
+---
 
--------------------------------------------------------------------------------
+## 📁 Folder Structure
 
-## Folder Structure
-```bash
+```
 Sugooianime/
 │
-├── client/          # React frontend
+├── client/           # React frontend
 │   ├── src/
 │   ├── public/
 │   └── vite.config.js
 │
-├── server/          # Express backend
+├── server/           # Express backend
 │   ├── models/
 │   ├── routes/
 │   ├── middleware/
+│   ├── controllers/
 │   └── index.js
 │
-├── .gitignore
 └── README.md
 ```
--------------------------------------------------------------------------------
+
+---
+
+## ✔️ Status  
+Actively being improved — UI overhaul, design consistency, animations, and better toast/popup UX in progress.
+
+Sugooianime continues to evolve with new features and a polished unified design system.

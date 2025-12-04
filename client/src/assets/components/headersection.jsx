@@ -145,14 +145,15 @@ export default function Header() {
                 )}
             </div>
 
+
             <div className="navbarrightcontainer">
-                <div className="header-icons">
+                {/* <div className="header-icons">
                     {headerTextLinksRight.map((item, i) => (
                         <button key={i} className="icon-btn" title={item.alt}>
                             <img src={item.image} alt={item.alt} className='navbarright' />
                         </button>
                     ))}
-                </div>
+                </div> */}
 
                 <div className="auth-section">
                     {user ? (

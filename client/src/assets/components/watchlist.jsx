@@ -18,6 +18,8 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { AuthContext } from '../../context/AuthContext';
 import '../css_files/watchlist.css'; // kept for backwards compatibility (now minimal)
 import API from '../../api';
+import monitorplay from '../images/monitor-play.png';
+
 
 export default function Watchlist() {
   const { user } = useContext(AuthContext);
@@ -119,17 +121,16 @@ export default function Watchlist() {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            boxShadow="0 10px 30px rgba(41,95,255,0.12)"
           >
-            <Text fontSize="48px" fontWeight="700" color="white">📚</Text>
+            <Image src={monitorplay} alt="Empty" width="60px" height="60px" />
           </Box>
 
           <Heading size="md" color="white">Your watchlist is empty</Heading>
           <Text color="gray.300">Save anime to your watchlist to find them later.</Text>
 
           <HStack spacing={4}>
-            <Button as={RouterLink} to="/current" colorScheme="purple" variant="solid">Browse anime</Button>
-            <Button as={RouterLink} to="/filter" variant="outline" borderColor="rgba(255,255,255,0.08)">Explore genres</Button>
+            <Button as={RouterLink} to="/current" colorScheme="purple" variant="solid" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none", color:'black'}} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>Browse anime</Button>
+            <Button as={RouterLink} to="/filter" variant="outline" borderColor="rgba(255,255,255,0.08)" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none", color:'white' }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>Explore genres</Button>
           </HStack>
         </VStack>
       </Center>
@@ -148,7 +149,7 @@ export default function Watchlist() {
             borderRadius="12px"
             overflow="hidden"
             transition="transform 0.18s, box-shadow 0.18s"
-            _hover={{ transform: 'translateY(-6px)', boxShadow: '0 12px 32px rgba(0,0,0,0.5)' }}
+            _hover={{ transform: 'translateY(-6px)' }}
           >
             <Box position="relative" h="0" pb="140%" bg="gray.800">
               <Image
@@ -172,7 +173,10 @@ export default function Watchlist() {
                 right={3}
                 bg="rgba(0,0,0,0.6)"
                 color="white"
-                _hover={{ bg: 'red.500' }}
+                _hover={{ bg: 'red.500', textShadow:"none", boxShadow:"none" }}
+                _active={{ textShadow:"none", boxShadow:"none" }}
+                _focus={{ textShadow:"none", boxShadow:"none" }}
+                textShadow="none"
                 onClick={() => removeFromWatchlist(anime.mal_id)}
               />
             </Box>
@@ -187,8 +191,8 @@ export default function Watchlist() {
               </HStack>
 
               <HStack mt={4} spacing={3}>
-                <Button as={RouterLink} to={`/anime/${encodeURIComponent(anime.title)}`} size="sm" variant="outline" borderColor="rgba(255,255,255,0.06)" color="white">View</Button>
-                <Button size="sm" onClick={() => removeFromWatchlist(anime.mal_id)} variant="ghost" color="gray.300">Remove</Button>
+                <Button as={RouterLink} to={`/anime/${encodeURIComponent(anime.title)}`} size="sm" variant="outline" borderColor="rgba(255,255,255,0.06)" color="white" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none" }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>View</Button>
+                <Button size="sm" onClick={() => removeFromWatchlist(anime.mal_id)} variant="ghost" color="gray.300" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none" }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>Remove</Button>
               </HStack>
             </Box>
           </Box>

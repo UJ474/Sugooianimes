@@ -6,9 +6,11 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <Link to={`/anime/${encodeURIComponent(title)}`}>
+    <Link 
+      to={`/anime/${encodeURIComponent(title)}`}
+      style={{ textDecoration: 'none', color: 'inherit' }}
+    >
       <Box
-        // className="anime-card"
         position="relative"
         width="13.5rem"
         borderRadius="sm"
@@ -26,11 +28,11 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
 
           {!loaded && (
             <Skeleton
-              style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                    gap: "1rem",
-                }}
+              width="100%"
+              height="100%"
+              position="absolute"
+              top="0"
+              left="0"
             />
           )}
 
@@ -59,9 +61,14 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating }) {
           _hover={{ opacity: 1 }}
           color="white"
           p="10px"
+          textShadow="2px 2px 4px rgba(0, 0, 0, 0.8)"
         >
           <Box position="absolute" bottom="10px">
-            <Text fontSize="lg" fontWeight="bold">
+            <Text 
+              fontSize="lg" 
+              fontWeight="bold"
+              color="white"
+            >
               {title}
             </Text>
           </Box>

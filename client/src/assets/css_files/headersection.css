@@ -61,27 +61,12 @@
   cursor: pointer;
 }
 
-.navbarleft::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 2px;
-  transform: translateX(-50%);
-  transition: width 0.3s ease;
-}
 
 .navbarleft:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
 }
 
-.navbarleft:hover::after {
-  width: 70%;
-}
 
 /* Search Bar */
 .searchbarcontainer {

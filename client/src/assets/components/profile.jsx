@@ -3,6 +3,9 @@ import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import API from "../../api";
 import "../css_files/profile.css";
+import monitorplay from "../images/monitor-play.png";
+import historyimage from '../images/history.png';
+
 
 export default function Profile() {
   const { user, loading } = useContext(AuthContext);
@@ -65,73 +68,108 @@ export default function Profile() {
 
   return (
     <div className="profile-page">
-      <div className="profile-container">
+      <div className="profile-container" style={{ boxShadow: "none" }}>
         {/* HEADER */}
-        <div className="profile-header">
+        <div className="profile-header" style={{ boxShadow: "none" }}>
           <div className="profile-avatar-section">
             <div className="profile-avatar-large">
-              {user.username?.charAt(0).toUpperCase()}
+              <span style={{ textShadow: "none" }}>{user.username?.charAt(0).toUpperCase()}</span>
             </div>
           </div>
 
           <div className="profile-info-section">
             <div className="profile-username-row">
-              <h1 className="profile-username">{user.username}</h1>
+              <h1 className="profile-username" style={{ textShadow: "none" }}>{user.username}</h1>
             </div>
 
             <div className="profile-stats">
               <div className="stat-item">
-                <span className="stat-number">{stats.watchlistCount}</span>
-                <span className="stat-label">Watchlist</span>
+                <span className="stat-number" style={{ textShadow: "none" }}>{stats.watchlistCount}</span>
+                <span className="stat-label" style={{ textShadow: "none" }}>Watchlist</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">{stats.historyCount}</span>
-                <span className="stat-label">Watching</span>
+                <span className="stat-number" style={{ textShadow: "none" }}>{stats.historyCount}</span>
+                <span className="stat-label" style={{ textShadow: "none" }}>Watching</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">{stats.completedCount}</span>
-                <span className="stat-label">Completed</span>
+                <span className="stat-number" style={{ textShadow: "none" }}>{stats.completedCount}</span>
+                <span className="stat-label" style={{ textShadow: "none" }}>Completed</span>
               </div>
-            </div>
-
-            <div className="profile-bio">
-              <p className="profile-email">{user.email}</p>
-              <p className="profile-description">
-                Anime enthusiast • Discovering new worlds
-              </p>
             </div>
           </div>
         </div>
 
         {/* TABS */}
-        <div className="profile-tabs">
+        <div className="profile-tabs" style={{ boxShadow: "none" }}>
           <Link
             to="/profile/watchlist"
-            className={`profile-tab ${activeTab === "watchlist" ? "active" : ""}`}>
-            <span className="tab-icon">📺</span> WATCHLIST
+            className={`profile-tab ${activeTab === "watchlist" ? "active" : ""}`}
+            onMouseOver={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+            onFocus={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+            onMouseDown={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+          >
+            <img
+              src={monitorplay}
+              alt="Watchlist Icon"
+              style={{
+                width: "22px",
+                height: "22px",
+                objectFit: "contain",
+                opacity: 0.7,
+                filter: "none"
+              }}
+            />
+            <span style={{ textShadow: "none" }}>WATCHLIST</span>
           </Link>
 
           <Link
             to="/profile/history"
-            className={`profile-tab ${activeTab === "history" ? "active" : ""}`}>
-            <span className="tab-icon">🕐</span> HISTORY
+            className={`profile-tab ${activeTab === "history" ? "active" : ""}`}
+            onMouseOver={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+            onFocus={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+            onMouseDown={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+          >
+            <img
+              src={historyimage}
+              alt="History Icon"
+              style={{
+                width: "22px",
+                height: "22px",
+                objectFit: "contain",
+                opacity: 0.7,
+                filter: "none"
+              }}
+            />
+            <span style={{ textShadow: "none" }}>HISTORY</span>
           </Link>
         </div>
 
         {/* CONTENT */}
         <div className="profile-content">
           {isOnMainProfile ? (
-            <div className="profile-empty-state">
-              <div className="empty-state-icon">📚</div>
-              <h2>Welcome to Your Profile</h2>
-              <p>Start building your anime collection</p>
+            <div className="profile-empty-state" style={{ boxShadow: "none" }}>
+
+              <h2 style={{ textShadow: "none" }}>Welcome to Your Profile</h2>
+              <p style={{ textShadow: "none" }}>Start building your anime collection</p>
 
               <div className="empty-state-actions">
-                <Link to="/profile/watchlist" className="empty-state-btn">
-                  View Watchlist
+                <Link 
+                  to="/profile/watchlist" 
+                  className="empty-state-btn"
+                  onMouseOver={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                  onFocus={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                  onMouseDown={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                >
+                  <span style={{  textShadow: "none" }} _hover={{ color:'black'}}>View Watchlist</span>
                 </Link>
-                <Link to="/" className="empty-state-btn secondary">
-                  Browse Anime
+                <Link 
+                  to="/" 
+                  className="empty-state-btn secondary"
+                  onMouseOver={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                  onFocus={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                  onMouseDown={(e)=>{ e.currentTarget.style.boxShadow="none"; e.currentTarget.style.textShadow="none"; }}
+                >
+                  <span style={{ textShadow: "none" }}>Browse Anime</span>
                 </Link>
               </div>
             </div>

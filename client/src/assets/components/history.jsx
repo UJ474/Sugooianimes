@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { CloseIcon } from "@chakra-ui/icons";
 import API from "../../api";
+import historyimage from '../images/history.png';
 
 export default function History() {
   const { user } = useContext(AuthContext);
@@ -33,6 +34,7 @@ export default function History() {
 
     try {
       setLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 600));
 
       let res;
 
@@ -67,16 +69,16 @@ export default function History() {
         res = await API.delete(`/weeb/completed/${mal_id}`);
       }
 
-      // server may return either { history: [...] } or the raw list
-      const updated = res.data.history || res.data || [];
+      const updated = Array.isArray(res.data) ? res.data : (res.data.history || []);
       setHistory(updated);
+      fetchHistory();
 
-      // quick toast feedback (uses your chosen style)
       toast({
         title: "Removed!",
         status: "error",
         duration: 1200,
         position: "top-right",
+        zIndex: 999999,
         containerStyle: {
           bg: "#7c3aed",
           color: "white",
@@ -112,7 +114,7 @@ export default function History() {
         res = await API.delete("/weeb/completed");
       }
 
-      const updated = res.data.history || res.data || [];
+      const updated = Array.isArray(res.data) ? res.data : (res.data.history || []);
       setHistory(updated);
 
       toast({
@@ -120,6 +122,7 @@ export default function History() {
         status: "error",
         duration: 1200,
         position: "top-right",
+        zIndex: 999999,
         containerStyle: {
           bg: "#7c3aed",
           color: "white",
@@ -163,6 +166,14 @@ export default function History() {
               variant={filter === key ? "solid" : "outline"}
               colorScheme="purple"
               onClick={() => setFilter(key)}
+              textShadow="none"
+              _hover={{
+                textShadow: "none",
+                transform: "scale(1.12)",
+                transition: "transform 0.2s ease"
+              }}
+              _active={{ textShadow: "none" }}
+              _focus={{ textShadow: "none", boxShadow: "none" }}
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </Button>
@@ -175,6 +186,10 @@ export default function History() {
             colorScheme="red"
             variant="outline"
             onClick={clearHistory}
+            textShadow="none"
+            _hover={{ textShadow: "none" }}
+            _active={{ textShadow: "none" }}
+            _focus={{ textShadow: "none", boxShadow: "none" }}
           >
             Clear All
           </Button>
@@ -184,14 +199,27 @@ export default function History() {
       {history.length === 0 ? (
         <Center py={20}>
           <VStack spacing={3}>
-            <Text fontSize="4xl" opacity={0.5}>📄</Text>
-            <Text fontSize="2xl" fontWeight="300">
+            <Image 
+              src={historyimage}
+              alt="No history" 
+              boxSize="50px" 
+              opacity={0.5}
+            />
+            <Text fontSize="2xl" fontWeight="300" textShadow="none">
               No History Found
             </Text>
-            <Text color="gray.400">
+            <Text color="gray.400" textShadow="none">
               Start exploring anime and they will appear here.
             </Text>
-            <Button as={Link} to="/" colorScheme="purple">
+            <Button 
+              as={Link} 
+              to="/" 
+              colorScheme="purple"
+              textShadow="none"
+              _hover={{ textShadow: "none" }}
+              _active={{ textShadow: "none" }}
+              _focus={{ textShadow: "none", boxShadow: "none" }}
+            >
               Browse Anime
             </Button>
           </VStack>
@@ -208,8 +236,9 @@ export default function History() {
               overflow="hidden"
               position="relative"
               _hover={{ transform: "translateX(4px)", transition: "0.2s" }}
+              boxShadow="none"
             >
-              <Link to={`/anime/${item.title}`}>
+              <Link to={`/anime/${encodeURIComponent(item.title)}`}>
                 <HStack spacing={0}>
                   <Image
                     src={item.imageUrl}
@@ -220,7 +249,7 @@ export default function History() {
                   />
 
                   <VStack align="start" spacing={2} p={4} flex="1">
-                    <Text fontSize="lg" fontWeight="600" noOfLines={2}>
+                    <Text fontSize="lg" fontWeight="600" noOfLines={2} textShadow="none">
                       {item.title}
                     </Text>
 
@@ -235,12 +264,13 @@ export default function History() {
                         }
                         borderRadius="full"
                         px={3}
+                        textShadow="none"
                       >
                         {filter}
                       </Badge>
                     )}
 
-                    <Text fontSize="sm" color="gray.400">
+                    <Text fontSize="sm" color="gray.400" textShadow="none">
                       Added: {new Date(item.addedAt).toLocaleDateString()}
                     </Text>
                   </VStack>
@@ -255,7 +285,9 @@ export default function History() {
                 right={3}
                 bg="rgba(0,0,0,0.6)"
                 color="white"
-                _hover={{ bg: 'red.500' }}
+                _hover={{ bg: 'red.500', textShadow: "none", boxShadow: "none" }}
+                _active={{ textShadow: "none", boxShadow: "none" }}
+                _focus={{ textShadow: "none", boxShadow: "none" }}
                 onClick={(e) => {
                   e.preventDefault();
                   removeFromHistory(item.mal_id);

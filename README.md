@@ -5,7 +5,7 @@ It delivers **live anime data**, **personalized user dashboards**, **watchlists*
 
 ---
 
-## 📌 Problem Statement
+##  Problem Statement
 
 Most anime‑browsing websites only show static lists with no personalization. Users cannot:
 
@@ -19,7 +19,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 🏗️ System Architecture  
+##  System Architecture  
 **Frontend → Backend API → Database**
 
 ### **Frontend**
@@ -66,7 +66,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - Full authentication system (Login, Signup, Protected Routes)
 - Watchlist (Add / Remove)
@@ -81,7 +81,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 🛠️ Tech Stack
+## ️ Tech Stack
 
 | Layer | Technologies |
 |-------|--------------|
@@ -94,7 +94,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 🔗 Deployment Links
+##  Deployment Links
 
 | Component | URL |
 |----------|-----|
@@ -103,7 +103,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 📡 API Routes Summary
+##  API Routes Summary
 
 | Endpoint | Method | Description | Auth |
 |----------|--------|-------------|------|
@@ -125,7 +125,7 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ---
 
-## 🧩 How to Run Locally
+##  How to Run Locally
 
 ### 1. Clone Repository
 ```bash
@@ -168,7 +168,7 @@ node run dev
 
 ---
 
-## 📁 Folder Structure
+##  Folder Structure
 
 ```
 Sugooianime/
@@ -189,10 +189,3 @@ Sugooianime/
 │
 └── README.md
 ```
-
----
-
-## ✔️ Status  
-Actively being improved — UI overhaul, design consistency, animations, and better toast/popup UX in progress.
-
-Sugooianime continues to evolve with new features and a polished unified design system.

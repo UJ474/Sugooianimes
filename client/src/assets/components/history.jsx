@@ -17,6 +17,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import API from "../../api";
 import historyimage from '../images/history.png';
 
+
 export default function History() {
   const { user } = useContext(AuthContext);
   const toast = useToast();

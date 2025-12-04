@@ -163,7 +163,7 @@ npm run dev
 
 Backend:
 ```bash
-node index.js
+node run dev
 ```
 
 ---
@@ -183,6 +183,8 @@ Sugooianime/
 │   ├── routes/
 │   ├── middleware/
 │   ├── controllers/
+│   ├── services/
+│   ├── utils/
 │   └── index.js
 │
 └── README.md

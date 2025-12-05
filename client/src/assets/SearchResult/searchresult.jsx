@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import AnimeCard from '../components/animecard.jsx';
 import './searchresult.css';
 import '../css_files/spinner.css';
+import { useNavigate } from 'react-router-dom';
 
 function capitalizeQuery(str) {
   return str
@@ -16,6 +17,8 @@ export default function SearchResults() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (!query) return;

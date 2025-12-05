@@ -10,7 +10,6 @@ const app = express();
 // DB connect
 connectDB();
 
-// Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true,
@@ -18,22 +17,19 @@ app.use(cors({
 
 app.use(express.json());
 
-// Routes
 const authRoutes = require('./routes/authRoutes');
 const weebRoutes = require("./routes/weebRoutes");
 app.use("/api/weeb", weebRoutes);
 app.use('/api/auth', authRoutes);
 
-// Protected route (for testing middleware)
 const verifyToken = require('./middleware/verifyToken');
 app.get('/api/protected', verifyToken, (req, res) => {
   res.json({
     message: 'Access granted to protected route',
-    user: req.user // coming from verifyToken
+    user: req.user
   });
 });
 
-// Root
 app.get('/', (req, res) => res.send('API running...'));
 
 module.exports = app;

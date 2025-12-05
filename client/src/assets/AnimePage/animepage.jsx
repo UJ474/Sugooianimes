@@ -193,7 +193,6 @@ const AnimePage = () => {
     }
   };
 
-  // Loading spinner
   if (loading) {
     return (
       <div className="animepagecontainer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -207,7 +206,6 @@ const AnimePage = () => {
   return (
     <div className="animepagecontainer">
 
-      {/* HERO SECTION */}
       <div className="anime-hero-section">
         <div className="anime-hero-backdrop"
           style={{ backgroundImage: `url(${animeData.images.jpg.large_image_url})` }}>
@@ -216,17 +214,14 @@ const AnimePage = () => {
         <div className="anime-hero-content">
           <div className="anime-hero-wrapper">
 
-            {/* POSTER */}
             <div className="anime-poster">
               <img src={animeData.images.jpg.large_image_url} alt={animeData.title} className="anime-poster-image" />
             </div>
 
-            {/* RIGHT COLUMN INFO */}
             <div className="anime-main-info">
 
               <h1 className="anime-main-title">{animeData.title}</h1>
 
-              {/* META TAGS centered */}
               <div className="anime-meta-tags" style={{ justifyContent: "center" }}>
                 <span className="meta-tag rating">{animeData.rating?.split(" ")[0] || "N/A"}</span>
                 <span className="meta-tag">{animeData.type || "TV"}</span>
@@ -234,7 +229,6 @@ const AnimePage = () => {
                 <span className="meta-tag score">⭐ {animeData.score || "N/A"}</span>
               </div>
 
-              {/* GENRES centered */}
               <div className="anime-genres" style={{ justifyContent: "center" }}>
                 {animeData.genres?.map((genre, idx) => (
                   <span key={idx} className="genre-tag">{genre.name}</span>
@@ -243,7 +237,6 @@ const AnimePage = () => {
 
               <p className="anime-synopsis-main">{animeData.synopsis}</p>
 
-              {/* ACTION BUTTONS (centered) */}
               <div className="anime-action-buttons" style={{ justifyContent: "center" }}>
 
                 {watchStatus === "completed" && (
@@ -353,7 +346,6 @@ const AnimePage = () => {
         </div>
       </div>
 
-      {/* DETAILS */}
       <div className="anime-details-section">
         <div className="details-grid">
           <div className="detail-item"><span className="detail-label">Japanese Title</span><span className="detail-value">{animeData.title_japanese || "N/A"}</span></div>
@@ -367,7 +359,6 @@ const AnimePage = () => {
         </div>
       </div>
 
-      {/* FEEDS */}
       <div className="anime-recommendations-section">
         <CurrentAnimeFeed />
       </div>

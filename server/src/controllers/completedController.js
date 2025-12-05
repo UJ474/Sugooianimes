@@ -1,6 +1,5 @@
 const completedService = require("../services/completedService");
 
-// GET COMPLETED
 exports.getCompleted = async (req, res) => {
   try {
     const list = await completedService.getCompleted(req.user._id);
@@ -10,7 +9,6 @@ exports.getCompleted = async (req, res) => {
   }
 };
 
-// ADD TO COMPLETED
 exports.addToCompleted = async (req, res) => {
   try {
     const updated = await completedService.addToCompleted(req.user._id, req.body);
@@ -20,7 +18,6 @@ exports.addToCompleted = async (req, res) => {
   }
 };
 
-// REMOVE FROM COMPLETED
 exports.removeFromCompleted = async (req, res) => {
   try {
     const updated = await completedService.removeFromCompleted(

@@ -18,9 +18,8 @@ export default function Profile() {
     completedCount: 0,
   });
 
-  // Wait for context to load BEFORE redirect logic
   useEffect(() => {
-    if (loading) return; // wait until user is loaded from localStorage
+    if (loading) return;
 
     if (!user) {
       navigate("/login");
@@ -28,10 +27,8 @@ export default function Profile() {
     }
 
     fetchUserStats();
-    // refresh stats when user changes
   }, [user, loading, navigate]);
 
-  // Fetch counts from backend
   const fetchUserStats = async () => {
     try {
       const calls = [
@@ -49,11 +46,10 @@ export default function Profile() {
       });
     } catch (error) {
       console.error("Error fetching user stats:", error);
-      // keep previous values if error
+      // keeping previous values if error
     }
   };
 
-  // While auth state loading — show nothing (or loader)
   if (loading) return null;
 
   // If user is still null → redirect triggered above
@@ -69,7 +65,6 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <div className="profile-container" style={{ boxShadow: "none" }}>
-        {/* HEADER */}
         <div className="profile-header" style={{ boxShadow: "none" }}>
           <div className="profile-avatar-section">
             <div className="profile-avatar-large">
@@ -99,7 +94,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* TABS */}
         <div className="profile-tabs" style={{ boxShadow: "none" }}>
           <Link
             to="/profile/watchlist"
@@ -144,7 +138,6 @@ export default function Profile() {
           </Link>
         </div>
 
-        {/* CONTENT */}
         <div className="profile-content">
           {isOnMainProfile ? (
             <div className="profile-empty-state" style={{ boxShadow: "none" }}>

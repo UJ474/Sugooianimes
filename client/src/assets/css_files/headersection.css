@@ -68,7 +68,6 @@
 }
 
 
-/* Search Bar */
 .searchbarcontainer {
   position: relative;
   margin: 0 2rem;
@@ -147,7 +146,6 @@
   padding-left: 20px;
 }
 
-/* Right Container */
 .navbarrightcontainer {
   display: flex;
   gap: 0;
@@ -185,7 +183,6 @@
   filter: brightness(0) invert(1);
 }
 
-/* Auth Section */
 .auth-section {
   display: flex;
   align-items: center;
@@ -230,7 +227,6 @@
   transform: translateY(-2px);
 }
 
-/* Profile Dropdown */
 .profile-button {
   background: none;
   border: none;
@@ -366,7 +362,6 @@
   text-align: center;
 }
 
-/* Hamburger & Mobile Menu */
 .hamburgerimage {
   display: none;
   height: 32px;
@@ -416,9 +411,7 @@
   padding-left: 16px;
 }
 
-/* ====================================== */
-/* RESPONSIVE DESIGN */
-/* ====================================== */
+
 
 @media screen and (max-width: 1024px) {
   .headersectionmain {

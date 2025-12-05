@@ -98,7 +98,6 @@ export default function Signup() {
       p={4}
       position="relative"
     >
-      {/* glowing background blobs */}
       <Box
         position="absolute"
         top="-6"
@@ -125,7 +124,6 @@ export default function Signup() {
       />
 
       <Box position="relative" maxW="md" w="full" zIndex={10}>
-        {/* heading */}
         <Box textAlign="center" mb={6}>
           <HStack justify="center">
             <Heading size="lg" color="white">
@@ -137,7 +135,6 @@ export default function Signup() {
           </Text>
         </Box>
 
-        {/* signup card */}
         <Box
           bg="rgba(15, 23, 42, 0.6)"
           p={8}
@@ -152,7 +149,6 @@ export default function Signup() {
 
           <form onSubmit={handleSubmit}>
             <VStack spacing={4}>
-              {/* username */}
               <FormControl>
                 <FormLabel color="gray.300" fontSize="sm">
                   Full name
@@ -169,7 +165,6 @@ export default function Signup() {
                 />
               </FormControl>
 
-              {/* email */}
               <FormControl>
                 <FormLabel color="gray.300" fontSize="sm">
                   Email
@@ -187,7 +182,6 @@ export default function Signup() {
                 />
               </FormControl>
 
-              {/* password */}
               <FormControl>
                 <FormLabel color="gray.300" fontSize="sm">
                   Password
@@ -212,7 +206,6 @@ export default function Signup() {
                 </InputGroup>
               </FormControl>
 
-              {/* confirm password */}
               <FormControl>
                 <FormLabel color="gray.300" fontSize="sm">
                   Confirm password
@@ -237,7 +230,6 @@ export default function Signup() {
                 </InputGroup>
               </FormControl>
 
-              {/* submit */}
               <Button
                 type="submit"
                 w="full"
@@ -253,7 +245,6 @@ export default function Signup() {
           </form>
         </Box>
 
-        {/* Login redirect */}
         <Text mt={4} color="gray.400" fontSize="xs" textAlign="center">
           Already have an account?{" "}
           <ChakraLink as={Link} to="/login" color="purple.300" fontWeight="semibold">

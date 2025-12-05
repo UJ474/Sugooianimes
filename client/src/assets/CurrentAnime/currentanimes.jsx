@@ -9,11 +9,9 @@ export default function CurrentAnimes() {
     const [currentAnimes, setCurrentAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // initialize page from localStorage so pagination works across navigation
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        // Look for cached page data for the currently selected page
         const storedData = localStorage.getItem('current_airing_page_data');
         if (storedData) {
             try {
@@ -21,7 +19,6 @@ export default function CurrentAnimes() {
                 const now = Date.now();
                 const oneDay = 24 * 60 * 60 * 1000;
 
-                // Use cached data only if it was stored for the same page and is fresh
                 if (parsedData.page === currentPage && (now - parsedData.timestamp < oneDay)) {
                     setCurrentAnimes(parsedData.data || []);
                     currentanimedata.length = 0;
@@ -30,12 +27,10 @@ export default function CurrentAnimes() {
                     return;
                 }
             } catch (err) {
-                // ignore parse errors and fetch fresh
                 console.warn('Failed to parse cached current airing data:', err);
             }
         }
 
-        // if cache is missing or stale, fetch the current page
         fetchAndStoreCurrentAnime(currentPage);
     }, [currentPage]);
 
@@ -66,7 +61,6 @@ export default function CurrentAnimes() {
                     currentanimedata.length = 0;
                     currentanimedata.push(...top30);
 
-                    // cache per-page data with timestamp and page number
                     try {
                         localStorage.setItem('current_airing_page_data', JSON.stringify({
                             data: top30,
@@ -77,7 +71,6 @@ export default function CurrentAnimes() {
                         console.warn('Failed to cache current airing page data:', err);
                     }
                 } else {
-                    // if API returned empty, clear list
                     setCurrentAnimes([]);
                 }
             })
@@ -157,17 +150,14 @@ export default function CurrentAnimes() {
                         variant={currentPage === pageNum ? "solid" : "outline"}
                         colorScheme={currentPage === pageNum ? "pink" : undefined}
 
-                        // text color
                         color={currentPage === pageNum ? "white" : "white"}
 
-                        // hover styles
                         _hover={
                             currentPage === pageNum
                                 ? { bg: "blue", color: "white" }
                                 : { bg: "white", color: "black" }
                         }
 
-                        // border color for outline version
                         borderColor={currentPage === pageNum ? "pink.500" : "white"}
                     >
                         {pageNum}

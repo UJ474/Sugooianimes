@@ -34,7 +34,6 @@ function App() {
           <Route path='/genre/:genreName' element={<SpecificGenre />} />
           <Route path='/anime/:animeId' element={<AnimePage />} />
           <Route path="/search/:query" element={<SearchResults />} />
-          {/* <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} /> */}
           <Route path="/profile" element={<Profile />}>
             <Route path="watchlist" element={<Watchlist />} />
             <Route path="history" element={<History />} />
@@ -47,6 +46,4 @@ function App() {
 }
 
 export default App
-
-
 

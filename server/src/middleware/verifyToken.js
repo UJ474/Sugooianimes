@@ -1,4 +1,3 @@
-// middleware/verifyToken.js
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -21,7 +20,6 @@ module.exports = function (req, res, next) {
     const id = decoded.id || decoded._id || decoded._id_str || decoded.userId;
     const email = decoded.email || decoded.em || null;
 
-    // Attach the normalized user object
     req.user = {
       id,
       _id: id,

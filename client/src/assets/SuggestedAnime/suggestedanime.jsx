@@ -9,11 +9,9 @@ export default function SuggestedAnime() {
     const [suggestedAnimes, setSuggestedAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // always start from page 1 — do NOT restore old page
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        // Load from cache
         const storedData = localStorage.getItem("suggested_page_cache");
         if (storedData) {
             try {
@@ -37,7 +35,6 @@ export default function SuggestedAnime() {
     }, [currentPage]);
 
     useEffect(() => {
-        // Scroll to top whenever page changes
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [currentPage]);
 
@@ -65,7 +62,6 @@ export default function SuggestedAnime() {
                     suggestedanimedata.length = 0;
                     suggestedanimedata.push(...top30);
 
-                    // cache properly
                     localStorage.setItem(
                         "suggested_page_cache",
                         JSON.stringify({
@@ -80,18 +76,6 @@ export default function SuggestedAnime() {
             .finally(() => setLoading(false));
     }
 
-    // if (loading) {
-    //     return (
-    //         <div style={{
-    //             display: "flex",
-    //             justifyContent: "center",
-    //             alignItems: "center",
-    //             height: "400px"
-    //         }}>
-    //             <div className="loading-spinner"></div>
-    //         </div>
-    //     );
-    // }
 
     return (
         <>
@@ -125,7 +109,6 @@ export default function SuggestedAnime() {
                 </div>
             )}
 
-            {/* Pagination (unchanged logic) but Chakra-themed */}
             <Flex justify="center" align="center" gap="10px" mt="3rem">
                 <Button
                     colorScheme="blue"

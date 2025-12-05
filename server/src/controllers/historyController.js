@@ -30,7 +30,6 @@ exports.removeFromHistory = async (req, res) => {
   }
 };
 
-
 exports.clearHistory = async (req, res) => {
   try {
     const updated = await historyService.clearHistory(req.user._id);

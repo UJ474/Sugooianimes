@@ -1,6 +1,5 @@
 const Weeb = require("../models/Weeb");
 
-// --- Utility: Ensures history object exists ---
 function ensureHistoryStructure(weeb) {
   if (!weeb.history || Array.isArray(weeb.history)) {
     weeb.history = {
@@ -11,7 +10,6 @@ function ensureHistoryStructure(weeb) {
   }
 }
 
-// --- GET ALL HISTORY ---
 exports.getHistory = async (userId) => {
   const weeb = await Weeb.findById(userId);
 
@@ -23,11 +21,10 @@ exports.getHistory = async (userId) => {
 
   ensureHistoryStructure(weeb);
 
-  return weeb.history.all; // return only ALL for now
+  return weeb.history.all;
 };
 
 
-// --- ADD TO HISTORY.ALL ---
 exports.addToHistory = async (userId, anime) => {
   const weeb = await Weeb.findById(userId);
 
@@ -37,10 +34,8 @@ exports.addToHistory = async (userId, anime) => {
     throw err;
   }
 
-  // Make sure structure exists
   ensureHistoryStructure(weeb);
 
-  // Normalize anime data for safety
   const item = {
     mal_id: anime.mal_id,
     title: anime.title,
@@ -48,13 +43,10 @@ exports.addToHistory = async (userId, anime) => {
     addedAt: new Date(),
   };
 
-  // Remove duplicates
   weeb.history.all = weeb.history.all.filter(a => a.mal_id !== item.mal_id);
 
-  // Add to TOP
   weeb.history.all.unshift(item);
 
-  // Limit to 30
   if (weeb.history.all.length > 30) {
     weeb.history.all = weeb.history.all.slice(0, 30);
   }
@@ -65,7 +57,6 @@ exports.addToHistory = async (userId, anime) => {
 };
 
 
-// --- REMOVE FROM HISTORY ---
 exports.removeFromHistory = async (userId, mal_id) => {
   const weeb = await Weeb.findById(userId);
 

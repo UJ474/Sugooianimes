@@ -18,7 +18,6 @@ const GenrePage = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [showFiltered, setShowFiltered] = useState(false);
 
-  // Handle preselected genres from navigation
   useEffect(() => {
     if (location.state?.preselectedGenres) {
       setSelectedGenres(location.state.preselectedGenres);
@@ -46,14 +45,12 @@ const GenrePage = () => {
 
   return (
     <div className="genre-page-container">
-      {/* Breadcrumb */}
       <div className="breadcrumb">
         <span>Home</span>
         <span>•</span>
         <span className="breadcrumb-current">Filter by Genre</span>
       </div>
 
-      {/* Filter Box */}
       <div className="filter-box">
         <h2 className="filter-title">Select Genres</h2>
 
@@ -71,7 +68,6 @@ const GenrePage = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="filter-button-container">
           {selectedGenres.length > 0 && (
             <>
@@ -94,12 +90,10 @@ const GenrePage = () => {
         </div>
       </div>
 
-      {/* Results */}
       {showFiltered && selectedGenres.length > 0 && (
         <GenreSearch selectedGenre={selectedGenres} />
       )}
 
-      {/* Empty State */}
       {!showFiltered && selectedGenres.length === 0 && (
         <div className="genre-message">
           <p>✨ Select one or more genres to discover amazing anime!</p>

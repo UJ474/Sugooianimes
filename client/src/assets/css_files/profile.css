@@ -1,7 +1,6 @@
-/* Profile Page Styles */
 .profile-page {
     min-height: 100vh;
-    background: #000; /* pure black */
+    background: #000;
     padding: 80px 20px 40px;
 }
 
@@ -16,7 +15,6 @@
     box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
 
-/* Profile Header */
 .profile-header {
     display: flex;
     gap: 40px;
@@ -126,7 +124,6 @@
     margin: 0;
 }
 
-/* Tabs Navigation */
 .profile-tabs {
     display: flex;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -164,7 +161,6 @@
     font-size: 18px;
 }
 
-/* Profile Content */
 .profile-content {
     padding: 40px 0;
 }
@@ -230,7 +226,6 @@
     box-shadow: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .profile-page {
         padding: 60px 16px 40px;

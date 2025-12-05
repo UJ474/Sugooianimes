@@ -130,13 +130,11 @@ export default function TrendingAnime() {
             });
     }
 
-    // Handle manual navigation
     const goToSlide = (index) => {
         setPrevIndex(currentIndex);
         setCurrentIndex(index);
         setAutoPlay(false);
         
-        // Resume auto-play after 8 seconds of inactivity
         setTimeout(() => setAutoPlay(true), 8000);
     };
 
@@ -150,7 +148,6 @@ export default function TrendingAnime() {
         goToSlide(newIndex);
     };
 
-    // Auto-play effect
     useEffect(() => {
         if (topAnime.length > 0 && autoPlay) {
             intervalRef.current = setInterval(() => {
@@ -192,7 +189,6 @@ export default function TrendingAnime() {
             )}
             </div>
 
-            {/* Left Navigation Button */}
             <button 
                 className="nav-button nav-button-left"
                 onClick={goToPrevious}
@@ -203,7 +199,6 @@ export default function TrendingAnime() {
                 </svg>
             </button>
 
-            {/* Right Navigation Button */}
             <button 
                 className="nav-button nav-button-right"
                 onClick={goToNext}
@@ -214,7 +209,6 @@ export default function TrendingAnime() {
                 </svg>
             </button>
 
-            {/* Progress Indicators */}
             <div className="progress-indicators">
                 {topAnime.map((_, index) => (
                     <div

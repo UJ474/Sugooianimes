@@ -12,7 +12,6 @@ const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || JWT_SECRET;
 
 
 
-// SIGNUP
 exports.signup = async ({ username, email, password }) => {
   if (!username || !email || !password) {
     const error = new Error("All fields are required");
@@ -68,7 +67,6 @@ exports.login = async ({ email, password }) => {
     throw err;
   }
 
-  // ISSUE FIX: token should store _id (NOT id)
   const accessToken = jwt.sign(
     { _id: user._id.toString(), email: user.email },
     JWT_SECRET,
@@ -93,7 +91,6 @@ exports.login = async ({ email, password }) => {
 };
 
 
-// REFRESH TOKEN
 exports.refreshTokens = async (refreshToken) => {
   if (!refreshToken) {
     const err = new Error("Refresh token missing");

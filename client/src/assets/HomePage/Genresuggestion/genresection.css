@@ -43,7 +43,6 @@
   transform: scale(1.15);
 }
 
-/* Genre Empty State */
 .genre-empty-state {
   display: flex;
   flex-direction: column;
@@ -109,7 +108,6 @@
   background-color: #505377;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .genretitle {
     font-size: 3rem;

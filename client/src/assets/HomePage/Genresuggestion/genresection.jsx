@@ -103,7 +103,6 @@ export default function GenreSection() {
         ))}
       </SimpleGrid>
 
-      {/* Empty State Section */}
       <Box className="genre-empty-state" mt="4rem">
         <div className="genre-illustration">
           <img 

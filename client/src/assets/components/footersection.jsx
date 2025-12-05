@@ -8,7 +8,6 @@ export default function Footer() {
     return (
         <footer className="footer-main">
             <div className="footer-container">
-                {/* Logo and Description Section */}
                 <div className="footer-section footer-brand">
                     <div className="footer-logo">
                         <img src={sugooianimelogo} alt="Sugooianime Logo" />
@@ -48,7 +47,6 @@ export default function Footer() {
                 </div>
             </div>
 
-            {/* Bottom Bar */}
             <div className="footer-bottom">
                 <div className="footer-bottom-content">
                     <p className="footer-copyright">© 2025 Sugooianimes. All rights reserved.</p>

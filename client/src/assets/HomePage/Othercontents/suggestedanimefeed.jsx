@@ -105,7 +105,6 @@ const SuggestedAnimeFeed = () => {
                 </Button>
             </Flex>
 
-            {/* Skeleton shimmer loading */}
             {loading && (
                 <div style={{ padding: "2rem", width: "100%" }}>
                     <div
@@ -122,7 +121,6 @@ const SuggestedAnimeFeed = () => {
                 </div>
             )}
 
-            {/* Actual list */}
             {!loading && (
                 <Flex
                     className="animescroll"

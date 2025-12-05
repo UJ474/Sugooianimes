@@ -27,7 +27,6 @@ const SingleGenreFeed = ({ genre }) => {
             const now = Date.now();
             const oneDay = 24 * 60 * 60 * 1000;
 
-            // Use cache if valid
             if (now - parsed.timestamp < oneDay) {
                 setAnimeList(parsed.data);
                 setLoading(false);
@@ -74,7 +73,6 @@ const SingleGenreFeed = ({ genre }) => {
                     })
                 );
             } else {
-                // API returned nothing → fallback to old localStorage
                 const saved = localStorage.getItem(key);
                 if (saved) {
                     const parsed = JSON.parse(saved);
@@ -84,7 +82,6 @@ const SingleGenreFeed = ({ genre }) => {
         } catch (err) {
             console.error(`Error fetching ${genre.name}:`, err);
 
-            // On error → show cached data if available
             const key = `genre_feed_${genre.name}`;
             const saved = localStorage.getItem(key);
             if (saved) {
@@ -102,7 +99,6 @@ const SingleGenreFeed = ({ genre }) => {
         });
     };
 
-    // If it has NEVER fetched ANYTHING, hide the section
     if (!loading && animeList.length === 0) {
         return null;
     }

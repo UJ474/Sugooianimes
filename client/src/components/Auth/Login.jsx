@@ -84,7 +84,6 @@ export default function Login() {
       p={4}
       position="relative"
     >
-      {/* background blur */}
       <Box
         position="absolute"
         top="-6"
@@ -112,7 +111,6 @@ export default function Login() {
 
       <Box position="relative" zIndex={10} w="full" maxW="md">
 
-        {/* Header */}
         <Box textAlign="center" mb={6}>
           <Heading size="lg" color="white">
             Sugooianime
@@ -122,7 +120,6 @@ export default function Login() {
           </Text>
         </Box>
 
-        {/* Auth Card */}
         <Box
           bg="rgba(15, 23, 42, 0.6)"
           border="1px solid"
@@ -139,7 +136,6 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <VStack spacing={4}>
 
-              {/* Email */}
               <FormControl id="email" isRequired>
                 <FormLabel color="gray.300" fontSize="sm">
                   Email address
@@ -156,7 +152,6 @@ export default function Login() {
                 />
               </FormControl>
 
-              {/* Password */}
               <FormControl id="password" isRequired>
                 <FormLabel color="gray.300" fontSize="sm">
                   Password
@@ -188,7 +183,6 @@ export default function Login() {
                 </InputGroup>
               </FormControl>
 
-              {/* Signup Redirect */}
               <HStack w="full" justify="space-between">
                 <Text mt={4} color="gray.400" fontSize="xs" textAlign="center">
                   Don't have an account?{" "}
@@ -198,7 +192,6 @@ export default function Login() {
                 </Text>
               </HStack>
 
-              {/* Submit Button */}
               <Button
                 type="submit"
                 w="full"

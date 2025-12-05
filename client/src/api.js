@@ -4,14 +4,12 @@ const API = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
 });
 
-// Attaching JWT token automatically for all requests
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// SIGNUP
 export const signupUser = async (userData) => {
   try {
     const res = await API.post("/auth/signup", userData);
@@ -23,7 +21,6 @@ export const signupUser = async (userData) => {
   }
 };
 
-// LOGIN
 export const loginUser = async (credentials) => {
   try {
     const res = await API.post("/auth/login", credentials);

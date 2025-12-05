@@ -75,7 +75,6 @@
     -webkit-mask-repeat: no-repeat;
 }
 
-/* Navigation Buttons */
 .nav-button {
     position: absolute;
     top: 50%;
@@ -109,7 +108,6 @@
     right: 2rem;
 }
 
-/* Progress Indicators */
 .progress-indicators {
     position: absolute;
     bottom: 2rem;
@@ -144,11 +142,7 @@
     background: rgba(255, 255, 255, 0.5);
 }
 
-/* ========================================
-   RESPONSIVE BREAKPOINTS
-   ======================================== */
 
-/* Large Desktop & Ultra-wide (1920px+) */
 @media (min-width: 1920px) {
     .nav-button {
         width: 60px;
@@ -164,7 +158,6 @@
     }
 }
 
-/* Tablets & Small Laptops (768px - 1024px) */
 @media (max-width: 1024px) {
     .trendingherosliderdata {
         width: 40%;
@@ -194,7 +187,6 @@
     }
 }
 
-/* Tablets Portrait (768px - 900px) */
 @media (max-width: 900px) {
     .trendingherosliderdata {
         width: 50%;
@@ -207,7 +199,6 @@
     }
 }
 
-/* Mobile Landscape & Small Tablets (600px - 768px) */
 @media (max-width: 768px) {
     .trendingherosliderdata {
         width: 60%;
@@ -249,7 +240,6 @@
     }
 }
 
-/* Mobile Portrait (480px - 600px) */
 @media (max-width: 600px) {
     .trendingheroslider {
         height: 70vh;
@@ -263,7 +253,6 @@
         margin-bottom: 4rem;
     }
     
-    /* Adjust gradient mask for mobile */
     .herosliderimages img {
         -webkit-mask-image: 
             linear-gradient(to bottom, black 20%, transparent 90%);
@@ -289,7 +278,6 @@
     }
 }
 
-/* Small Mobile (max 480px) */
 @media (max-width: 480px) {
     .trendingheroslider {
         height: 65vh;
@@ -301,7 +289,6 @@
         margin-top: 1rem;
     }
     
-    /* Smaller text for mobile */
     .trendingherosliderdata p:first-child {
         font-size: 24px !important;
         padding-bottom: 1.5rem !important;
@@ -342,7 +329,6 @@
     }
 }
 
-/* Extra Small Mobile (max 375px) */
 @media (max-width: 375px) {
     .trendingherosliderdata {
         width: 92%;

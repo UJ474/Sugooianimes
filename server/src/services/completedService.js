@@ -1,13 +1,11 @@
 const Weeb = require("../models/Weeb");
 
-// Ensure valid structure
 function ensureHistory(weeb) {
   if (!weeb.history || Array.isArray(weeb.history)) {
     weeb.history = { all: [], watching: [], completed: [] };
   }
 }
 
-// GET COMPLETED
 exports.getCompleted = async (userId) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {
@@ -19,7 +17,6 @@ exports.getCompleted = async (userId) => {
   return weeb.history.completed;
 };
 
-// ADD TO COMPLETED
 exports.addToCompleted = async (userId, anime) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {
@@ -37,23 +34,18 @@ exports.addToCompleted = async (userId, anime) => {
     addedAt: new Date(),
   };
 
-  // Remove from watching
   weeb.history.watching = weeb.history.watching.filter(a => a.mal_id !== item.mal_id);
 
-  // Remove from watchlist
   weeb.watchlist = weeb.watchlist.filter(a => a.mal_id !== item.mal_id);
 
-  // Remove duplicates in completed
   weeb.history.completed = weeb.history.completed.filter(a => a.mal_id !== item.mal_id);
 
-  // Add
   weeb.history.completed.unshift(item);
 
   await weeb.save();
   return weeb.history.completed;
 };
 
-// REMOVE FROM COMPLETED
 exports.removeFromCompleted = async (userId, mal_id) => {
   const weeb = await Weeb.findById(userId);
   if (!weeb) {

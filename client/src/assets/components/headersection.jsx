@@ -44,7 +44,6 @@ export default function Header() {
         setProfileMenuOpen(prev => !prev);
     };
 
-    // Close profile menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {

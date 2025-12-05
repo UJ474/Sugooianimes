@@ -1,6 +1,5 @@
 const watchingService = require("../services/watchingService");
 
-// GET WATCHING
 exports.getWatching = async (req, res) => {
   try {
     const list = await watchingService.getWatching(req.user._id);
@@ -10,7 +9,6 @@ exports.getWatching = async (req, res) => {
   }
 };
 
-// ADD TO WATCHING
 exports.addToWatching = async (req, res) => {
   try {
     const updated = await watchingService.addToWatching(req.user._id, req.body);
@@ -20,7 +18,6 @@ exports.addToWatching = async (req, res) => {
   }
 };
 
-// REMOVE FROM WATCHING
 exports.removeFromWatching = async (req, res) => {
   try {
     const updated = await watchingService.removeFromWatching(

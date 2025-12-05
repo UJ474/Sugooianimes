@@ -23,10 +23,8 @@ export default function SearchResults() {
     setLoading(true);
     setError(null);
 
-    // Don't capitalize - let API handle the search as-is for better partial matching
     const searchQuery = query.trim();
     
-    // Removed limit parameter to get all matching results (default is 25, can add &limit=50 for more)
     fetch(`https://api.jikan.moe/v4/anime?q=${searchQuery}&sfw=true`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch results');
@@ -43,9 +41,7 @@ export default function SearchResults() {
       });
   }, [query]);
 
-  // Handle anime card click with state cleanup
   const handleAnimeClick = (anime) => {
-    // Pass anime data to prevent empty state on navigation
     navigate(`/anime/${anime.mal_id}`, {
       state: {
         animeData: {
@@ -62,7 +58,6 @@ export default function SearchResults() {
 
   return (
     <div className="search-results-container">
-      {/* Header Section */}
       <div className="search-header">
         <div className="search-header-content">
           <svg className="search-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -85,7 +80,6 @@ export default function SearchResults() {
         )}
       </div>
 
-      {/* Loading State */}
       {loading && (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -93,7 +87,6 @@ export default function SearchResults() {
         </div>
       )}
 
-      {/* Error State */}
       {error && !loading && (
         <div className="error-container">
           <svg className="error-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -109,7 +102,6 @@ export default function SearchResults() {
         </div>
       )}
 
-      {/* No Results State */}
       {!loading && !error && results.length === 0 && (
         <div className="no-results-container">
           <svg className="no-results-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -133,7 +125,6 @@ export default function SearchResults() {
         </div>
       )}
 
-      {/* Results Grid */}
       {!loading && !error && results.length > 0 && (
         <div className="filteredanimecontainer">
           {results.map(anime => (

@@ -1,6 +1,5 @@
 const watchlistService = require("../services/watchlistService");
 
-// GET WATCHLIST
 exports.getWatchlist = async (req, res) => {
   try {
     const list = await watchlistService.getWatchlist(req.user._id);
@@ -10,7 +9,6 @@ exports.getWatchlist = async (req, res) => {
   }
 };
 
-// ADD TO WATCHLIST
 exports.addToWatchlist = async (req, res) => {
   try {
     const updated = await watchlistService.addToWatchlist(req.user._id, req.body);
@@ -20,7 +18,6 @@ exports.addToWatchlist = async (req, res) => {
   }
 };
 
-// REMOVE FROM WATCHLIST
 exports.removeFromWatchlist = async (req, res) => {
   try {
     const updated = await watchlistService.removeFromWatchlist(

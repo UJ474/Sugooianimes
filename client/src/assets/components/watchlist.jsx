@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { AuthContext } from '../../context/AuthContext';
-import '../css_files/watchlist.css'; // kept for backwards compatibility (now minimal)
+import '../css_files/watchlist.css'; 
 import API from '../../api';
 import monitorplay from '../images/monitor-play.png';
 
@@ -28,9 +28,8 @@ export default function Watchlist() {
   const toast = useToast();
 
   useEffect(() => {
-    if (!user) return; // if no user we'll show empty UI below
+    if (!user) return; 
     fetchWatchlist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchWatchlist = async () => {
@@ -38,7 +37,6 @@ export default function Watchlist() {
     try {
       const res = await API.get('/weeb/watchlist');
 
-      // normalize response to an array
       const payload = Array.isArray(res.data)
         ? res.data
         : (res.data.watchlist || res.data.data || []);
@@ -89,7 +87,6 @@ export default function Watchlist() {
     }
   };
 
-  // skeleton / loading grid
   if (loading) {
     return (
       <div style={{ padding: "2rem", width: "100%" }}>
@@ -108,7 +105,6 @@ export default function Watchlist() {
     );
   }
 
-  // empty state
   if (!loading && watchlist.length === 0) {
     return (
       <Center minH="60vh" p={{ base: 6, md: 12 }}>

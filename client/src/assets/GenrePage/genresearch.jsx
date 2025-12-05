@@ -57,7 +57,6 @@ const GenreSearch = ({ selectedGenre }) => {
   useEffect(() => {
     if (!selectedGenre || selectedGenre.length === 0) return;
     
-    // Reset to page 1 when genres change
     setCurrentPage(1);
   }, [selectedGenre]);
 
@@ -120,7 +119,6 @@ const GenreSearch = ({ selectedGenre }) => {
         ))}
       </div>
 
-      {/* Pagination */}
       {animeList.length > 0 && (
         <Flex justify="center" align="center" gap="10px" mt="3rem" mb="2rem" flexWrap="wrap">
           <Button

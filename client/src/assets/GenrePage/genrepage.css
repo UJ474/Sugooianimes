@@ -156,7 +156,6 @@
   transform: none;
 }
 
-/* Selected Count Badge */
 .selected-count {
   display: inline-flex;
   align-items: center;
@@ -188,7 +187,6 @@
   transform: translateY(-2px);
 }
 
-/* Genre Search Results */
 .genre-search-container {
   margin-top: 3rem;
   animation: fadeInUp 0.5s ease;
@@ -230,11 +228,7 @@
   margin-top: 2rem;
 }
 
-/* ====================================== */
-/* RESPONSIVE DESIGN */
-/* ====================================== */
 
-/* Tablets (768px and below) */
 @media (max-width: 768px) {
   .genre-page-container {
     margin: 1.5rem auto;
@@ -296,7 +290,6 @@
   }
 }
 
-/* Mobile (480px and below) */
 @media (max-width: 480px) {
   .genre-page-container {
     margin: 1rem 0.5rem;
@@ -354,7 +347,6 @@
   }
 }
 
-/* Extra Small Mobile (360px and below) */
 @media (max-width: 360px) {
   .genre-page-container {
     padding: 0.8rem;

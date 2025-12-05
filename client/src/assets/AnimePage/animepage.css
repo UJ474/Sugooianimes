@@ -1,4 +1,3 @@
-/* Reset and Base */
 .animepagecontainer {
   background: #0f0f0f;
   color: white;
@@ -7,7 +6,6 @@
   margin: 0;
 }
 
-/* Hero Section */
 .anime-hero-section {
   position: relative;
   width: 100%;
@@ -37,8 +35,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, 
-    rgba(15, 15, 15, 0.3) 0%, 
+  background: linear-gradient(to bottom,
+    rgba(15, 15, 15, 0.3) 0%,
     rgba(15, 15, 15, 0.8) 60%,
     rgba(15, 15, 15, 1) 100%
   );
@@ -127,7 +125,6 @@
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Action Buttons */
 .anime-action-buttons {
   display: flex;
   gap: 1rem;
@@ -206,7 +203,6 @@
   border-color: rgba(239, 68, 68, 0.5);
 }
 
-/* Genres */
 .anime-genres {
   display: flex;
   gap: 0.75rem;
@@ -228,7 +224,6 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Details Section */
 .anime-details-section {
   max-width: 1400px;
   margin: 0 auto;
@@ -265,7 +260,6 @@
   font-weight: 400;
 }
 
-/* Recommendations Section */
 .anime-recommendations-section {
   max-width: 1400px;
   margin: 0 auto;
@@ -279,7 +273,6 @@
   color: #ffffff;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .anime-hero-wrapper {
     gap: 2rem;
@@ -400,7 +393,6 @@
   }
 }
 
-/* Loading State */
 .loading-spinner {
   width: 50px;
   height: 50px;
@@ -416,8 +408,6 @@
   }
 }
 
-
-/* Unified Button Style — No glow, no text-shadow */
 .action-btn {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -430,13 +420,11 @@
   box-shadow: none;
 }
 
-/* Disabled */
 .action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Hover and active (clean, no glow) */
 .action-btn:not(:disabled):hover {
   transform: translateY(-3px);
 }
@@ -444,8 +432,6 @@
   transform: translateY(0px);
 }
 
-/* Unified button color scheme — use site blue gradient */
-/* Primary / Add to Watchlist */
 .primary-btn {
   background: linear-gradient(50deg, #4924eefb);
   color: white;
@@ -457,7 +443,6 @@
   filter: brightness(0.95);
 }
 
-/* Soft Outline (secondary) */
 .secondary-btn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.12);
@@ -469,7 +454,6 @@
   background: rgba(255,255,255,0.04);
 }
 
-/* "Watching" (uses same brand blue but darker) */
 .watching-btn {
   background: linear-gradient(50deg, #3b6eed, #274fd6);
   color: white;
@@ -480,7 +464,6 @@
   filter: brightness(0.95);
 }
 
-/* "Completed" (use a teal variant to visually differ but still harmonious) */
 .completed-btn {
   background: linear-gradient(50deg, #12b886, #0e9a6d);
   color: white;
@@ -491,10 +474,9 @@
   filter: brightness(0.95);
 }
 
-/* Remove Button (outline, consistent with brand blue) */
 .remove-btn {
   background: transparent;
-  border: 1px solid rgba(73,36,238,0.22); /* lighter version of brand */
+  border: 1px solid rgba(73,36,238,0.22);
   color: #cfe1ff;
   text-shadow: none;
   box-shadow: none;
@@ -503,7 +485,6 @@
   background: rgba(73,36,238,0.06);
 }
 
-/* ensure loading spinner uses brand blue */
 .loading-spinner {
   width: 50px;
   height: 50px;
@@ -513,23 +494,20 @@
   animation: spin 1s linear infinite;
 }
 
-/* keep hover transforms subtle and consistent */
 .action-btn:not(:disabled):hover { transform: translateY(-3px); }
 .action-btn:not(:disabled):active { transform: translateY(0px); }
 
-/* Login popup used across anime page actions (no glows, consistent gradient) */
 .login-popup-overlay {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20000; /* high so toasts/popups appear above header */
+  z-index: 20000;
   background: rgba(0, 0, 0, 0.45);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
-
 
 .login-popup-card {
   width: 320px;
@@ -561,7 +539,6 @@
   text-align: center;
 }
 
-/* actions row */
 .login-popup-actions {
   display: flex;
   gap: 10px;
@@ -569,7 +546,6 @@
   margin-top: 4px;
 }
 
-/* reuse your site button classes, but ensure no glows/shadows */
 .login-popup-card .action-btn {
   padding: 8px 14px;
   border-radius: 10px;
@@ -580,7 +556,6 @@
   min-width: 100px;
 }
 
-/* primary uses your site gradient */
 .login-popup-card .primary-btn {
   background: linear-gradient(50deg, #4924eefb);
   color: #fff;
@@ -590,7 +565,6 @@
   transform: translateY(-2px);
 }
 
-/* secondary is outline */
 .login-popup-card .secondary-btn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.08);
@@ -600,7 +574,6 @@
   background: rgba(255,255,255,0.03);
 }
 
-/* keep responsive */
 @media (max-width: 420px) {
   .login-popup-card { width: 90%; padding: 14px; }
   .login-popup-card .action-btn { min-width: 86px; padding: 8px 10px; }

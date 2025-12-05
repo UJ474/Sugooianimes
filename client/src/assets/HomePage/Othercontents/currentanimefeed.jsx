@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import AnimeCard from '../../components/animecard';
 import '../../css_files/spinner.css';
 import './homepageother.css';
@@ -7,14 +8,14 @@ import './homepageother.css';
 const CurrentAnimeFeed = () => {
     const [animeList, setAnimeList] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // const currentStoredData = localStorage.getItem('currentanimesdata');
-        const currentStoredData = localStorage.getItem('home_current_top_10')
+        const currentStoredData = localStorage.getItem('home_current_top_10');
         
         if (currentStoredData) {
             const parsedData = JSON.parse(currentStoredData);
-            const now = new Date().getTime();
+            const now = Date.now();
             const oneday = 24 * 60 * 60 * 1000;
 
             if (now - parsedData.timestamp < oneday) {
@@ -28,6 +29,7 @@ const CurrentAnimeFeed = () => {
     
     function fetchAndStoreCurrentAnime() {
         setLoading(true);
+
         fetch('https://api.jikan.moe/v4/seasons/now?page=1')
             .then(response => response.json())
             .then(data => {
@@ -45,70 +47,99 @@ const CurrentAnimeFeed = () => {
                         themes: anime.themes,
                         episodes: anime.episodes,
                     }));
+
                     setAnimeList(top30);
-                    localStorage.setItem('home_current_top_10', JSON.stringify({
-                        data: top30,
-                        timestamp: new Date().getTime()
-                    }));
+
+                    localStorage.setItem(
+                        'home_current_top_10',
+                        JSON.stringify({
+                            data: top30,
+                            timestamp: Date.now()
+                        })
+                    );
                 }
             })
-            .catch(error => {
-                console.log("Error fetching current anime:", error);
-            })
+            .catch(error => console.log("Error fetching current anime:", error))
             .finally(() => setLoading(false));
     }
 
-        {loading && (
-            <div style={{ padding: "2rem", width: "100%" }}>
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                        gap: "1rem"
-                    }}
-                >
-                    {Array.from({ length: animeList.length || 25 }).map((_, i) => (
-                        <div key={i} className="skeleton-card"></div>
-                    ))}
-                </div>
-            </div>
-        )}
+    const handleShowMore = () => {
+        navigate("/current");
+    };
 
     return (
-        <Box mt="3rem" mb="1rem" >
-            <Text
-                className='fancyheading'
-                pl="20px"
-                textAlign="left"
-                fontSize="3xl"
-                fontWeight="800"
-                letterSpacing="wide"
-                bgGradient="linear(to-r, brand.400, brand.100)"
-                bgClip="text"
-                // textShadow="0 0 20px rgba(82,125,255,0.6)"
-                // mb="1rem"
-            >
-                Currently Airing
-            </Text>
+        <Box mt="3rem" mb="1rem">
+            <Flex align="center" justify="space-between" pr="20px">
+                <Text
+                    className='fancyheading'
+                    pl="20px"
+                    textAlign="left"
+                    fontSize="3xl"
+                    fontWeight="800"
+                    letterSpacing="wide"
+                    bgGradient="linear(50deg, #4924eefb)"
+                    bgClip="text"
+                >
+                    Currently Airing
+                </Text>
 
-            <Flex
-                className="animescroll"
-                overflowX="auto"
-                gap="10px"
-                pl="20px"
-                pb="10px"
-            >
-                {animeList.slice(0, 10).map((anime, index) => (
-                    <Box key={index} flex="0 0 auto">
-                        <AnimeCard
-                            title={anime.title}
-                            imageUrl={anime.imageUrl}
-                            synopsis={anime.synopsis ?? "No synopsis available"}
-                            rating={anime.score ?? "N/A"}
-                        />
-                    </Box>
-                ))}
+                <Button
+                    onClick={handleShowMore}
+                    size="md"
+                    bg="linear-gradient(50deg, #4924eefb)"
+                    color="white"
+                    _hover={{
+                        filter: "brightness(0.95)",
+                        transform: "translateY(-2px)",
+                    }}
+                    _active={{
+                        transform: "translateY(0)",
+                    }}
+                    borderRadius="full"
+                    px="6"
+                    textShadow="none"
+                    boxShadow="none"
+                >
+                    Show More →
+                </Button>
             </Flex>
+
+            {loading && (
+                <div style={{ padding: "2rem", width: "100%" }}>
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                            gap: "1rem"
+                        }}
+                    >
+                        {Array.from({ length: animeList.length || 25 }).map((_, i) => (
+                            <div key={i} className="skeleton-card"></div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {!loading && (
+                <Flex
+                    className="animescroll"
+                    overflowX="auto"
+                    gap="10px"
+                    pl="20px"
+                    pb="10px"
+                >
+                    {animeList.slice(0, 10).map((anime, index) => (
+                        <Box key={index} flex="0 0 auto">
+                            <AnimeCard
+                                title={anime.title}
+                                imageUrl={anime.imageUrl}
+                                synopsis={anime.synopsis ?? "No synopsis available"}
+                                rating={anime.score ?? "N/A"}
+                            />
+                        </Box>
+                    ))}
+                </Flex>
+            )}
         </Box>
     );
 };

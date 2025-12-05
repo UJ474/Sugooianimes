@@ -1,9 +1,11 @@
 import React from 'react';
 import './genrepage.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import GenreSearch from './genresearch';
 
 const GenrePage = () => {
+  const location = useLocation();
   const genres = [
     "Action", "Adventure", "Cars", "Comedy", "Dementia", "Demons", "Drama", "Ecchi",
     "Fantasy", "Game", "Harem", "Historical", "Horror", "Isekai", "Josei", "Kids",
@@ -15,6 +17,14 @@ const GenrePage = () => {
 
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [showFiltered, setShowFiltered] = useState(false);
+
+  // Handle preselected genres from navigation
+  useEffect(() => {
+    if (location.state?.preselectedGenres) {
+      setSelectedGenres(location.state.preselectedGenres);
+      setShowFiltered(true);
+    }
+  }, [location.state]);
 
   const toggleGenre = (genre) => {
     setSelectedGenres(prev =>
@@ -63,20 +73,24 @@ const GenrePage = () => {
 
         {/* Action Buttons */}
         <div className="filter-button-container">
+          {selectedGenres.length > 0 && (
+            <>
+              <div className="selected-count">
+                <span>{selectedGenres.length}</span>
+                <span>Genre{selectedGenres.length > 1 ? 's' : ''} Selected</span>
+              </div>
+              <button className="clear-button" onClick={handleClearAll}>
+                Clear All
+              </button>
+            </>
+          )}
           <button 
             className="filter-button" 
             onClick={handleFilter}
             disabled={selectedGenres.length === 0}
-            >
+          >
             {selectedGenres.length === 0 ? 'Select Genres to Filter' : 'Apply Filter'}
           </button>
-            {selectedGenres.length > 0 && (
-              <>
-                <button className="clear-button" onClick={handleClearAll}>
-                  Clear All
-                </button>
-              </>
-            )}
         </div>
       </div>
 
@@ -88,7 +102,7 @@ const GenrePage = () => {
       {/* Empty State */}
       {!showFiltered && selectedGenres.length === 0 && (
         <div className="genre-message">
-          <p>Select one or more genres to discover amazing anime!</p>
+          <p>✨ Select one or more genres to discover amazing anime!</p>
         </div>
       )}
     </div>

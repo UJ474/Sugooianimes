@@ -4,6 +4,7 @@ import './animepage.css';
 import '../css_files/spinner.css';
 import CurrentAnimeFeed from '../HomePage/Othercontents/currentanimefeed';
 import SuggestedAnimeFeed from '../HomePage/Othercontents/suggestedanimefeed';
+import RelatedGenreFeed from '../HomePage/Othercontents/relatedgenrefeed';
 import API from "../../api";
 import { AuthContext } from '../../context/AuthContext';
 
@@ -113,7 +114,6 @@ const AnimePage = () => {
     }
   };
 
-  // Move to watching
   const handleMarkAsWatching = async () => {
     if (!user) return alert("Please login first");
     setActionLoading(true);
@@ -149,7 +149,6 @@ const AnimePage = () => {
     }
   };
 
-  // Move to completed
   const handleMarkAsCompleted = async () => {
     if (!user) return alert("Please login first");
     setActionLoading(true);
@@ -171,7 +170,6 @@ const AnimePage = () => {
     }
   };
 
-  // Loading spinner
   if (loading) {
     return (
       <div className="animepagecontainer" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -224,38 +222,17 @@ const AnimePage = () => {
               {/* ACTION BUTTONS (centered) */}
               <div className="anime-action-buttons" style={{ justifyContent: "center" }}>
 
-                {/* BUTTON LOGIC REWRITTEN */}
                 {watchStatus === "completed" && (
                   <>
                     <button className="action-btn completed-btn" disabled>✓ Completed</button>
-
-                    <button
-                      className="action-btn remove-btn"
-                      onClick={handleRemoveFromCompleted}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn remove-btn" onClick={handleRemoveFromCompleted} disabled={actionLoading}>
                       Remove from Completed
                     </button>
-                    <button
-                      className="action-btn secondary-btn"
-                      onClick={handleMarkAsWatching}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn secondary-btn" onClick={handleMarkAsWatching} disabled={actionLoading}>
                       {actionLoading ? "..." : "Move to Watching"}
                     </button>
-
-
-                    {/* Watchlist toggle always available */}
-                    <button
-                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
-                      onClick={toggleWatchlist}
-                      disabled={actionLoading}
-                    >
-                      {actionLoading
-                        ? "..."
-                        : watchlistStatus
-                          ? "✓ In Watchlist (Remove?)"
-                          : "+ Add to Watchlist"}
+                    <button className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`} onClick={toggleWatchlist} disabled={actionLoading}>
+                      {actionLoading ? "..." : watchlistStatus ? "✓ In Watchlist (Remove?)" : "+ Add to Watchlist"}
                     </button>
                   </>
                 )}
@@ -263,66 +240,27 @@ const AnimePage = () => {
                 {watchStatus === "watching" && (
                   <>
                     <button className="action-btn watching-btn" disabled>⏵ Watching</button>
-
-                    <button
-                      className="action-btn remove-btn"
-                      onClick={handleRemoveFromWatching}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn remove-btn" onClick={handleRemoveFromWatching} disabled={actionLoading}>
                       Remove from Watching
                     </button>
-                    <button
-                      className="action-btn secondary-btn"
-                      onClick={handleMarkAsCompleted}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn secondary-btn" onClick={handleMarkAsCompleted} disabled={actionLoading}>
                       {actionLoading ? "..." : "Mark as Completed"}
                     </button>
-
-
-                    {/* Watchlist toggle always available */}
-                    <button
-                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
-                      onClick={toggleWatchlist}
-                      disabled={actionLoading}
-                    >
-                      {actionLoading
-                        ? "..."
-                        : watchlistStatus
-                          ? "✓ In Watchlist (Remove?)"
-                          : "+ Add to Watchlist"}
+                    <button className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`} onClick={toggleWatchlist} disabled={actionLoading}>
+                      {actionLoading ? "..." : watchlistStatus ? "✓ In Watchlist (Remove?)" : "+ Add to Watchlist"}
                     </button>
                   </>
                 )}
 
                 {watchStatus === null && (
                   <>
-                    {/* Watchlist toggle */}
-                    <button
-                      className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`}
-                      onClick={toggleWatchlist}
-                      disabled={actionLoading}
-                    >
-                      {actionLoading
-                        ? "..."
-                        : watchlistStatus
-                          ? "✓ In Watchlist (Remove?)"
-                          : "+ Add to Watchlist"}
+                    <button className={`action-btn ${watchlistStatus ? 'secondary-btn' : 'primary-btn'}`} onClick={toggleWatchlist} disabled={actionLoading}>
+                      {actionLoading ? "..." : watchlistStatus ? "✓ In Watchlist (Remove?)" : "+ Add to Watchlist"}
                     </button>
-
-                    <button
-                      className="action-btn secondary-btn"
-                      onClick={handleMarkAsWatching}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn secondary-btn" onClick={handleMarkAsWatching} disabled={actionLoading}>
                       Mark as Watching
                     </button>
-
-                    <button
-                      className="action-btn secondary-btn"
-                      onClick={handleMarkAsCompleted}
-                      disabled={actionLoading}
-                    >
+                    <button className="action-btn secondary-btn" onClick={handleMarkAsCompleted} disabled={actionLoading}>
                       Mark as Completed
                     </button>
                   </>
@@ -358,6 +296,9 @@ const AnimePage = () => {
         <SuggestedAnimeFeed />
       </div>
 
+      <div className="anime-recommendations-section">
+        <RelatedGenreFeed genres={animeData.genres} />
+      </div>
     </div>
   );
 };

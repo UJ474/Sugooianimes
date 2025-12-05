@@ -415,3 +415,104 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* Unified Button Style — No glow, no text-shadow */
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+/* Disabled */
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Hover and active (clean, no glow) */
+.action-btn:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+.action-btn:not(:disabled):active {
+  transform: translateY(0px);
+}
+
+/* Unified button color scheme — use site blue gradient */
+/* Primary / Add to Watchlist */
+.primary-btn {
+  background: linear-gradient(50deg, #4924eefb);
+  color: white;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+}
+.primary-btn:hover {
+  filter: brightness(0.95);
+}
+
+/* Soft Outline (secondary) */
+.secondary-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  text-shadow: none;
+  box-shadow: none;
+}
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+/* "Watching" (uses same brand blue but darker) */
+.watching-btn {
+  background: linear-gradient(50deg, #3b6eed, #274fd6);
+  color: white;
+  text-shadow: none;
+  box-shadow: none;
+}
+.watching-btn:hover {
+  filter: brightness(0.95);
+}
+
+/* "Completed" (use a teal variant to visually differ but still harmonious) */
+.completed-btn {
+  background: linear-gradient(50deg, #12b886, #0e9a6d);
+  color: white;
+  text-shadow: none;
+  box-shadow: none;
+}
+.completed-btn:hover {
+  filter: brightness(0.95);
+}
+
+/* Remove Button (outline, consistent with brand blue) */
+.remove-btn {
+  background: transparent;
+  border: 1px solid rgba(73,36,238,0.22); /* lighter version of brand */
+  color: #cfe1ff;
+  text-shadow: none;
+  box-shadow: none;
+}
+.remove-btn:hover {
+  background: rgba(73,36,238,0.06);
+}
+
+/* ensure loading spinner uses brand blue */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.06);
+  border-top-color: #4924eefb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* keep hover transforms subtle and consistent */
+.action-btn:not(:disabled):hover { transform: translateY(-3px); }
+.action-btn:not(:disabled):active { transform: translateY(0px); }

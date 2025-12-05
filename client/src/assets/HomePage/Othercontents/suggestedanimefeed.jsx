@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import AnimeCard from '../../components/animecard';
 import '../../css_files/spinner.css';
 import './homepageother.css';
@@ -7,6 +8,7 @@ import './homepageother.css';
 const SuggestedAnimeFeed = () => {
     const [animeList, setAnimeList] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const currentStoredData = localStorage.getItem('home_suggested_top_10');
@@ -62,22 +64,48 @@ const SuggestedAnimeFeed = () => {
             .finally(() => setLoading(false));
     }
 
+    const handleShowMore = () => {
+        navigate("/suggested");
+    };
+
     return (
         <Box mt="3rem" mb="1rem">
-            <Text
-                className="fancyheading"
-                pl="20px"
-                textAlign="left"
-                fontSize="3xl"
-                fontWeight="800"
-                letterSpacing="wide"
-                bgGradient="linear(to-r, brand.400, brand.100)"
-                bgClip="text"
-            >
-                Suggested
-            </Text>
+            <Flex align="center" justify="space-between" pr="20px">
+                <Text
+                    className="fancyheading"
+                    pl="20px"
+                    textAlign="left"
+                    fontSize="3xl"
+                    fontWeight="800"
+                    letterSpacing="wide"
+                    bgGradient="linear(50deg, #4924eefb)"
+                    bgClip="text"
+                >
+                    Suggested
+                </Text>
 
-            {/* Skeleton shimmer loading (same as CurrentAnimeFeed) */}
+                <Button
+                    onClick={handleShowMore}
+                    size="md"
+                    bg="linear-gradient(50deg, #4924eefb)"
+                    color="white"
+                    _hover={{
+                        filter: "brightness(0.95)",
+                        transform: "translateY(-2px)",
+                    }}
+                    _active={{
+                        transform: "translateY(0)",
+                    }}
+                    borderRadius="full"
+                    px="6"
+                    textShadow="none"
+                    boxShadow="none"
+                >
+                    Show More →
+                </Button>
+            </Flex>
+
+            {/* Skeleton shimmer loading */}
             {loading && (
                 <div style={{ padding: "2rem", width: "100%" }}>
                     <div
@@ -94,7 +122,7 @@ const SuggestedAnimeFeed = () => {
                 </div>
             )}
 
-            {/* Actual list (same layout as current anime feed) */}
+            {/* Actual list */}
             {!loading && (
                 <Flex
                     className="animescroll"

@@ -1,10 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db.js');
 
 dotenv.config();
 
 const app = express();
+
+// DB connect
+connectDB();
 
 app.use(cors({
   origin: process.env.FRONTEND_URL,
@@ -15,7 +19,6 @@ app.use(express.json());
 
 const authRoutes = require('./routes/authRoutes');
 const weebRoutes = require("./routes/weebRoutes");
-
 app.use("/api/weeb", weebRoutes);
 app.use('/api/auth', authRoutes);
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import currentanimedata from './currentanimedata.jsx';
 import AnimeCard from "../components/animecard.jsx";
+import AnimeCardSkeleton from "../components/AnimeCardSkeleton.jsx";
 import '../css_files/spinner.css';
 import './currentanime.css';
 import { Box, Button, Flex } from "@chakra-ui/react";
@@ -106,7 +107,7 @@ export default function CurrentAnimes() {
                     }}
                 >
                     {Array.from({ length: currentAnimes.length || 25 }).map((_, i) => (
-                        <div key={i} className="skeleton-card"></div>
+                        <AnimeCardSkeleton key={i} />
                     ))}
                 </div>
             </div>
@@ -121,6 +122,9 @@ export default function CurrentAnimes() {
                         imageUrl={anime.imageUrl}
                         synopsis={anime.synopsis}
                         rating={anime.score}
+                        status={null}
+                        genres={anime.genres}
+                        episodes={anime.episodes}
                     />
                 ))}
             </div>

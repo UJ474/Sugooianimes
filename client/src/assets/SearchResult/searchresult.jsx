@@ -138,6 +138,9 @@ export default function SearchResults() {
               imageUrl={anime.images.jpg.large_image_url}
               synopsis={anime.synopsis}
               rating={anime.score}
+              status={anime.status}
+              genres={anime.genres}
+              episodes={anime.episodes}
             />
           ))}
         </div>

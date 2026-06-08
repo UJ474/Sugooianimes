@@ -33,7 +33,7 @@ const theme = extendTheme({
   },
 
   fonts: {
-    heading: "'Poppins', sans-serif",
+    heading: "'Space Grotesk', sans-serif",
     body: "'Inter', sans-serif",
   },
 
@@ -62,7 +62,7 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "gray.900",
+        bg: "#000000",
         color: "white",
         fontSmooth: "always",
         WebkitFontSmoothing: "antialiased",

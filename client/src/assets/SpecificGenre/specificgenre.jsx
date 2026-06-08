@@ -80,6 +80,9 @@ export default function SpecificGenre() {
           imageUrl: anime.images?.jpg?.large_image_url,
           synopsis: anime.synopsis,
           rating: anime.score,
+          status: anime.status,
+          genres: anime.genres,
+          episodes: anime.episodes,
         }));
         setAnimes(formatted);
       } catch (error) {
@@ -107,6 +110,9 @@ export default function SpecificGenre() {
               imageUrl={anime.imageUrl}
               synopsis={anime.synopsis}
               rating={anime.rating}
+              status={anime.status}
+              genres={anime.genres}
+              episodes={anime.episodes}
             />
           ))}
         </div>

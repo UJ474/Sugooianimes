@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './animepage.css';
 import '../css_files/spinner.css';
-import CurrentAnimeFeed from '../HomePage/Othercontents/currentanimefeed';
-import SuggestedAnimeFeed from '../HomePage/Othercontents/suggestedanimefeed';
 import RelatedGenreFeed from '../HomePage/Othercontents/relatedgenrefeed';
 import API from "../../api";
 import { AuthContext } from '../../context/AuthContext';
@@ -15,7 +13,10 @@ const AnimePage = () => {
   const { user } = useContext(AuthContext);
 
   const [animeData, setAnimeData] = useState(null);
+  const [episodesData, setEpisodesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [episodesLoading, setEpisodesLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
 
   const [watchlistStatus, setWatchlistStatus] = useState(false);
   const [watchStatus, setWatchStatus] = useState(null);
@@ -30,12 +31,30 @@ const AnimePage = () => {
     if (!animeId) return;
 
     setLoading(true);
+    setEpisodesLoading(true);
+
     fetch(`https://api.jikan.moe/v4/anime?q=${animeId}`)
       .then(res => res.json())
       .then(data => {
         if (data.data && data.data.length > 0) {
-          setAnimeData(data.data[0]);
+          const anime = data.data[0];
+          setAnimeData(anime);
+
+          // Fetch episodes using mal_id
+          fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/episodes`)
+            .then(res => res.json())
+            .then(epData => {
+              setEpisodesData(epData.data || []);
+            })
+            .catch(() => setEpisodesData([]))
+            .finally(() => setEpisodesLoading(false));
+
+        } else {
+          setEpisodesLoading(false);
         }
+      })
+      .catch(() => {
+        setEpisodesLoading(false);
       })
       .finally(() => setLoading(false));
   }, [animeId]);
@@ -235,8 +254,6 @@ const AnimePage = () => {
                 ))}
               </div>
 
-              <p className="anime-synopsis-main">{animeData.synopsis}</p>
-
               <div className="anime-action-buttons" style={{ justifyContent: "center" }}>
 
                 {watchStatus === "completed" && (
@@ -346,25 +363,82 @@ const AnimePage = () => {
         </div>
       </div>
 
-      <div className="anime-details-section">
-        <div className="details-grid">
-          <div className="detail-item"><span className="detail-label">Japanese Title</span><span className="detail-value">{animeData.title_japanese || "N/A"}</span></div>
-          <div className="detail-item"><span className="detail-label">Episodes</span><span className="detail-value">{animeData.episodes || "N/A"}</span></div>
-          <div className="detail-item"><span className="detail-label">Status</span><span className="detail-value">{animeData.status}</span></div>
-          <div className="detail-item"><span className="detail-label">Aired</span><span className="detail-value">{animeData.aired?.string}</span></div>
-          <div className="detail-item"><span className="detail-label">Season</span><span className="detail-value">{animeData.season} {animeData.year}</span></div>
-          <div className="detail-item"><span className="detail-label">Duration</span><span className="detail-value">{animeData.duration}</span></div>
-          <div className="detail-item"><span className="detail-label">Studios</span><span className="detail-value">{animeData.studios?.map(s => s.name).join(", ") || "N/A"}</span></div>
-          <div className="detail-item"><span className="detail-label">Source</span><span className="detail-value">{animeData.source || "N/A"}</span></div>
+      <div className="anime-page-tabs-section">
+        <div className="tabs-header">
+          <button 
+            className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('overview')}
+          >
+            Overview
+          </button>
+          {!episodesLoading && episodesData.length > 0 && (
+            <button 
+              className={`tab-btn ${activeTab === 'episodes' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('episodes')}
+            >
+              Episodes ({episodesData.length})
+            </button>
+          )}
         </div>
-      </div>
 
-      <div className="anime-recommendations-section">
-        <CurrentAnimeFeed />
-      </div>
+        <div className="tab-content">
+          {activeTab === 'overview' && (
+            <div className="overview-tab">
+              {animeData.trailer?.youtube_id && (
+                <div className="trailer-container">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${animeData.trailer.youtube_id}`}
+                    title="Anime Trailer"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="trailer-iframe"
+                  ></iframe>
+                </div>
+              )}
 
-      <div className="anime-recommendations-section">
-        <SuggestedAnimeFeed />
+              <div className="overview-text-content">
+                <div className="overview-text-block">
+                  <h3 className="overview-subtitle">Synopsis</h3>
+                  <p className="overview-text">{animeData.synopsis || "No synopsis available."}</p>
+                </div>
+                {animeData.background && (
+                  <div className="overview-text-block">
+                    <h3 className="overview-subtitle">Background</h3>
+                    <p className="overview-text">{animeData.background}</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="details-grid">
+                <div className="detail-item"><span className="detail-label">Japanese Title</span><span className="detail-value">{animeData.title_japanese || "N/A"}</span></div>
+                <div className="detail-item"><span className="detail-label">Episodes</span><span className="detail-value">{animeData.episodes || "N/A"}</span></div>
+                <div className="detail-item"><span className="detail-label">Status</span><span className="detail-value">{animeData.status}</span></div>
+                <div className="detail-item"><span className="detail-label">Aired</span><span className="detail-value">{animeData.aired?.string}</span></div>
+                <div className="detail-item"><span className="detail-label">Season</span><span className="detail-value">{animeData.season} {animeData.year}</span></div>
+                <div className="detail-item"><span className="detail-label">Duration</span><span className="detail-value">{animeData.duration}</span></div>
+                <div className="detail-item"><span className="detail-label">Studios</span><span className="detail-value">{animeData.studios?.map(s => s.name).join(", ") || "N/A"}</span></div>
+                <div className="detail-item"><span className="detail-label">Source</span><span className="detail-value">{animeData.source || "N/A"}</span></div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'episodes' && (
+            <div className="episodes-tab">
+              <div className="episodes-list">
+                {episodesData.map((ep) => (
+                  <div key={ep.mal_id} className="episode-item">
+                    <div className="episode-info">
+                      <span className="episode-number">EP {ep.mal_id}</span>
+                      <span className="episode-title">{ep.title}</span>
+                    </div>
+                    {ep.aired && <span className="episode-date">{new Date(ep.aired).toLocaleDateString()}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="anime-recommendations-section">

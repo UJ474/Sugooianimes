@@ -1,0 +1,69 @@
+/* Hide scrollbar for Chrome, Safari and Opera */
+.anime-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .anime-scroll-row {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    scroll-behavior: smooth;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: -30px;
+    margin-bottom: -30px;
+  }
+  
+  .anime-row-container {
+    position: relative;
+  }
+  
+  .anime-row-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .anime-row-container:hover .anime-row-arrow.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .anime-row-arrow:hover {
+    background: rgba(98, 63, 255, 0.5); /* Website primary purple */
+    border-color: rgba(98, 63, 255, 0.8);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 0 15px rgba(98, 63, 255, 0.4);
+  }
+  
+  .anime-row-arrow-left {
+    left: 20px;
+  }
+  
+  .anime-row-arrow-right {
+    right: 20px;
+  }
+  
+  /* Create an invisible extended hover area to keep arrows visible when mouse moves near them */
+  .anime-row-arrow::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    left: -20px;
+    right: -20px;
+  }

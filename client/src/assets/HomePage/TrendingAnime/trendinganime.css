@@ -1,113 +1,158 @@
 .trendingheroslider {
-    height: 95vh;
-    width: 100%;
+    height: 85vh; /* Standard cinematic height */
+    width: 100vw;
+    max-width: 100%;
     position: relative;
     overflow: hidden;
-    background-color: #000;
+    background-color: #0a0a0f;
     display: flex; 
     justify-content: flex-start; 
     align-items: center; 
+    margin-top: 0;
+}
+
+.herosliderimages {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
 .slide-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top;
     position: absolute;
     top: 0;
-    right: 0;
-    transition: opacity 3s ease-in-out;
+    left: 0;
+    transition: opacity 1s ease-in-out;
     pointer-events: none;
-    z-index: 1; 
 }
 
 .fade-in {
     opacity: 1;
     z-index: 2;
-    transition: opacity 3s ease-in-out;
 }
 
 .fade-out {
     opacity: 0;
     z-index: 1;
-    transition: opacity 3s ease-in-out;
 }
 
-.trendingheroslider img {
+/* Netflix style gradient overlay */
+.hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width: auto;
+    z-index: 3;
+    background: 
+        linear-gradient(to right, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.6) 40%, transparent 100%),
+        linear-gradient(to top, rgba(10, 10, 15, 1) 0%, rgba(10, 10, 15, 0) 40%);
+    pointer-events: none;
 }
 
 .trendingherosliderdata {
     position: relative;
-    z-index: 2; 
-    left: 0;
-    top: 0;
-    color: white;
-    margin-top: 7rem;
-    padding: 3rem;
-    border-radius: 8px;
-    width: 30%;
+    z-index: 4; 
+    width: 50%;
+    padding-left: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
     text-align: left;
-    font-family: 'Poppins', 'Inter', sans-serif;
 }
 
-.genretag {
-    background-color: rgba(0, 85, 254, 0.494);
-    padding: 5px 10px;
-    border-radius: 15px;
-    margin-right: 5px;
-    font-size: 14px;
-    opacity: 1;
+.hero-content {
+    max-width: 800px;
 }
 
-.herosliderimages img {
-    -webkit-mask-image: 
-        linear-gradient(to left, black 30%, transparent 80%),
-        linear-gradient(to bottom, black 50%, transparent 100%);
-    -webkit-mask-composite: destination-in;
-    mask-image: 
-        linear-gradient(to left, black 30%, transparent 100%),
-        linear-gradient(to bottom, black 30%, transparent 100%);
-    mask-composite: intersect;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
+.hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    color: #ffffff;
 }
 
+.hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.hero-genres {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    gap: 8px;
+}
+
+.hero-synopsis {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    
+    /* Truncate to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Navigation Controls */
 .nav-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: rgba(255, 255, 255, 0.01);
-    width: 50px;
-    height: 50px;
+    background: rgba(10, 10, 15, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
     color: white;
-    padding: 0;
 }
 
 .nav-button:hover {
-    transform: translateY(-50%) scale(1.5);
-}
-
-.nav-button:active {
-    transform: translateY(-50%) scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .nav-button-left {
-    left: 2rem;
+    left: 2%;
 }
 
 .nav-button-right {
-    right: 2rem;
+    right: 2%;
 }
 
+/* Progress Indicators */
 .progress-indicators {
     position: absolute;
     bottom: 2rem;
@@ -115,235 +160,106 @@
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
 }
 
 .progress-dash {
-    height: 3px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.progress-dash:not(.active) {
+    height: 4px;
     width: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .progress-dash.active {
-    width: 50px;
-    height: 4px;
-    background: rgba(0, 85, 254, 0.9);
-    box-shadow: 0 0 10px rgba(0, 85, 254, 0.5);
+    width: 60px;
+    background: #623fff; /* Accent color matching GlowButton */
+    box-shadow: 0 0 10px rgba(98, 63, 255, 0.6);
 }
 
 .progress-dash:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.6);
 }
 
-
-@media (min-width: 1920px) {
-    .nav-button {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .nav-button-left {
-        left: 3rem;
-    }
-    
-    .nav-button-right {
-        right: 3rem;
-    }
-}
-
+/* Responsive Design */
 @media (max-width: 1024px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
     .trendingherosliderdata {
-        width: 40%;
-        padding: 2.5rem 2rem;
-        margin-top: 5rem;
+        width: 70%;
     }
-    
-    .nav-button {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .nav-button-left {
-        left: 1.5rem;
-    }
-    
-    .nav-button-right {
-        right: 1.5rem;
-    }
-    
-    .progress-dash:not(.active) {
-        width: 25px;
-    }
-    
-    .progress-dash.active {
-        width: 40px;
-    }
-}
-
-@media (max-width: 900px) {
-    .trendingherosliderdata {
-        width: 50%;
-        padding: 2rem 1.5rem;
-        margin-top: 4rem;
-    }
-    
-    .trendingheroslider {
-        height: 80vh;
+    .hero-gradient-overlay {
+        background: 
+            linear-gradient(to right, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.4) 60%, transparent 100%),
+            linear-gradient(to top, rgba(10, 10, 15, 1) 0%, rgba(10, 10, 15, 0) 40%);
     }
 }
 
 @media (max-width: 768px) {
+    .trendingheroslider {
+        height: 70vh;
+        align-items: flex-end; /* Push content to bottom */
+    }
+    
     .trendingherosliderdata {
-        width: 60%;
-        padding: 2rem 1.5rem;
-        margin-top: 3rem;
+        width: 100%;
+        padding: 2rem;
+        padding-bottom: 5rem;
+        justify-content: flex-end;
     }
-    
+
+    .hero-gradient-overlay {
+        background: 
+            linear-gradient(to top, rgba(10, 10, 15, 1) 0%, rgba(10, 10, 15, 0.9) 30%, rgba(10, 10, 15, 0.2) 60%, transparent 100%);
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-synopsis {
+        font-size: 1rem;
+        -webkit-line-clamp: 2; /* Truncate to 2 lines on mobile */
+    }
+
     .nav-button {
-        width: 40px;
-        height: 40px;
+        display: none; /* Hide arrows on mobile for cleaner look */
     }
-    
-    .nav-button svg {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .nav-button-left {
-        left: 1rem;
-    }
-    
-    .nav-button-right {
-        right: 1rem;
-    }
-    
+
     .progress-indicators {
         bottom: 1.5rem;
         gap: 6px;
     }
-    
-    .progress-dash:not(.active) {
-        width: 20px;
-        height: 2.5px;
-    }
-    
-    .progress-dash.active {
-        width: 35px;
-        height: 3.5px;
-    }
-}
 
-@media (max-width: 600px) {
-    .trendingheroslider {
-        height: 70vh;
-        align-items: flex-end;
+    .progress-dash {
+        width: 20px;
     }
-    
-    .trendingherosliderdata {
-        width: 85%;
-        padding: 1.5rem;
-        margin-top: 2rem;
-        margin-bottom: 4rem;
-    }
-    
-    .herosliderimages img {
-        -webkit-mask-image: 
-            linear-gradient(to bottom, black 20%, transparent 90%);
-        mask-image: 
-            linear-gradient(to bottom, black 20%, transparent 90%);
-    }
-    
-    .nav-button {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .nav-button-left {
-        left: 0.75rem;
-    }
-    
-    .nav-button-right {
-        right: 0.75rem;
-    }
-    
-    .progress-indicators {
-        bottom: 1rem;
+
+    .progress-dash.active {
+        width: 40px;
     }
 }
 
 @media (max-width: 480px) {
-    .trendingheroslider {
-        height: 65vh;
+    .hero-title {
+        font-size: 1.8rem;
     }
-    
+    .hero-synopsis {
+        font-size: 0.9rem;
+    }
     .trendingherosliderdata {
-        width: 90%;
-        padding: 1.25rem;
-        margin-top: 1rem;
-    }
-    
-    .trendingherosliderdata p:first-child {
-        font-size: 24px !important;
-        padding-bottom: 1.5rem !important;
-        margin-top: 4rem !important;
-    }
-    
-    .trendingherosliderdata p:nth-child(2) {
-        font-size: 0.95rem !important;
-    }
-    
-    .genretag {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-    
-    .nav-button {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .nav-button svg {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .progress-dash:not(.active) {
-        width: 16px;
-        height: 2px;
-    }
-    
-    .progress-dash.active {
-        width: 28px;
-        height: 3px;
-    }
-    
-    .progress-indicators {
-        gap: 5px;
-    }
-}
-
-@media (max-width: 375px) {
-    .trendingherosliderdata {
-        width: 92%;
-        padding: 1rem;
-    }
-    
-    .nav-button-left {
-        left: 0.5rem;
-    }
-    
-    .nav-button-right {
-        right: 0.5rem;
-    }
-    
-    .progress-indicators {
-        bottom: 0.75rem;
+        padding: 1.5rem;
+        padding-bottom: 4rem;
     }
 }

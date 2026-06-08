@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css'
 import Footer from './assets/components/footersection'
 import Header from './assets/components/headersection'
@@ -17,13 +17,15 @@ import History from './assets/components/history.jsx';
 import ScrollToTop from "./assets/components/scrolltotop.jsx";
 
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   return (
     <>
-    <Router>
       <ScrollToTop />
       <Header />
+      <div style={{ paddingTop: isHome ? '0' : '80px' }}>
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -39,9 +41,17 @@ function App() {
             <Route path="history" element={<History />} />
           </Route>
         </Routes>
+      </div>
       <Footer />
-    </Router>
     </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 }
 

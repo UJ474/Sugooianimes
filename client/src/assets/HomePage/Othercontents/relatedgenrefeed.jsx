@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
-import AnimeCard from '../../components/animecard';
+import AnimeRow from '../../components/AnimeRow';
 import '../../css_files/spinner.css';
 import './homepageother.css';
 
@@ -19,7 +19,7 @@ const SingleGenreFeed = ({ genre }) => {
     useEffect(() => {
         if (!genre) return;
 
-        const key = `genre_feed_${genre.name}`;
+        const key = `genre_feed_v2_${genre.name}`;
         const saved = localStorage.getItem(key);
 
         if (saved) {
@@ -39,7 +39,7 @@ const SingleGenreFeed = ({ genre }) => {
 
     async function fetchAndStoreGenreAnime() {
         setLoading(true);
-        const key = `genre_feed_${genre.name}`;
+        const key = `genre_feed_v2_${genre.name}`;
 
         try {
             const genreId = genreMap[genre.name] || genre.mal_id;
@@ -60,7 +60,9 @@ const SingleGenreFeed = ({ genre }) => {
                     score: anime.score,
                     imageUrl: anime.images.jpg.large_image_url,
                     synopsis: anime.synopsis,
-                    genres: anime.genres
+                    genres: anime.genres,
+                    status: anime.status,
+                    episodes: anime.episodes
                 }));
 
                 setAnimeList(list);
@@ -82,7 +84,7 @@ const SingleGenreFeed = ({ genre }) => {
         } catch (err) {
             console.error(`Error fetching ${genre.name}:`, err);
 
-            const key = `genre_feed_${genre.name}`;
+            const key = `genre_feed_v2_${genre.name}`;
             const saved = localStorage.getItem(key);
             if (saved) {
                 const parsed = JSON.parse(saved);
@@ -104,85 +106,12 @@ const SingleGenreFeed = ({ genre }) => {
     }
 
     return (
-        <Box mt="3rem" mb="1rem">
-            <Flex
-                align="center"
-                justify="space-between"
-                pl="20px"
-                pr="20px"
-                mb="1rem"
-                flexWrap="wrap"
-                gap="1rem"
-            >
-                <Text
-                    className="fancyheading"
-                    fontSize="3xl"
-                    fontWeight="800"
-                    letterSpacing="wide"
-                    bgGradient="linear(to-r, brand.400)"
-                    bgClip="text"
-                >
-                    More {genre.name} Anime
-                </Text>
-
-                <Button
-                    onClick={handleShowMore}
-                    size="md"
-                    bg="linear-gradient(50deg, #4924eefb)"
-                    color="white"
-                    _hover={{
-                        filter: "brightness(0.95)",
-                        transform: "translateY(-2px)",
-                    }}
-                    _active={{ transform: "translateY(0)" }}
-                    borderRadius="full"
-                    px="6"
-                    textShadow="none"
-                    boxShadow="none"
-                >
-                    Show More →
-                </Button>
-            </Flex>
-
-            {/* Skeleton */}
-            {loading && (
-                <div style={{ padding: "2rem" }}>
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                            gap: "1rem",
-                        }}
-                    >
-                        {Array.from({ length: 10 }).map((_, i) => (
-                            <div key={i} className="skeleton-card"></div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Anime list */}
-            {!loading && animeList.length > 0 && (
-                <Flex
-                    className="animescroll"
-                    overflowX="auto"
-                    gap="10px"
-                    pl="20px"
-                    pb="10px"
-                >
-                    {animeList.map((anime, i) => (
-                        <Box key={i} flex="0 0 auto">
-                            <AnimeCard
-                                title={anime.title_english || anime.title}
-                                imageUrl={anime.imageUrl}
-                                synopsis={anime.synopsis ?? "No synopsis available"}
-                                rating={anime.score ?? "N/A"}
-                            />
-                        </Box>
-                    ))}
-                </Flex>
-            )}
-        </Box>
+        <AnimeRow 
+            title={`More ${genre.name} Anime`} 
+            animeList={animeList} 
+            loading={loading} 
+            onShowMore={handleShowMore} 
+        />
     );
 };
 

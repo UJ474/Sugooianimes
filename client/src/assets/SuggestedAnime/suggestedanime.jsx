@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import suggestedanimedata from './suggestedanimedata.jsx';
 import AnimeCard from "../components/animecard.jsx";
+import AnimeCardSkeleton from "../components/AnimeCardSkeleton.jsx";
 import '../css_files/spinner.css';
 import './suggestedanime.css';
 import { Flex, Button } from "@chakra-ui/react";
@@ -89,7 +90,7 @@ export default function SuggestedAnime() {
                     }}
                 >
                     {Array.from({ length: suggestedAnimes.length || 25 }).map((_, i) => (
-                        <div key={i} className="skeleton-card"></div>
+                        <AnimeCardSkeleton key={i} />
                     ))}
                 </div>
             </div>
@@ -98,13 +99,16 @@ export default function SuggestedAnime() {
             {!loading && (
                 <div className="suggestedanimelist">
                     {suggestedAnimes.map((anime, index) => (
-                        <AnimeCard
-                            key={index}
-                            title={anime.title_english || anime.title}
-                            imageUrl={anime.imageUrl}
-                            synopsis={anime.synopsis}
-                            rating={anime.score}
-                        />
+                            <AnimeCard
+                                key={index}
+                                title={anime.title_english || anime.title}
+                                imageUrl={anime.imageUrl}
+                                synopsis={anime.synopsis}
+                                rating={anime.score}
+                                status={anime.status || "Finished Airing"}
+                                genres={anime.genres}
+                                episodes={anime.episodes}
+                            />
                     ))}
                 </div>
             )}

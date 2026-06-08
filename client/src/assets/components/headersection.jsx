@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
@@ -28,7 +28,11 @@ export default function Header() {
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [searchExpanded, setSearchExpanded] = useState(false);
     const profileMenuRef = useRef(null);
+    const searchRef = useRef(null);
+    const location = useLocation();
 
     const { user, logout } = useContext(AuthContext);
 
@@ -49,10 +53,22 @@ export default function Header() {
             if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
                 setProfileMenuOpen(false);
             }
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setSearchExpanded(false);
+            }
+        };
+
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 80);
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     const handleSearch = async (e) => {
@@ -78,6 +94,7 @@ export default function Header() {
             navigate(`/search/${searchQuery.trim()}`);
             setSearchResults([]);
             setSearchQuery('');
+            setSearchExpanded(false);
         }
     };
 
@@ -93,16 +110,19 @@ export default function Header() {
     };
 
     return (
-        <nav className="headersectionmain">
+        <nav className={`headersectionmain ${scrolled ? 'solid' : ''}`}>
             <div className="navbarleftcontainer">
                 <img src={hamburgerimage} alt='hamburger' className='hamburgerimage' onClick={toggleMobileMenu}/>
                 <Link to='/' className='logo-link'>
                     <img src={sugooianimelogo} alt='logo' className='sugooianimelogo'/>
                 </Link>
                 <div className="nav-links-desktop">
-                    {headerTextLinksLeft.map((item, i) => (
-                        <Link to={item.path} key={i} className='navbarleft'>{item.heading}</Link>
-                    ))}
+                    {headerTextLinksLeft.map((item, i) => {
+                        const isActive = location.pathname === item.path || (item.path === '/current' && location.pathname.includes('/current')) || (item.path === '/filter' && location.pathname.includes('/filter'));
+                        return (
+                            <Link to={item.path} key={i} className={`navbarleft ${isActive ? 'active' : ''}`}>{item.heading}</Link>
+                        );
+                    })}
                 </div>
                 {mobileMenuOpen && (
                     <div className="mobilemenu show">
@@ -113,8 +133,8 @@ export default function Header() {
                 )}
             </div>
 
-            <div className="searchbarcontainer">
-                <div className="search-input-wrapper">
+            <div className={`searchbarcontainer ${searchExpanded ? 'expanded-container' : ''}`} ref={searchRef}>
+                <div className={`search-input-wrapper ${searchExpanded ? 'expanded' : ''}`}>
                   <input
                     type="text"
                     value={searchQuery}
@@ -122,8 +142,27 @@ export default function Header() {
                     onKeyDown={handleKeyPress}
                     placeholder="Search anime..."
                     className="searchinput"
+                    ref={(input) => {
+                        if (searchExpanded && input) {
+                            input.focus();
+                        }
+                    }}
                   />
-                  <img src={searchImage} alt="Search" className="searchinput-icon" />
+                  <img 
+                    src={searchImage} 
+                    alt="Search" 
+                    className="searchinput-icon" 
+                    onClick={() => {
+                        if (searchExpanded && searchQuery.trim()) {
+                            navigate(`/search/${searchQuery.trim()}`);
+                            setSearchResults([]);
+                            setSearchQuery('');
+                            setSearchExpanded(false);
+                        } else {
+                            setSearchExpanded(prev => !prev);
+                        }
+                    }}
+                  />
                 </div>
                 {searchResults.length > 0 && (
                     <div className="searchdropdown">

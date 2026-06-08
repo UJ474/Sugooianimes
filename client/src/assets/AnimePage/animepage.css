@@ -261,9 +261,159 @@
 }
 
 .anime-recommendations-section {
+  padding-top: 1rem;
+}
+
+/* Tabs System */
+.anime-page-tabs-section {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 2rem 3rem;
+  padding: 0 2rem 3rem;
+}
+
+.tabs-header {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.tabs-header::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #a1a1aa;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+}
+
+.tab-btn.active {
+  color: #a855f7;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #a855f7;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -2px 10px rgba(168, 85, 247, 0.6);
+}
+
+/* Trailer */
+.trailer-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  background: #000;
+}
+
+.trailer-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Overview descriptive text */
+.overview-text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.overview-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.overview-subtitle {
+  font-size: 1.4rem;
+  color: #ffffff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.overview-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #d4d4d4;
+  margin: 0;
+}
+
+/* Episodes */
+.episodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.episode-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.episode-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(4px);
+}
+
+.episode-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.episode-number {
+  font-weight: 700;
+  color: #a855f7;
+  font-size: 1.1rem;
+  min-width: 60px;
+}
+
+.episode-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.episode-date {
+  color: #9ca3af;
+  font-size: 0.9rem;
 }
 
 .section-title {

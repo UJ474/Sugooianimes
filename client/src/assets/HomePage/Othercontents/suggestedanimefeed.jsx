@@ -11,7 +11,7 @@ const SuggestedAnimeFeed = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentStoredData = localStorage.getItem('home_suggested_top_10');
+        const currentStoredData = localStorage.getItem('home_suggested_top_10_v2');
 
         if (currentStoredData) {
             const parsedData = JSON.parse(currentStoredData);
@@ -36,6 +36,7 @@ const SuggestedAnimeFeed = () => {
             .then(data => {
                 if (data.data && data.data.length > 0) {
                     const top30 = data.data.slice(0, 20).map(anime => ({
+                        mal_id: anime.mal_id,
                         title: anime.title,
                         title_english: anime.title_english,
                         score: anime.score,
@@ -52,7 +53,7 @@ const SuggestedAnimeFeed = () => {
                     setAnimeList(top30);
 
                     localStorage.setItem(
-                        'home_suggested_top_10',
+                        'home_suggested_top_10_v2',
                         JSON.stringify({
                             data: top30,
                             timestamp: Date.now(),

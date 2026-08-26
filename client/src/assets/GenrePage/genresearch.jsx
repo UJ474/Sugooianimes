@@ -111,6 +111,7 @@ const GenreSearch = ({ selectedGenre }) => {
         {animeList.map(anime => (
           <AnimeCard
             key={anime.mal_id}
+            animeId={anime.mal_id}
             title={anime.title_english || anime.title}
             imageUrl={anime.images.jpg.large_image_url}
             synopsis={anime.synopsis}

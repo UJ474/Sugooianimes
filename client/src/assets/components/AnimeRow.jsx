@@ -118,6 +118,7 @@ const AnimeRow = ({ title, animeList, loading, onShowMore }) => {
                         animeList.map((anime, index) => (
                             <Box key={index} flex="0 0 auto">
                                 <AnimeCard
+                                    animeId={anime.mal_id}
                                     title={anime.title_english || anime.title}
                                     imageUrl={anime.imageUrl}
                                     synopsis={anime.synopsis ?? "No synopsis available"}

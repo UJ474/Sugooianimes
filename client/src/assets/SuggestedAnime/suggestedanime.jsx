@@ -13,7 +13,7 @@ export default function SuggestedAnime() {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const storedData = localStorage.getItem("suggested_page_cache");
+        const storedData = localStorage.getItem("suggested_page_cache_v2");
         if (storedData) {
             try {
                 const parsed = JSON.parse(storedData);
@@ -46,6 +46,7 @@ export default function SuggestedAnime() {
             .then(data => {
                 if (data.data && data.data.length > 0) {
                     const top30 = data.data.slice(0, 30).map(anime => ({
+                        mal_id: anime.mal_id,
                         title: anime.title,
                         title_english: anime.title_english,
                         score: anime.score,
@@ -64,7 +65,7 @@ export default function SuggestedAnime() {
                     suggestedanimedata.push(...top30);
 
                     localStorage.setItem(
-                        "suggested_page_cache",
+                        "suggested_page_cache_v2",
                         JSON.stringify({
                             data: top30,
                             timestamp: Date.now(),
@@ -101,6 +102,7 @@ export default function SuggestedAnime() {
                     {suggestedAnimes.map((anime, index) => (
                             <AnimeCard
                                 key={index}
+                                animeId={anime.mal_id}
                                 title={anime.title_english || anime.title}
                                 imageUrl={anime.imageUrl}
                                 synopsis={anime.synopsis}

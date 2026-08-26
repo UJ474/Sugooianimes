@@ -32,15 +32,23 @@ const AnimePage = () => {
 
     setLoading(true);
     setEpisodesLoading(true);
+    setAnimeData(null);
+    setEpisodesData([]);
 
     fetch(`https://api.jikan.moe/v4/anime/${animeId}`)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`Failed to load anime (${res.status})`);
+      return res.json();
+    })
     .then(data => {
       if (data.data) {
         const anime = data.data;  // ← direct object, not array
         setAnimeData(anime);
         fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/episodes`)
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) throw new Error(`Failed to load episodes (${res.status})`);
+            return res.json();
+          })
           .then(epData => {
             setEpisodesData(epData.data || []);
           })

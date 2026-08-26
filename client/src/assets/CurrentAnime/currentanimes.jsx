@@ -13,7 +13,7 @@ export default function CurrentAnimes() {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const storedData = localStorage.getItem('current_airing_page_data');
+        const storedData = localStorage.getItem('current_airing_page_data_v2');
         if (storedData) {
             try {
                 const parsedData = JSON.parse(storedData);
@@ -46,6 +46,7 @@ export default function CurrentAnimes() {
             .then(data => {
                 if (data.data && data.data.length > 0) {
                     const top30 = data.data.slice(0, 30).map(anime => ({
+                        mal_id: anime.mal_id,
                         title: anime.title,
                         title_english: anime.title_english,
                         score: anime.score,
@@ -63,7 +64,7 @@ export default function CurrentAnimes() {
                     currentanimedata.push(...top30);
 
                     try {
-                        localStorage.setItem('current_airing_page_data', JSON.stringify({
+                        localStorage.setItem('current_airing_page_data_v2', JSON.stringify({
                             data: top30,
                             timestamp: Date.now(),
                             page: page
@@ -118,6 +119,7 @@ export default function CurrentAnimes() {
                 {currentAnimes.map((anime, index) => (
                     <AnimeCard
                         key={index}
+                        animeId={anime.mal_id}
                         title={anime.title_english || anime.title}
                         imageUrl={anime.imageUrl}
                         synopsis={anime.synopsis}

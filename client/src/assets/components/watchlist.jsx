@@ -187,7 +187,7 @@ export default function Watchlist() {
               </HStack>
 
               <HStack mt={4} spacing={3}>
-                <Button as={RouterLink} to={`/anime/${encodeURIComponent(anime.title)}`} size="sm" variant="outline" borderColor="rgba(255,255,255,0.06)" color="white" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none" }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>View</Button>
+                <Button as={RouterLink} to={`/anime/${anime.mal_id}`} size="sm" variant="outline" borderColor="rgba(255,255,255,0.06)" color="white" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none" }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>View</Button>
                 <Button size="sm" onClick={() => removeFromWatchlist(anime.mal_id)} variant="ghost" color="gray.300" textShadow="none" _hover={{ textShadow:"none", boxShadow:"none" }} _active={{ textShadow:"none", boxShadow:"none" }} _focus={{ textShadow:"none", boxShadow:"none" }}>Remove</Button>
               </HStack>
             </Box>

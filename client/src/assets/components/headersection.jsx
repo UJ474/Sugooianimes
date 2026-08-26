@@ -171,7 +171,7 @@ export default function Header() {
                                 key={anime.mal_id}
                                 className="searchitem"
                                 onClick={() => {
-                                    navigate(`/anime/${anime.title}`);
+                                    navigate(`/anime/${anime.mal_id}`);
                                     setSearchQuery('');
                                     setSearchResults([]);
                                 }}

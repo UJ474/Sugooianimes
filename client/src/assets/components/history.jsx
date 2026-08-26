@@ -239,7 +239,7 @@ export default function History() {
               _hover={{ transform: "translateX(4px)", transition: "0.2s" }}
               boxShadow="none"
             >
-              <Link to={`/anime/${encodeURIComponent(item.title)}`}>
+              <Link to={`/anime/${item.mal_id}`}>
                 <HStack spacing={0}>
                   <Image
                     src={item.imageUrl}

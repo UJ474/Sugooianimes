@@ -4,7 +4,7 @@ import { useState } from "react";
 import Badge from "../../components/Badge.jsx";
 import GlowButton from "../../components/GlowButton.jsx";
 
-export default function AnimeCard({ title, imageUrl, synopsis, rating, status, genres, episodes }) {
+export default function AnimeCard({ animeId, title, imageUrl, synopsis, rating, status, genres, episodes }) {
   const [loaded, setLoaded] = useState(false);
 
   // Determine colors based on rating
@@ -24,7 +24,7 @@ export default function AnimeCard({ title, imageUrl, synopsis, rating, status, g
 
   return (
     <Link 
-      to={`/anime/${encodeURIComponent(title)}`}
+      to={`/anime/${animeId}`}
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
       <Box

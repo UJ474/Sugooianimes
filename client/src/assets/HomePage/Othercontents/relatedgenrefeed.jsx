@@ -19,7 +19,7 @@ const SingleGenreFeed = ({ genre }) => {
     useEffect(() => {
         if (!genre) return;
 
-        const key = `genre_feed_v2_${genre.name}`;
+        const key = `genre_feed_v3_${genre.name}`;
         const saved = localStorage.getItem(key);
 
         if (saved) {
@@ -39,7 +39,7 @@ const SingleGenreFeed = ({ genre }) => {
 
     async function fetchAndStoreGenreAnime() {
         setLoading(true);
-        const key = `genre_feed_v2_${genre.name}`;
+        const key = `genre_feed_v3_${genre.name}`;
 
         try {
             const genreId = genreMap[genre.name] || genre.mal_id;
@@ -55,6 +55,7 @@ const SingleGenreFeed = ({ genre }) => {
 
             if (data.data && data.data.length > 0) {
                 const list = data.data.map(anime => ({
+                    mal_id: anime.mal_id,
                     title: anime.title,
                     title_english: anime.title_english,
                     score: anime.score,
@@ -84,7 +85,7 @@ const SingleGenreFeed = ({ genre }) => {
         } catch (err) {
             console.error(`Error fetching ${genre.name}:`, err);
 
-            const key = `genre_feed_v2_${genre.name}`;
+            const key = `genre_feed_v3_${genre.name}`;
             const saved = localStorage.getItem(key);
             if (saved) {
                 const parsed = JSON.parse(saved);

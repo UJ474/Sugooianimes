@@ -33,30 +33,27 @@ const AnimePage = () => {
     setLoading(true);
     setEpisodesLoading(true);
 
-    fetch(`https://api.jikan.moe/v4/anime?q=${animeId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.data && data.data.length > 0) {
-          const anime = data.data[0];
-          setAnimeData(anime);
-
-          // Fetch episodes using mal_id
-          fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/episodes`)
-            .then(res => res.json())
-            .then(epData => {
-              setEpisodesData(epData.data || []);
-            })
-            .catch(() => setEpisodesData([]))
-            .finally(() => setEpisodesLoading(false));
-
-        } else {
-          setEpisodesLoading(false);
-        }
-      })
-      .catch(() => {
+    fetch(`https://api.jikan.moe/v4/anime/${animeId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.data) {
+        const anime = data.data;  // ← direct object, not array
+        setAnimeData(anime);
+        fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/episodes`)
+          .then(res => res.json())
+          .then(epData => {
+            setEpisodesData(epData.data || []);
+          })
+          .catch(() => setEpisodesData([]))
+          .finally(() => setEpisodesLoading(false));
+      } else {
         setEpisodesLoading(false);
-      })
-      .finally(() => setLoading(false));
+      }
+    })
+    .catch(() => {
+      setEpisodesLoading(false);
+    })
+    .finally(() => setLoading(false));
   }, [animeId]);
 
   // Auto-add to history.ALL when visiting anime page

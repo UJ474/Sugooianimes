@@ -22,6 +22,8 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 
 ##  System Architecture  
 **Frontend → Backend API → Database**
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UJ474/Sugooianimes)
+
 
 ### **Frontend**
 - React.js (Vite)
@@ -64,7 +66,6 @@ Sugooianime solves this by combining real‑time API data + a custom backend + u
 - JWT‑based login sessions
 - Password hashing via bcrypt
 - Secure protected routes
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UJ474/Sugooianimes)
 
 ---
 

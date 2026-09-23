@@ -190,3 +190,4 @@ Sugooianime/
 │
 └── README.md
 ```
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UJ474/Sugooianimes)

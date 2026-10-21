@@ -4,14 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import AnimeRow from '../../components/AnimeRow';
 import '../../css_files/spinner.css';
 import './homepageother.css';
+import { getAnimeByGenre } from '../../../services/kitsuService.js';
 
-const genreMap = {
-  Action: 1, Adventure: 2, Comedy: 4, Drama: 8, Fantasy: 10,
-  Horror: 14, Mystery: 7, Romance: 22, "Sci-Fi": 24, 
-  Supernatural: 37, Thriller: 41, Sports: 30, Slice: 36
-};
-
-const SingleGenreFeed = ({ genre }) => {
+const SingleGenreFeed = ({ genre, fetchDelay = 0 }) => {
     const [animeList, setAnimeList] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -19,55 +14,37 @@ const SingleGenreFeed = ({ genre }) => {
     useEffect(() => {
         if (!genre) return;
 
-        const key = `genre_feed_v3_${genre.name}`;
+        const key = `genre_feed_v4_${genre.name}`;
         const saved = localStorage.getItem(key);
 
         if (saved) {
-            const parsed = JSON.parse(saved);
-            const now = Date.now();
-            const oneDay = 24 * 60 * 60 * 1000;
+            try {
+                const parsed = JSON.parse(saved);
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
 
-            if (now - parsed.timestamp < oneDay) {
-                setAnimeList(parsed.data);
-                setLoading(false);
-                return;
+                if (now - parsed.timestamp < oneDay && parsed.data?.length > 0) {
+                    setAnimeList(parsed.data);
+                    setLoading(false);
+                    return;
+                }
+            } catch (e) {
+                // ignore
             }
         }
 
-        fetchAndStoreGenreAnime();
-    }, [genre]);
+        const timer = setTimeout(() => fetchAndStoreGenreAnime(), fetchDelay);
+        return () => clearTimeout(timer);
+    }, [genre, fetchDelay]);
 
     async function fetchAndStoreGenreAnime() {
         setLoading(true);
-        const key = `genre_feed_v3_${genre.name}`;
+        const key = `genre_feed_v4_${genre.name}`;
 
         try {
-            const genreId = genreMap[genre.name] || genre.mal_id;
-            if (!genreId) {
-                setLoading(false);
-                return;
-            }
-
-            const response = await fetch(
-                `https://api.jikan.moe/v4/anime?genres=${genreId}&order_by=score&sort=desc&limit=10`
-            );
-            const data = await response.json();
-
-            if (data.data && data.data.length > 0) {
-                const list = data.data.map(anime => ({
-                    mal_id: anime.mal_id,
-                    title: anime.title,
-                    title_english: anime.title_english,
-                    score: anime.score,
-                    imageUrl: anime.images.jpg.large_image_url,
-                    synopsis: anime.synopsis,
-                    genres: anime.genres,
-                    status: anime.status,
-                    episodes: anime.episodes
-                }));
-
+            const list = await getAnimeByGenre(genre.name, 1, 10);
+            if (list && list.length > 0) {
                 setAnimeList(list);
-
                 localStorage.setItem(
                     key,
                     JSON.stringify({
@@ -75,22 +52,9 @@ const SingleGenreFeed = ({ genre }) => {
                         timestamp: Date.now()
                     })
                 );
-            } else {
-                const saved = localStorage.getItem(key);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    setAnimeList(parsed.data);
-                }
             }
         } catch (err) {
             console.error(`Error fetching ${genre.name}:`, err);
-
-            const key = `genre_feed_v3_${genre.name}`;
-            const saved = localStorage.getItem(key);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                setAnimeList(parsed.data);
-            }
         } finally {
             setLoading(false);
         }
@@ -122,7 +86,7 @@ const RelatedGenreFeed = ({ genres = [] }) => {
     return (
         <>
             {genres.map((genre, index) => (
-                <SingleGenreFeed key={`${genre.name}-${index}`} genre={genre} />
+                <SingleGenreFeed key={`${genre.name}-${index}`} genre={genre} fetchDelay={index * 500} />
             ))}
         </>
     );

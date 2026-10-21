@@ -55,39 +55,27 @@ const genreMap = {
 
 
 
+import { getAnimeByGenre } from '../../services/kitsuService.js';
+import Pagination from '../../components/Pagination.jsx';
+
 export default function SpecificGenre() {
   const { genreName } = useParams();
   const [animes, setAnimes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const fetchRef = useRef(false);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchGenreAnime = async () => {
+      if (!genreName) return;
       setLoading(true);
       try {
-        const genreId = genreMap[genreName && genreName.toLowerCase()];
-        if (!genreId) {
-          console.error('Invalid genre key');
-          setAnimes([]);
-          setLoading(false);
-          return;
-        }
-        const res = await fetch(`https://api.jikan.moe/v4/anime?genres=${genreId}&order_by=popularity&page=${currentPage}`);
-        const data = await res.json();
-        const formatted = data.data.map(anime => ({
-          mal_id: anime.mal_id,
-          title: anime.title_english || anime.title,
-          imageUrl: anime.images?.jpg?.large_image_url,
-          synopsis: anime.synopsis,
-          rating: anime.score,
-          status: anime.status,
-          genres: anime.genres,
-          episodes: anime.episodes,
-        }));
-        setAnimes(formatted);
+        const formatted = await getAnimeByGenre(genreName, currentPage, 20);
+        setAnimes(formatted || []);
+        setTotalPages(formatted?.totalPages || 1);
       } catch (error) {
         console.error("Failed to fetch genre-specific anime:", error);
+        setAnimes([]);
       } finally {
         setLoading(false);
       }
@@ -106,7 +94,7 @@ export default function SpecificGenre() {
         <div className="animegrid">
           {animes.map((anime, index) => (
             <AnimeCard
-              key={index}
+              key={anime.mal_id || index}
               animeId={anime.mal_id}
               title={anime.title}
               imageUrl={anime.imageUrl}
@@ -119,34 +107,14 @@ export default function SpecificGenre() {
           ))}
         </div>
       )}
-      <div style={{ marginTop: '3rem' }}>
-        <button
-          className="changebuttons"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        >
-          Prev
-        </button>
-        {Array.from({ length: 10 }, (_, i) => {
-          const startPage = Math.max(currentPage - 5, 1);
-          const pageNum = startPage + i;
-          return (
-            <button
-              key={pageNum}
-              onClick={() => setCurrentPage(pageNum)}
-              className={`pagebutton ${currentPage === pageNum ? 'active' : ''}`}
-            >
-              {pageNum}
-            </button>
-          );
-        })}
-        <button
-          className="changebuttons"
-          onClick={() => setCurrentPage(prev => prev + 1)}
-        >
-          Next
-        </button>
-      </div>
+
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

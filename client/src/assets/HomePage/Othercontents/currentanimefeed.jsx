@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AnimeRow from '../../components/AnimeRow';
 import '../../css_files/spinner.css';
 import './homepageother.css';
+import { getCurrentAnime } from '../../../services/kitsuService.js';
 
 const CurrentAnimeFeed = () => {
     const [animeList, setAnimeList] = useState([]);
@@ -11,57 +12,45 @@ const CurrentAnimeFeed = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentStoredData = localStorage.getItem('home_current_top_10_v2');
+        const currentStoredData = localStorage.getItem('home_current_top_10_v3');
         
         if (currentStoredData) {
-            const parsedData = JSON.parse(currentStoredData);
-            const now = Date.now();
-            const oneday = 24 * 60 * 60 * 1000;
+            try {
+                const parsedData = JSON.parse(currentStoredData);
+                const now = Date.now();
+                const oneday = 24 * 60 * 60 * 1000;
 
-            if (now - parsedData.timestamp < oneday) {
-                setAnimeList(parsedData.data);
-                setLoading(false);
-                return;
+                if (now - parsedData.timestamp < oneday && parsedData.data?.length > 0) {
+                    setAnimeList(parsedData.data);
+                    setLoading(false);
+                    return;
+                }
+            } catch (e) {
+                // ignore
             }
         }
         fetchAndStoreCurrentAnime();
     }, []);
     
-    function fetchAndStoreCurrentAnime() {
+    async function fetchAndStoreCurrentAnime() {
         setLoading(true);
-
-        fetch('https://api.jikan.moe/v4/seasons/now?page=1')
-            .then(response => response.json())
-            .then(data => {
-                if (data.data && data.data.length > 0) {
-                    const top30 = data.data.slice(0, 20).map(anime => ({
-                        mal_id: anime.mal_id,
-                        title: anime.title,
-                        title_english: anime.title_english,
-                        score: anime.score,
-                        imageUrl: anime.images.jpg.large_image_url,
-                        url: anime.url,
-                        synopsis: anime.synopsis,
-                        genres: anime.genres,
-                        title_japanese: anime.title_japanese,
-                        aniimages: anime.images,
-                        themes: anime.themes,
-                        episodes: anime.episodes,
-                    }));
-
-                    setAnimeList(top30);
-
-                    localStorage.setItem(
-                        'home_current_top_10_v2',
-                        JSON.stringify({
-                            data: top30,
-                            timestamp: Date.now()
-                        })
-                    );
-                }
-            })
-            .catch(error => console.log("Error fetching current anime:", error))
-            .finally(() => setLoading(false));
+        try {
+            const list = await getCurrentAnime(1, 20);
+            if (list && list.length > 0) {
+                setAnimeList(list);
+                localStorage.setItem(
+                    'home_current_top_10_v3',
+                    JSON.stringify({
+                        data: list,
+                        timestamp: Date.now()
+                    })
+                );
+            }
+        } catch (error) {
+            console.error("Error fetching current anime:", error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     const handleShowMore = () => {

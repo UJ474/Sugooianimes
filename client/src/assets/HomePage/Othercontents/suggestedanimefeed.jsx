@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AnimeRow from '../../components/AnimeRow';
 import '../../css_files/spinner.css';
 import './homepageother.css';
+import { getTopAnime } from '../../../services/kitsuService.js';
 
 const SuggestedAnimeFeed = () => {
     const [animeList, setAnimeList] = useState([]);
@@ -11,58 +12,46 @@ const SuggestedAnimeFeed = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentStoredData = localStorage.getItem('home_suggested_top_10_v2');
+        const currentStoredData = localStorage.getItem('home_suggested_top_10_v3');
 
         if (currentStoredData) {
-            const parsedData = JSON.parse(currentStoredData);
-            const now = Date.now();
-            const oneDay = 24 * 60 * 60 * 1000;
+            try {
+                const parsedData = JSON.parse(currentStoredData);
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
 
-            if (now - parsedData.timestamp < oneDay) {
-                setAnimeList(parsedData.data);
-                setLoading(false);
-                return;
+                if (now - parsedData.timestamp < oneDay && parsedData.data?.length > 0) {
+                    setAnimeList(parsedData.data);
+                    setLoading(false);
+                    return;
+                }
+            } catch (e) {
+                // ignore
             }
         }
 
         fetchAndStoreSuggestedAnime();
     }, []);
 
-    function fetchAndStoreSuggestedAnime() {
+    async function fetchAndStoreSuggestedAnime() {
         setLoading(true);
-
-        fetch('https://api.jikan.moe/v4/top/anime?filter=favorite&page=1')
-            .then(res => res.json())
-            .then(data => {
-                if (data.data && data.data.length > 0) {
-                    const top30 = data.data.slice(0, 20).map(anime => ({
-                        mal_id: anime.mal_id,
-                        title: anime.title,
-                        title_english: anime.title_english,
-                        score: anime.score,
-                        imageUrl: anime.images.jpg.large_image_url,
-                        url: anime.url,
-                        synopsis: anime.synopsis,
-                        genres: anime.genres,
-                        title_japanese: anime.title_japanese,
-                        aniimages: anime.images,
-                        themes: anime.themes,
-                        episodes: anime.episodes,
-                    }));
-
-                    setAnimeList(top30);
-
-                    localStorage.setItem(
-                        'home_suggested_top_10_v2',
-                        JSON.stringify({
-                            data: top30,
-                            timestamp: Date.now(),
-                        })
-                    );
-                }
-            })
-            .catch(err => console.log("Error fetching suggested anime:", err))
-            .finally(() => setLoading(false));
+        try {
+            const list = await getTopAnime(1, 20);
+            if (list && list.length > 0) {
+                setAnimeList(list);
+                localStorage.setItem(
+                    'home_suggested_top_10_v3',
+                    JSON.stringify({
+                        data: list,
+                        timestamp: Date.now(),
+                    })
+                );
+            }
+        } catch (err) {
+            console.error("Error fetching suggested anime:", err);
+        } finally {
+            setLoading(false);
+        }
     }
 
     const handleShowMore = () => {

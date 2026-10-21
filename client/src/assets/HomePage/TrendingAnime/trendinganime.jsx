@@ -23,7 +23,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "During their decade-long quest to defeat the Demon King, the members of the hero's party—Himmel himself, the priest Heiter, the dwarf warrior Eisen, and the elven mage Frieren—forge bonds through adventures and battles, creating unforgettable precious memories for most of them.\n\nHowever, the time that Frieren spends with her comrades is equivalent to merely a fraction of her life, which has lasted over a thousand years. When the party disbands after their victory, Frieren casually returns to her \"usual\" routine of collecting spells across the continent.",
     genres: [{ name: "Adventure" }, { name: "Drama" }, { name: "Fantasy" }],
     image: img1,
-    id: 52991
+    id: 46474
   },
   {
     title: "Fullmetal Alchemist: Brotherhood",
@@ -31,7 +31,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "After a horrific alchemy experiment goes wrong in the Elric household, brothers Edward and Alphonse are left in a catastrophic new reality. Ignoring the alchemical principle banning human transmutation, the boys attempted to bring their recently deceased mother back to life. Instead, they suffered brutal personal loss: Alphonse's body disintegrated while Edward lost a leg and then sacrificed an arm to keep Alphonse's soul in the physical realm by binding it to a hulking suit of armor.",
     genres: [{ name: "Action" }, { name: "Adventure" }, { name: "Drama" }, { name: "Fantasy" }],
     image: img2,
-    id: 5114
+    id: 3936
   },
   {
     title: "Steins;Gate",
@@ -39,7 +39,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "Eccentric scientist Rintarou Okabe has a never-ending thirst for scientific exploration. Together with his ditzy but well-meaning friend Mayuri Shiina and his roommate Itaru Hashida, Okabe founds the Future Gadget Laboratory in the hopes of creating technological innovations that baffle the human psyche. Despite claims of grandeur, the only notable \"gadget\" the trio have created is a microwave that has the mystifying power to turn bananas into green goo.",
     genres: [{ name: "Sci-Fi" }, { name: "Suspense" }],
     image: img3,
-    id: 9253
+    id: 5646
   },
   {
     title: "One Piece Fan Letter",
@@ -47,7 +47,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "Although the golden age of piracy is about to reach new heights, most people do not seek the glory of finding the elusive One Piece—a treasure signifying a new conqueror of all seas that was once embodied by the legendary King of the Pirates, Gol D. Roger. However, even if civilians generally despise pirates, they secretly cheer for at least one of them. One red-headed girl from Sabaody Archipelago is no exception: She reveres Nami, the ingenious female navigator of Monkey D. Luffy's Straw Hat crew.",
     genres: [{ name: "Action" }, { name: "Adventure" }, { name: "Fantasy" }],
     image: img4,
-    id: 59714
+    id: 49259
   },
   {
     title: "Attack on Titan",
@@ -55,7 +55,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans, forcing humans to hide in fear behind enormous concentric walls. What makes these giants truly terrifying is that their taste for human flesh is not born out of hunger but what appears to be out of pleasure. To ensure their survival, the remnants of humanity began living within defensive barriers, resulting in one hundred years without a single titan encounter.",
     genres: [{ name: "Action" }, { name: "Award Winning" }, { name: "Drama" }, { name: "Suspense" }],
     image: img5,
-    id: 16498
+    id: 7442
   },
   {
     title: "Gintama Season 4",
@@ -63,7 +63,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "After joining the resistance against the bakufu, Gintoki and the gang are in hiding, along with Katsura and his Joui rebels. The Yorozuya is soon approached by Nobunobu Tokugawa, the current shogun, who asks them to help him regain his power from the Tendoshuu. With the help of the Kiheitai, the Yorozuya must now form an alliance with their old enemies, the Shinsengumi, to protect Edo from the Tendoshuu's grasp.",
     genres: [{ name: "Action" }, { name: "Comedy" }, { name: "Sci-Fi" }],
     image: img6,
-    id: 34096
+    id: 818
   },
   {
     title: "Gintama: The Final",
@@ -71,7 +71,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "Two years have passed following the Tendoshuu's invasion of the O-Edo Central Terminal. Since then, the Yorozuya have gone their separate ways. Foreseeing Utsuro's return, Gintoki Sakata begins surveying Earth's ley lines for traces of the other man's Altana. After an encounter with the remnants of the Tendoshuu—who continue to press on in search of immortality—Gintoki returns to Edo.",
     genres: [{ name: "Action" }, { name: "Comedy" }, { name: "Sci-Fi" }],
     image: img7,
-    id: 39486
+    id: 43683
   },
   {
     title: "Hunter x Hunter (2011)",
@@ -79,7 +79,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "Hunters devote themselves to accomplishing hazardous tasks, all from traversing the world's uncharted territories to locating rare items and monsters. Before becoming a Hunter, one must pass the Hunter Examination—a high-risk selection process in which most applicants end up handicapped or worse, deceased. What drives 12-year-old Gon Freecss is finding Ging, his father and a Hunter himself.",
     genres: [{ name: "Action" }, { name: "Adventure" }, { name: "Fantasy" }],
     image: img8,
-    id: 11061
+    id: 6448
   },
   {
     title: "Gintama Season 2",
@@ -87,7 +87,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "After a one-year hiatus, Shinpachi Shimura returns to Edo, only to stumble upon a shocking surprise: Gintoki and Kagura, his fellow Yorozuya members, have become completely different characters! Fleeing from the Yorozuya headquarters in confusion, Shinpachi finds that all the denizens of Edo have undergone impossibly extreme changes, in both appearance and personality.",
     genres: [{ name: "Action" }, { name: "Comedy" }, { name: "Sci-Fi" }],
     image: img9,
-    id: 9969
+    id: 818
   },
   {
     title: "Gintama: Enchousen",
@@ -95,7 +95,7 @@ const STATIC_ANIME_DATA = [
     synopsis: "While Gintoki Sakata was away, the Yorozuya found themselves a new leader: Kintoki, Gintoki's golden-haired doppelganger. In order to regain his former position, Gintoki will need the help of those around him, a troubling feat when no one can remember him! Between Kintoki and Gintoki, who will claim the throne as the main character?",
     genres: [{ name: "Action" }, { name: "Comedy" }, { name: "Sci-Fi" }],
     image: img10,
-    id: 15417
+    id: 7253
   }
 ];
 

@@ -2,25 +2,26 @@ import { useEffect, useState } from "react";
 import currentanimedata from './currentanimedata.jsx';
 import AnimeCard from "../components/animecard.jsx";
 import AnimeCardSkeleton from "../components/AnimeCardSkeleton.jsx";
+import Pagination from "../../components/Pagination.jsx";
 import '../css_files/spinner.css';
 import './currentanime.css';
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { getCurrentAnime } from "../../services/kitsuService.js";
 
 export default function CurrentAnimes() {
     const [currentAnimes, setCurrentAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
-
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        const storedData = localStorage.getItem('current_airing_page_data_v2');
+        const storedData = localStorage.getItem('current_airing_page_data_v3');
         if (storedData) {
             try {
                 const parsedData = JSON.parse(storedData);
                 const now = Date.now();
                 const oneDay = 24 * 60 * 60 * 1000;
 
-                if (parsedData.page === currentPage && (now - parsedData.timestamp < oneDay)) {
+                if (parsedData.page === currentPage && (now - parsedData.timestamp < oneDay) && parsedData.data?.length > 0) {
                     setCurrentAnimes(parsedData.data || []);
                     currentanimedata.length = 0;
                     currentanimedata.push(...(parsedData.data || []));
@@ -39,47 +40,35 @@ export default function CurrentAnimes() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [currentPage]);
 
-    function fetchAndStoreCurrentAnime(page) {
+    async function fetchAndStoreCurrentAnime(page) {
         setLoading(true);
-        fetch(`https://api.jikan.moe/v4/seasons/now?page=${page}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.data && data.data.length > 0) {
-                    const top30 = data.data.slice(0, 30).map(anime => ({
-                        mal_id: anime.mal_id,
-                        title: anime.title,
-                        title_english: anime.title_english,
-                        score: anime.score,
-                        imageUrl: anime.images?.jpg?.large_image_url,
-                        url: anime.url,
-                        synopsis: anime.synopsis,
-                        genres: anime.genres,
-                        title_japanese: anime.title_japanese,
-                        aniimages: anime.images,
-                        themes: anime.themes,
-                        episodes: anime.episodes,
-                    }));
-                    setCurrentAnimes(top30);
-                    currentanimedata.length = 0;
-                    currentanimedata.push(...top30);
+        try {
+            const list = await getCurrentAnime(page, 20);
+            if (list && list.length > 0) {
+                setCurrentAnimes(list);
+                setTotalPages(list.totalPages || 1);
+                currentanimedata.length = 0;
+                currentanimedata.push(...list);
 
-                    try {
-                        localStorage.setItem('current_airing_page_data_v2', JSON.stringify({
-                            data: top30,
-                            timestamp: Date.now(),
-                            page: page
-                        }));
-                    } catch (err) {
-                        console.warn('Failed to cache current airing page data:', err);
-                    }
-                } else {
-                    setCurrentAnimes([]);
+                try {
+                    localStorage.setItem('current_airing_page_data_v3', JSON.stringify({
+                        data: list,
+                        totalPages: list.totalPages || 1,
+                        timestamp: Date.now(),
+                        page: page
+                    }));
+                } catch (err) {
+                    console.warn('Failed to cache current airing page data:', err);
                 }
-            })
-            .catch(error => {
-                console.log("Error fetching current anime:", error);
-            })
-            .finally(() => setLoading(false));
+            } else {
+                setCurrentAnimes([]);
+            }
+        } catch (error) {
+            console.error("Error fetching current anime:", error);
+            setCurrentAnimes([]);
+        } finally {
+            setLoading(false);
+        }
     }
 
 
@@ -132,57 +121,13 @@ export default function CurrentAnimes() {
             </div>
         )}
 
-        <Flex justify="center" align="center" gap="10px" mt="3rem">
-            <Button
-                colorScheme="blue"
-                variant="outline"
-                color="white"
-                borderColor="white"
-                _hover={{ bg: "white", color: "black" }}
-                isDisabled={currentPage === 1}
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            >
-                Prev
-            </Button>
-
-            {Array.from({ length: 10 }, (_, i) => {
-                const startPage = Math.max(currentPage - 5, 1);
-                const pageNum = startPage + i;
-
-                return (
-                    <Button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        variant={currentPage === pageNum ? "solid" : "outline"}
-                        colorScheme={currentPage === pageNum ? "pink" : undefined}
-
-                        color={currentPage === pageNum ? "white" : "white"}
-
-                        _hover={
-                            currentPage === pageNum
-                                ? { bg: "blue", color: "white" }
-                                : { bg: "white", color: "black" }
-                        }
-
-                        borderColor={currentPage === pageNum ? "pink.500" : "white"}
-                    >
-                        {pageNum}
-                    </Button>
-                );
-            })}
-
-
-            <Button
-                colorScheme="blue"
-                variant="outline"
-                color="white"
-                borderColor="white"
-                _hover={{ bg: "white", color: "black" }}
-                onClick={() => setCurrentPage(prev => prev + 1)}
-            >
-                Next
-            </Button>
-        </Flex>
+        {!loading && (
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
+        )}
         </>
     );
 }

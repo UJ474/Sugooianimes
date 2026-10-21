@@ -9,6 +9,7 @@ import savedImage from '../images/savedimage.png';
 import accountImage from '../images/accountimage.png';
 import hamburgerimage from '../images/hamburgerimage.png';
 import sugooianimelogo from '../images/sugooianimelogo2.png';
+import { searchAnime } from '../../services/kitsuService.js';
 
 
 export default function Header() {
@@ -77,9 +78,8 @@ export default function Header() {
 
         if (query.length >= 2) {
             try {
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=5`);
-                const data = await res.json();
-                setSearchResults(data.data || []);
+                const results = await searchAnime(query, 5);
+                setSearchResults(results || []);
             } catch (err) {
                 console.error('Search error:', err);
                 setSearchResults([]);

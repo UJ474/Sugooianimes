@@ -1,0 +1,79 @@
+{
+  "Health Check": {
+    "endpoint": "/",
+    "total_requests": 495755,
+    "rps": "49572.83",
+    "avg_ms": "0.18",
+    "med_ms": "0.15",
+    "p90_ms": "0.27",
+    "p95_ms": "0.35",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Token Validation": {
+    "endpoint": "/api/protected",
+    "total_requests": 253547,
+    "rps": "25352.20",
+    "avg_ms": "0.38",
+    "med_ms": "0.32",
+    "p90_ms": "0.62",
+    "p95_ms": "0.66",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Get Watchlist": {
+    "endpoint": "/api/weeb/watchlist",
+    "total_requests": 218424,
+    "rps": "21839.75",
+    "avg_ms": "0.44",
+    "med_ms": "0.36",
+    "p90_ms": "0.71",
+    "p95_ms": "0.75",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Get Watching": {
+    "endpoint": "/api/weeb/watching",
+    "total_requests": 229646,
+    "rps": "22963.29",
+    "avg_ms": "0.42",
+    "med_ms": "0.35",
+    "p90_ms": "0.68",
+    "p95_ms": "0.72",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Get Completed": {
+    "endpoint": "/api/weeb/completed",
+    "total_requests": 240704,
+    "rps": "24069.15",
+    "avg_ms": "0.40",
+    "med_ms": "0.34",
+    "p90_ms": "0.67",
+    "p95_ms": "0.70",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Get History": {
+    "endpoint": "/api/weeb/history",
+    "total_requests": 235937,
+    "rps": "23592.60",
+    "avg_ms": "0.41",
+    "med_ms": "0.35",
+    "p90_ms": "0.69",
+    "p95_ms": "0.72",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  },
+  "Staged Load (Watchlist)": {
+    "endpoint": "/api/weeb/watchlist (1-50 VUs)",
+    "total_requests": 11965,
+    "rps": "149.47",
+    "avg_ms": "1.39",
+    "med_ms": "1.01",
+    "p90_ms": "2.61",
+    "p95_ms": "3.33",
+    "p99_ms": "0.00",
+    "error_rate": "0.00%"
+  }
+}

@@ -3,3 +3,7 @@ node_modules
 .DS_Store
 dist
 zROADMAP/
+
+# Performance test artifacts
+performance/config/test-token.txt
+performance/results/summary-*.json

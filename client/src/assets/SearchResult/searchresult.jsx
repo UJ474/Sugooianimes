@@ -4,6 +4,7 @@ import AnimeCard from '../components/animecard.jsx';
 import './searchresult.css';
 import '../css_files/spinner.css';
 import { useNavigate } from 'react-router-dom';
+import { searchAnime } from '../../services/kitsuService.js';
 
 function capitalizeQuery(str) {
   return str
@@ -19,7 +20,6 @@ export default function SearchResults() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (!query) return;
     
@@ -27,19 +27,15 @@ export default function SearchResults() {
     setError(null);
 
     const searchQuery = query.trim();
-    
-    fetch(`https://api.jikan.moe/v4/anime?q=${searchQuery}&sfw=true`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch results');
-        return res.json();
-      })
+
+    searchAnime(searchQuery, 25)
       .then(data => {
-        setResults(data.data || []);
+        setResults(data || []);
         setLoading(false);
       })
       .catch(err => {
         console.error("Search error:", err);
-        setError(err.message);
+        setError(err.message || 'Failed to search anime');
         setLoading(false);
       });
   }, [query]);

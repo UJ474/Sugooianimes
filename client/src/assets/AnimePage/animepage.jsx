@@ -5,6 +5,7 @@ import '../css_files/spinner.css';
 import RelatedGenreFeed from '../HomePage/Othercontents/relatedgenrefeed';
 import API from "../../api";
 import { AuthContext } from '../../context/AuthContext';
+import { getAnimeById, getAnimeEpisodes } from '../../services/kitsuService.js';
 
 
 const AnimePage = () => {
@@ -35,33 +36,27 @@ const AnimePage = () => {
     setAnimeData(null);
     setEpisodesData([]);
 
-    fetch(`https://api.jikan.moe/v4/anime/${animeId}`)
-    .then(res => {
-      if (!res.ok) throw new Error(`Failed to load anime (${res.status})`);
-      return res.json();
-    })
-    .then(data => {
-      if (data.data) {
-        const anime = data.data;  // ← direct object, not array
-        setAnimeData(anime);
-        fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/episodes`)
-          .then(res => {
-            if (!res.ok) throw new Error(`Failed to load episodes (${res.status})`);
-            return res.json();
-          })
-          .then(epData => {
-            setEpisodesData(epData.data || []);
-          })
-          .catch(() => setEpisodesData([]))
-          .finally(() => setEpisodesLoading(false));
-      } else {
+    getAnimeById(animeId)
+      .then(async (anime) => {
+        if (anime) {
+          setAnimeData(anime);
+          try {
+            const eps = await getAnimeEpisodes(anime.id || anime.mal_id);
+            setEpisodesData(eps || []);
+          } catch (e) {
+            setEpisodesData([]);
+          } finally {
+            setEpisodesLoading(false);
+          }
+        } else {
+          setEpisodesLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load anime:", err);
         setEpisodesLoading(false);
-      }
-    })
-    .catch(() => {
-      setEpisodesLoading(false);
-    })
-    .finally(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   }, [animeId]);
 
   // Auto-add to history.ALL when visiting anime page
